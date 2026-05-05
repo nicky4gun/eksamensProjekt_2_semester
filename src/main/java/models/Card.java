@@ -1,0 +1,120 @@
+package models;
+
+import models.enums.CardType;
+import models.enums.ManaColor;
+import models.enums.Rarity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Card {
+    private String name;
+    private CardType cardType;
+    private List<ManaColor> colors = new ArrayList<>();
+    private String set;
+    private Rarity rarity;
+    private String ruleText;
+    private String imageUrl;
+    private boolean isTradable;
+
+    public Card() {}
+
+    public Card(String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl, boolean isTradable) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+
+        if (cardType == null) {
+            throw new IllegalArgumentException("Invalid card type");
+        }
+
+        if  (colors == null || colors.isEmpty()) {
+            throw new IllegalArgumentException("Colors cannot be null or empty");
+        }
+
+        if (set == null || set.isEmpty()) {
+            throw new IllegalArgumentException("Set cannot be null or empty");
+        }
+
+        if (rarity == null) {
+            throw new IllegalArgumentException("Invalid rarity");
+        }
+
+        if (ruleText == null || ruleText.isEmpty()) {
+            throw new IllegalArgumentException("Rule text cannot be null or empty");
+        }
+
+        this.name = name;
+        this.cardType = cardType;
+        this.colors = colors;
+        this.set = set;
+        this.rarity = rarity;
+        this.ruleText = ruleText;
+        this.imageUrl = imageUrl;
+        this.isTradable = isTradable;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
+    }
+
+    public List<ManaColor> getColor() {
+        return colors;
+    }
+
+    public void addColor(ManaColor color) {
+        colors.add(color);
+    }
+
+    public String getSet() {
+        return set;
+    }
+
+    public void setSet(String set) {
+        this.set = set;
+    }
+
+    public Rarity getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(Rarity rarity) {
+        this.rarity = rarity;
+    }
+
+    public String getRuleText() {
+        return ruleText;
+    }
+
+    public void setRuleText(String ruleText) {
+        this.ruleText = ruleText;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isTradable() {
+        return isTradable;
+    }
+
+    public void setIsTradable(boolean isTradable) {
+        this.isTradable = isTradable;
+    }
+}
