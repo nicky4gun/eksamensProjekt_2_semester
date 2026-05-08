@@ -1,13 +1,14 @@
-package models;
+package org.example.eksamensprojekt_2_semester.models;
 
-import models.enums.CardType;
-import models.enums.ManaColor;
-import models.enums.Rarity;
+import org.example.eksamensprojekt_2_semester.models.enums.CardType;
+import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
+import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Card {
+    private int id;
     private String name;
     private CardType cardType;
     private List<ManaColor> colors = new ArrayList<>();
@@ -43,7 +44,6 @@ public class Card {
         if (ruleText == null || ruleText.isEmpty()) {
             throw new IllegalArgumentException("Rule text cannot be null or empty");
         }
-
         this.name = name;
         this.cardType = cardType;
         this.colors = colors;
@@ -52,6 +52,47 @@ public class Card {
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
         this.isTradable = isTradable;
+    }
+
+    public Card(int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl, boolean isTradable) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+
+        if (cardType == null) {
+            throw new IllegalArgumentException("Invalid card type");
+        }
+
+        if  (colors == null || colors.isEmpty()) {
+            throw new IllegalArgumentException("Colors cannot be null or empty");
+        }
+
+        if (set == null || set.isEmpty()) {
+            throw new IllegalArgumentException("Set cannot be null or empty");
+        }
+
+        if (rarity == null) {
+            throw new IllegalArgumentException("Invalid rarity");
+        }
+
+        if (ruleText == null || ruleText.isEmpty()) {
+            throw new IllegalArgumentException("Rule text cannot be null or empty");
+        }
+        this.id = id;
+        this.name = name;
+        this.cardType = cardType;
+        this.colors = colors;
+        this.set = set;
+        this.rarity = rarity;
+        this.ruleText = ruleText;
+        this.imageUrl = imageUrl;
+        this.isTradable = isTradable;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

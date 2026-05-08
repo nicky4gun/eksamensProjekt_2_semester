@@ -1,11 +1,12 @@
-package models.enums;
+package org.example.eksamensprojekt_2_semester.models.enums;
 
 public enum ManaColor {
     RED("Red"),
     BLUE("Blue"),
     GREEN("Green"),
     WHITE("White"),
-    BLACK("Black");
+    BLACK("Black"),
+    COLORLESS("Colorless");
 
     private final String color;
 

@@ -1,6 +1,6 @@
-package models;
+package org.example.eksamensprojekt_2_semester.models;
 
-import models.enums.Visibility;
+import org.example.eksamensprojekt_2_semester.models.enums.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;

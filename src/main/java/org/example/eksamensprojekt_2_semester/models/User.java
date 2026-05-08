@@ -1,6 +1,6 @@
-package models;
+package org.example.eksamensprojekt_2_semester.models;
 
-import models.enums.Role;
+import org.example.eksamensprojekt_2_semester.models.enums.Role;
 
 public class User {
     private String firstName;
