@@ -7,8 +7,8 @@ public enum Format {
     BOOSTER_DRAFT(100,40),
     MODERN(60,60),
     BRAWL(60,60),
-    TIMELESS(250,60);
-
+    TIMELESS(250,60),
+    TEST(100, 1);
 
     private final int maxCards;
     private final int minCards;

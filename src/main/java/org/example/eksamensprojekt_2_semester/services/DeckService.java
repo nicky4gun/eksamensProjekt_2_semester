@@ -19,21 +19,20 @@ public class DeckService {
     }
 
     public void addDeck(String deckName, List<Integer> cardIds, Format format, int userId) {
-        List<Card> cards = userRepository.findAllCardsByUserId(userId, cardIds);
         Deck deck = new Deck(deckName, format, userId);
 
-        for (Card card : cards) {
-            deck.addCard(card);
-        }
+        if (cardIds != null && !cardIds.isEmpty()) {
+            List<Card> cards = userRepository.findAllCardsByUserId(userId, cardIds);
 
-        if (!deck.isDeckValid()) {
-            throw new IllegalStateException("Deck is not valid for format: " + format.name());
+            for (Card card : cards) {
+                deck.addCard(card);
+            }
         }
 
         deckRepository.createDeck(deck);
     }
 
-    public List<Deck> getAllDecksByUserId(int userId) {
+    public List<Deck> getDecksByUserId(int userId) {
         return deckRepository.findDecksByUserId(userId);
     }
 }
