@@ -8,18 +8,14 @@ import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-
-public class CardServices {
+@Service
+public class CardService {
     private final ICardRepository cardRepository;
 
-    public CardServices(ICardRepository cardRepository) {this.cardRepository = cardRepository;}
+    public CardService(ICardRepository cardRepository) {this.cardRepository = cardRepository;}
 
     public Card addCard(User user, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl, boolean isTradable) {
 

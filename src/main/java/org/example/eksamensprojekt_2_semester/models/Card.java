@@ -41,9 +41,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid rarity");
         }
 
-        if (ruleText == null || ruleText.isEmpty()) {
-            throw new IllegalArgumentException("Rule text cannot be null or empty");
-        }
+
         this.name = name;
         this.cardType = cardType;
         this.colors = colors;
