@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DeckService {
     private final IDeckRepository deckRepository;
     private final IUserRepository userRepository;
