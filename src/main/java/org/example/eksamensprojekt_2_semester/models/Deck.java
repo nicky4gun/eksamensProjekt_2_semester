@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
+    private int id;
     private String deckName;
     private Format format;
     private List<Card> cards = new ArrayList<Card>();
@@ -22,6 +23,21 @@ public class Deck {
             throw new IllegalArgumentException("Format is required");
         }
 
+        this.deckName = deckName;
+        this.format = format;
+        this.userId = userId;
+    }
+
+    public Deck(int id, String deckName, Format format, int userId) {
+        if (deckName == null || deckName.isEmpty()) {
+            throw new IllegalArgumentException("The deck must have a name");
+        }
+
+        if (format == null) {
+            throw new IllegalArgumentException("Format is required");
+        }
+
+        this.id = id;
         this.deckName = deckName;
         this.format = format;
         this.userId = userId;
@@ -69,5 +85,13 @@ public class Deck {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

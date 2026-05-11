@@ -8,6 +8,7 @@ import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeckService {
@@ -21,16 +22,28 @@ public class DeckService {
 
     public void addDeck(String deckName, List<Integer> cardIds, Format format, int userId) {
         Deck deck = new Deck(deckName, format, userId);
+        deckRepository.createDeck(deck);
+        addCardsToDeck(deck, cardIds, userId);
+    }
 
+    public void addCardsToExistingDeck(int deckId, List<Integer> cardIds, int userId) {
+        Deck deck = findDeckByIdAndUserId(deckId, userId).orElseThrow();
+        addCardsToDeck(deck, cardIds, userId);
+    }
+
+    private void addCardsToDeck(Deck deck, List<Integer> cardIds, int userId) {
         if (cardIds != null && !cardIds.isEmpty()) {
-            List<Card> cards = userRepository.findAllCardsByUserId(userId, cardIds);
+            List<Card> cards = userRepository.findCardsByUserId(userId, cardIds);
 
             for (Card card : cards) {
+                deckRepository.addCardToDeck(deck.getId(), card.getId());
                 deck.addCard(card);
             }
         }
+    }
 
-        deckRepository.createDeck(deck);
+    public Optional<Deck> findDeckByIdAndUserId(int deckId, int userId) {
+        return deckRepository.findDeckByIdAndUserId(deckId, userId);
     }
 
     public List<Deck> getDecksByUserId(int userId) {

@@ -37,4 +37,15 @@ public class DeckController {
 
         return "redirect:/decks";
     }
+
+    @PostMapping("/add-cards")
+    public String addCardsToDeck(@RequestParam int deckId, @RequestParam List<Integer> cardIds, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            deckService.addCardsToExistingDeck(deckId, cardIds, userId);
+        }
+
+        return "redirect:/decks";
+    }
 }
