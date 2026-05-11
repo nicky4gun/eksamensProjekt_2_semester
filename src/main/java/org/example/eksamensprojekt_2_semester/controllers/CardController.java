@@ -19,27 +19,62 @@ public class CardController {
     public CardController(CardService cardService) {
         this.cardService = cardService;
     }
-@PostMapping("/Create/Card")
-    public String createCard(@ModelAttribute Card card, Model model, HttpSession session ){
-    User user = (User) session.getAttribute("user");
 
-    if (user == null) {
-        return "redirect:/Login";
-    }
-    if (user.getRole() != Role.ADMIN) {
-        model.addAttribute("error","you do not have permission to create this card");
-        return "Create"; }
+    @PostMapping("/Create")
+    public String createCard(@ModelAttribute Card card, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
 
-        try{
-            cardService.addCard(user,card.getName(),card.getCardType(),card.getColor(),card.getSet(),card.getRarity(),card.getRuleText(),card.getImageUrl(), card.isTradable());
-         return "redirect:/Card/List";
+        if (user == null) {
+            return "redirect:/Login";
         }
-        catch(IllegalArgumentException e){
-            model.addAttribute("error",e.getMessage());
+        if (user.getRole() != Role.ADMIN) {
+            model.addAttribute("error", "you do not have permission to create this card");
+            return "Create";
+        }
+
+        try {
+            cardService.addCard(user, card.getName(), card.getCardType(), card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
+            return "redirect:/Card/List";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
             return "Create";
         }
     }
+
+    @PostMapping("/Update")
+    public String updateCard(@ModelAttribute Card card, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/Login";
+        }
+        if (user.getRole() != Role.ADMIN) {
+            model.addAttribute("error", "you do not have permission to update this card");
+        }
+        cardService.updateCard(
+                user,
+                card.getId(),
+                card.getName(),
+                card.getCardType(),
+                card.getColor(),
+                card.getSet(),
+                card.getRarity(),
+                card.getRuleText(),
+                card.getImageUrl()
+
+
+        );
+        return "redirect:/Card/List";
+    }
 }
+
+
+
+
+
+
+
+
+
 
 
 

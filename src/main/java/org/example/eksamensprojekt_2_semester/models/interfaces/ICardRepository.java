@@ -1,8 +1,12 @@
 package org.example.eksamensprojekt_2_semester.models.interfaces;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
+import org.springframework.stereotype.Repository;
+
 
 public interface ICardRepository {
-    Card createCard(Card card);
+    int createCard(Card card);
+
+    void updateCard(Card card);
 
 }

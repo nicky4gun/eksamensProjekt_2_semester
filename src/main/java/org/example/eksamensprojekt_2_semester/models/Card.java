@@ -20,7 +20,11 @@ public class Card {
 
     public Card() {}
 
-    public Card(String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl, boolean isTradable) {
+    public Card(boolean isTradable){
+        this.isTradable = isTradable;
+    }
+
+    public Card(String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -42,6 +46,8 @@ public class Card {
         }
 
 
+
+
         this.name = name;
         this.cardType = cardType;
         this.colors = colors;
@@ -49,10 +55,14 @@ public class Card {
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
-        this.isTradable = isTradable;
+
     }
 
-    public Card(int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl, boolean isTradable) {
+    public Card(int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Invalid card id");
+
+        }
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -84,7 +94,7 @@ public class Card {
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
-        this.isTradable = isTradable;
+
     }
     public int getId() {
         return id;

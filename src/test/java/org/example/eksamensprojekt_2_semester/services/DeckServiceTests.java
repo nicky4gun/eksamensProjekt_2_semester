@@ -40,7 +40,7 @@ public class DeckServiceTests {
         List<Integer> cardIds = List.of(1);
         Card card = new Card(1 ,"Dingus Staff", CardType.ARTIFACT, List.of(ManaColor.COLORLESS), "Weatherlight", Rarity.COMMON,
                 "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
-                "", false);
+                "");
         when(userRepository.findAllCardsByUserId(userId, cardIds)).thenReturn(List.of(card));
 
         Deck expectedDeck = new Deck(deckName, format, userId);
