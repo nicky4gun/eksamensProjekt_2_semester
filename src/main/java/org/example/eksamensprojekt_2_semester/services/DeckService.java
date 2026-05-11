@@ -36,7 +36,7 @@ public class DeckService {
             List<Card> cards = userRepository.findCardsByUserId(userId, cardIds);
 
             for (Card card : cards) {
-                deckRepository.addCardToDeck(deck.getId(), card.getId());
+                deckRepository.addCardToDeck(userId, deck.getId(), card.getId());
                 deck.addCard(card);
             }
         }

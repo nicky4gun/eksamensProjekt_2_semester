@@ -98,8 +98,8 @@ public class DeckServiceTests {
         int deckId = 1;
         Deck deck = new Deck(deckId, deckName, format, userId);
         List<Integer> cardIds = List.of(1, 2);
-        Card card1 = new Card(1, "Card 1", CardType.CREATURE, List.of(ManaColor.WHITE), "Set", Rarity.COMMON, "Text", "URL", false);
-        Card card2 = new Card(2, "Card 2", CardType.SORCERY, List.of(ManaColor.BLUE), "Set", Rarity.RARE, "Text", "URL", false);
+        Card card1 = new Card(1, "Card 1", CardType.CREATURE, List.of(ManaColor.WHITE), "Set", Rarity.COMMON, "Text", "URL");
+        Card card2 = new Card(2, "Card 2", CardType.SORCERY, List.of(ManaColor.BLUE), "Set", Rarity.RARE, "Text", "URL");
 
         when(deckRepository.findDeckByIdAndUserId(deckId, userId)).thenReturn(Optional.of(deck));
         when(userRepository.findCardsByUserId(userId, cardIds)).thenReturn(List.of(card1, card2));
@@ -109,8 +109,8 @@ public class DeckServiceTests {
         assertEquals(2, deck.getCards().size());
         assertTrue(deck.getCards().contains(card1));
         assertTrue(deck.getCards().contains(card2));
-        verify(deckRepository, times(1)).addCardToDeck(deckId, 1);
-        verify(deckRepository, times(1)).addCardToDeck(deckId, 2);
+        verify(deckRepository, times(1)).addCardToDeck(userId, deckId, 1);
+        verify(deckRepository, times(1)).addCardToDeck(userId, deckId, 2);
     }
 
     @Test

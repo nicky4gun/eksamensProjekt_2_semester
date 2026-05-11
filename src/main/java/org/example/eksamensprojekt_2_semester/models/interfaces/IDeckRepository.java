@@ -12,5 +12,5 @@ public interface IDeckRepository {
 
     Optional<Deck> findDeckByIdAndUserId(int deckId, int userId);
 
-    void addCardToDeck(int deckId, int cardId);
+    void addCardToDeck(int userId, int deckId, int cardId);
 }
