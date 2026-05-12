@@ -166,4 +166,6 @@ public class Card {
     public void setIsTradable(boolean isTradable) {
         this.isTradable = isTradable;
     }
+
+
 }

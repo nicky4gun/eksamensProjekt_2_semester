@@ -20,6 +20,16 @@ public class DeckService {
         this.userRepository = userRepository;
     }
 
+    public void deleteDeck(int deckId, int userId ) {
+        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+        User user = userRepository.findUserById(userId);
+        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId){
+            throw new SecurityException("You cannot delete this deck");
+        }
+
+        deckRepository.deleteDeck(deckId);
+    }
+
     public void addDeck(String deckName, List<Integer> cardIds, Format format, int userId) {
         Deck deck = new Deck(deckName, format, userId);
         deckRepository.createDeck(deck);

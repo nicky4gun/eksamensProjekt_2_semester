@@ -9,6 +9,7 @@ import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 
+import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,23 +22,27 @@ import static org.mockito.Mockito.*;
 class CardServiceTests {
     private  ICardRepository cardRepository;
     private CardService cardService;
+    private IUserRepository userRepository;
+    private UserService userService;
+
 
     @BeforeEach
     void setUp() {
         cardRepository = mock(ICardRepository.class);
-        cardService = new CardService(cardRepository);
+        cardService = new CardService(cardRepository,userRepository);
+
     }
 
     @Test
     void addCard_ShouldAddNewCard() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
 
         Card card = new Card("Dingus Staff", CardType.ARTIFACT, List.of(ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
                 "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                 "");
         when(cardRepository.createCard(any(Card.class))).thenReturn(card.getId());
 
-        cardService.addCard(user,"Dingus Staff", CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
+        cardService.addCard("Dingus Staff", CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
                 "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                 "");
         verify(cardRepository, times(1)).createCard(any(Card.class));
@@ -45,9 +50,9 @@ class CardServiceTests {
 
     @Test
     void addCard_ShouldNotAddNewCardWhenNoName() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
         assertThrows(IllegalArgumentException.class,()->
-                cardService.addCard(user ,"",CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
+                cardService.addCard("",CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
                         "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
 
@@ -55,32 +60,32 @@ class CardServiceTests {
     }
     @Test
     void addCard_ShouldNotAddNewCardWhenNoColor() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
         assertThrows(IllegalArgumentException.class,()->
-                cardService.addCard(user,"Dingus Staff",CardType.ARTIFACT,List.of(),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
+                cardService.addCard("Dingus Staff",CardType.ARTIFACT,List.of(),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
 
     }
     @Test
     void addCard_ShouldNotAddNewCardWhenNoRarity() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
         assertThrows(IllegalArgumentException.class,()->
-                cardService.addCard(user,"Dingus Staff",CardType.ARTIFACT,List.of(ManaColor.COLORLESS),"Weatherlight", null,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
+                cardService.addCard("Dingus Staff",CardType.ARTIFACT,List.of(ManaColor.COLORLESS),"Weatherlight", null,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
 
     }
     @Test
     void addCard_ShouldNotAddNewCardWhenNoSet() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
         assertThrows(IllegalArgumentException.class,()->
-                cardService.addCard(user,"Dingus Staff",CardType.ARTIFACT,List.of(ManaColor.COLORLESS),"", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
+                cardService.addCard("Dingus Staff",CardType.ARTIFACT,List.of(ManaColor.COLORLESS),"", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
     }
     @Test
     void addCard_ShouldNotAddNewCardWhenNoCardType() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
+
         assertThrows(IllegalArgumentException.class,()->
-                cardService.addCard(user,"Dingus Staff",null,List.of(ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
+                cardService.addCard("Dingus Staff",null,List.of(ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
 
     }
@@ -88,15 +93,14 @@ class CardServiceTests {
     void User_CantBeAUserHasToBeAAdmin(){
         User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.USER, new Collection());
 
-      assertThrows(SecurityException.class, ()-> cardService.addCard(user ,"Dingus Staff",CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
+      assertThrows(SecurityException.class, ()-> cardService.addCard(User.getId(),"Dingus Staff",CardType.ARTIFACT, List.of (ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,
                 "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                 ""));
     }
     @Test
     void updateCard_ShouldnotUpdateCardWHenIdIsNegative() {
-        User user = new User("bob","han","bygger","1234","bobhan@bygger.com", Role.ADMIN, new Collection());
         assertThrows(IllegalArgumentException.class,()->
-                cardService.updateCard(user,-1,"Dingus Staff",null,List.of(ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
+                cardService.updateCard(-1,"Dingus Staff",null,List.of(ManaColor.COLORLESS),"Weatherlight", Rarity.COMMON,"Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
                         ""));
 
 

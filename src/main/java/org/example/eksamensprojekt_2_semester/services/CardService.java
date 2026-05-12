@@ -8,16 +8,22 @@ import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
+import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class CardService {
     private final ICardRepository cardRepository;
+    private final IUserRepository userRepository;
 
-    public CardService(ICardRepository cardRepository) {this.cardRepository = cardRepository;}
+    public CardService(ICardRepository cardRepository, IUserRepository userRepository) {this.cardRepository = cardRepository;
+        this.userRepository = userRepository;
+    }
 
-    public int addCard(User user, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ) {
+
+    public int addCard( int userId, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ) {
+        User user = userRepository.findUserById(userId);
 
      if (user.getRole() != Role.ADMIN){
          throw new SecurityException("You are not allowed to perform this action");
@@ -27,7 +33,8 @@ public class CardService {
         Card card = new Card(name,cardType,colors,set,rarity,ruleText,imageUrl);
         return cardRepository.createCard(card);
     }
-    public void updateCard(User user,int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ){
+    public void updateCard(int userId,int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ){
+        User user = userRepository.findUserById(userId);
         if (user.getRole() != Role.ADMIN){
             throw new SecurityException("You are not allowed to perform this action");
         }

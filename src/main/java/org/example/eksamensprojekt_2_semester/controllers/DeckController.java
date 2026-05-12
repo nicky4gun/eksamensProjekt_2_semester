@@ -48,4 +48,14 @@ public class DeckController {
 
         return "redirect:/decks";
     }
+
+    @GetMapping("/delete")
+    public String deleteDeck(@RequestParam Integer deckId, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            deckService.deleteDeck(deckId, userId);
+        }
+        return "redirect:/decks";
+    }
 }
