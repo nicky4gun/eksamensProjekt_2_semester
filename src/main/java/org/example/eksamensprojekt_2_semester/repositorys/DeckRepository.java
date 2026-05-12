@@ -37,11 +37,11 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
-    public void addCardToDeck(int  userId, int deckId, int cardId) {
-        String sql = "INSERT INTO deck_cards (user_id, deck_id, card_id) VALUES (?, ?, ?)";
+    public void addCardToDeck(int deckId, int cardId) {
+        String sql = "INSERT INTO deck_cards (deck_id, card_id) VALUES (?, ?)";
 
         try {
-            jdbcTemplate.update(sql, userId, deckId, cardId);
+            jdbcTemplate.update(sql, deckId, cardId);
 
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke tilføje kort til deck, Prøv igen", e);
@@ -66,22 +66,29 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
-    public Optional<Deck> findDeckByIdAndUserId(int deckId, int userId) {
-        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE id = ? AND user_id = ?";
-        List<Deck> decks;
+    public Optional<Deck> findDeckById(int deckId) {
+        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE deck_id = ?";
 
-        try {
-             decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                    rs.getInt("id"),
-                    rs.getString("deck_name"),
-                    Format.valueOf(rs.getString("format")),
-                    rs.getInt("user_id")
-            ), deckId, userId);
-
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke finde deck, Prøv igen", e);
-        }
+        List<Deck> decks  = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
+                rs.getInt("id"),
+                rs.getString("deck_name"),
+                Format.valueOf(rs.getString("format")),
+                rs.getInt("user_id")
+        ), deckId);
 
         return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
     }
+
+    @Override
+    public void removeCardFromDeck(int cardId, int deckId) {
+        String sql = "DELETE FROM deck_cards WHERE card_id = ? AND deck_id = ?";
+        jdbcTemplate.update(sql, cardId, deckId);
+    }
+
+    @Override
+    public void deleteDeck(int deckId) {
+        String sql = "DELETE FROM deck WHERE id = ? ";
+        jdbcTemplate.update(sql,deckId);
+    }
 }
+

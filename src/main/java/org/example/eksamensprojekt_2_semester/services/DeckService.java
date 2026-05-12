@@ -2,13 +2,14 @@ package org.example.eksamensprojekt_2_semester.services;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
+import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
+import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DeckService {
@@ -37,7 +38,12 @@ public class DeckService {
     }
 
     public void addCardsToExistingDeck(int deckId, List<Integer> cardIds, int userId) {
-        Deck deck = findDeckByIdAndUserId(deckId, userId).orElseThrow();
+        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+
+        if (deck.getUserId() != userId) {
+            throw new SecurityException("Decket tilhører ikke denne bruger");
+        }
+
         addCardsToDeck(deck, cardIds, userId);
     }
 
@@ -46,17 +52,24 @@ public class DeckService {
             List<Card> cards = userRepository.findCardsByUserId(userId, cardIds);
 
             for (Card card : cards) {
-                deckRepository.addCardToDeck(userId, deck.getId(), card.getId());
+                deckRepository.addCardToDeck(deck.getId(), card.getId());
                 deck.addCard(card);
             }
         }
     }
 
-    public Optional<Deck> findDeckByIdAndUserId(int deckId, int userId) {
-        return deckRepository.findDeckByIdAndUserId(deckId, userId);
-    }
-
     public List<Deck> getDecksByUserId(int userId) {
         return deckRepository.findDecksByUserId(userId);
     }
+
+    public void removeCardFromDeck(int userId, int cardId, int deckId) {
+        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+
+        if (deck.getUserId() != userId) {
+            throw new SecurityException("Decket tilhører ikke denne bruger");
+        }
+
+        deckRepository.removeCardFromDeck(cardId, deckId);
+    }
+
 }

@@ -10,7 +10,11 @@ public interface IDeckRepository {
 
     List<Deck> findDecksByUserId(int userId);
 
-    Optional<Deck> findDeckByIdAndUserId(int deckId, int userId);
+    void addCardToDeck(int deckId, int cardId);
 
-    void addCardToDeck(int userId, int deckId, int cardId);
+    void removeCardFromDeck(int cardId, int deckId);
+
+    void deleteDeck(int deckId);
+
+    Optional<Deck> findDeckById(int deckId);
 }

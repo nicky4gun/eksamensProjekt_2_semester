@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.services.DeckService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,6 +44,17 @@ public class DeckController {
         }
 
         return "redirect:/decks";
+    }
+    
+    @PostMapping("/{deckId}/remove-card")
+    public String removeCardFromDeck(@PathVariable int deckId, @RequestParam int cardId, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            deckService.removeCardFromDeck(userId, cardId, deckId);
+        }
+
+        return "redirect:/decks/" + deckId;
     }
 
     @GetMapping("/delete")
