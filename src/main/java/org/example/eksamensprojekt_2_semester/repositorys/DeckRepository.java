@@ -80,6 +80,18 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
+    public void updateDeck(Deck deck) {
+        String sql = "UPDATE decks SET deck_name = ?, format = ? WHERE id = ?";
+
+        try {
+            jdbcTemplate.update(sql, deck.getDeckName(), deck.getFormat().name(), deck.getId());
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke opdatere deck, Prøv igen", e);
+        }
+    }
+
+    @Override
     public void removeCardFromDeck(int cardId, int deckId) {
         String sql = "DELETE FROM deck_cards WHERE card_id = ? AND deck_id = ?";
         jdbcTemplate.update(sql, cardId, deckId);

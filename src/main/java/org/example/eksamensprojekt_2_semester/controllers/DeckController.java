@@ -45,6 +45,18 @@ public class DeckController {
 
         return "redirect:/decks";
     }
+
+    @PostMapping("/{deckId}/update")
+    public String updateDeck(@PathVariable int deckId, @RequestParam String deckName,
+                             @RequestParam Format format, HttpSession session)  {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            deckService.updateDeck(deckId, deckName, format, userId);
+        }
+
+        return "redirect:/decks/" + deckId;
+    }
     
     @PostMapping("/{deckId}/remove-card")
     public String removeCardFromDeck(@PathVariable int deckId, @RequestParam int cardId, HttpSession session) {

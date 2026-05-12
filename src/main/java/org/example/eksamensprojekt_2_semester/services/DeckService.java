@@ -21,16 +21,6 @@ public class DeckService {
         this.userRepository = userRepository;
     }
 
-    public void deleteDeck(int deckId, int userId ) {
-        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
-        User user = userRepository.findUserById(userId);
-        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId){
-            throw new SecurityException("You cannot delete this deck");
-        }
-
-        deckRepository.deleteDeck(deckId);
-    }
-
     public void addDeck(String deckName, List<Integer> cardIds, Format format, int userId) {
         Deck deck = new Deck(deckName, format, userId);
         deckRepository.createDeck(deck);
@@ -62,6 +52,20 @@ public class DeckService {
         return deckRepository.findDecksByUserId(userId);
     }
 
+    public void updateDeck(int deckId, String deckName, Format format, int userId) {
+        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+
+        if (deck.getUserId() != userId) {
+            throw new SecurityException("Decket tilhører ikke denne bruger");
+        }
+
+        deck.setDeckName(deckName);
+        deck.setFormat(format);
+        deckRepository.updateDeck(deck);
+
+
+    }
+
     public void removeCardFromDeck(int userId, int cardId, int deckId) {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
 
@@ -70,6 +74,17 @@ public class DeckService {
         }
 
         deckRepository.removeCardFromDeck(cardId, deckId);
+    }
+
+    public void deleteDeck(int deckId, int userId ) {
+        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+
+        User user = userRepository.findUserById(userId);
+        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId){
+            throw new SecurityException("You cannot delete this deck");
+        }
+
+        deckRepository.deleteDeck(deckId);
     }
 
 }

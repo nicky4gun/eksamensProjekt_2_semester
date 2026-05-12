@@ -8,13 +8,15 @@ import java.util.Optional;
 public interface IDeckRepository {
     void createDeck(Deck deck);
 
+    void addCardToDeck(int deckId, int cardId);
+
     List<Deck> findDecksByUserId(int userId);
 
-    void addCardToDeck(int deckId, int cardId);
+    Optional<Deck> findDeckById(int deckId);
+
+    void updateDeck(Deck deck);
 
     void removeCardFromDeck(int cardId, int deckId);
 
     void deleteDeck(int deckId);
-
-    Optional<Deck> findDeckById(int deckId);
 }

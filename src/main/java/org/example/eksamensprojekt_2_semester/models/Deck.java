@@ -63,7 +63,7 @@ public class Deck {
         cards.add(card);
     }
 
-    public boolean isDeckValid() {
+    public boolean isValid() {
         if (cards == null || cards.isEmpty()) {
             return false;
         }
