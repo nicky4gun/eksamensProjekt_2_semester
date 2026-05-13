@@ -25,11 +25,14 @@ public class CardController {
 
     @PostMapping("/Create")
     public String createCard(@ModelAttribute Card card, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        Integer userId = (Integer) session.getAttribute("userId");
 
-        if (user == null) {
+        if (userId == null) {
             return "redirect:/Login";
         }
+
+        User user = userService.findUserById(userId).orElseThrow();
+
         if (user.getRole() != Role.ADMIN) {
             model.addAttribute("error", "you do not have permission to create this card");
             return "Create";
@@ -46,38 +49,15 @@ public class CardController {
 
     @PostMapping("/Update")
     public String updateCard(@ModelAttribute Card card, Model model, HttpSession session) {
-        Integer userid = (Integer) session.getAttribute("userId");
-        User user = userService.findUserById(userid).orElseThrow();
+        Integer userId = (Integer) session.getAttribute("userId");
 
-        if (userid == null) {
+        if (userId == null) {
             return "redirect:/Login";
         }
 
-        cardService.updateCard(
-                user.getId(),
-                card.getId(),
-                card.getName(),
-                card.getCardType(),
-                card.getColor(),
-                card.getSet(),
-                card.getRarity(),
-                card.getRuleText(),
-                card.getImageUrl()
-
-
-        );
+        User user = userService.findUserById(userId).orElseThrow();
+        cardService.updateCard(user.getId(), card.getId(), card.getName(), card.getCardType(),
+                card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
         return "redirect:/cards/"+ card.getId();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
