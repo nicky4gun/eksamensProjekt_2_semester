@@ -1,0 +1,36 @@
+
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(14, 14, 14, 0.78);
+    color: white;
+    flex-direction: column;
+    min-height: 100vh;
+}
+button {
+    border: none;
+    background: blue;
+    text-align: center;
+    color: white;
+
+}
+button:hover {
+    background: deepskyblue;
+    color: white;
+    cursor: crosshair;
+}
+h1 {
+    text-align: center;
+    color: darkred;
+    font-size: 1.5rem;
+}
+a{
+    text-decoration: none;
+    color : white;
+    font-weight: bold;
+
+}

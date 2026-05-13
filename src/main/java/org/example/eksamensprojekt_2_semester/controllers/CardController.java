@@ -5,6 +5,7 @@ import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.services.CardService;
+import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/Card")
 public class CardController {
     private final CardService cardService;
+    private final UserService userService;
 
-    public CardController(CardService cardService) {
+    public CardController(CardService cardService , UserService userService) {
         this.cardService = cardService;
+        this.userService = userService;
     }
 
     @PostMapping("/Create")
@@ -33,7 +36,7 @@ public class CardController {
         }
 
         try {
-            cardService.addCard(user, card.getName(), card.getCardType(), card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
+            cardService.addCard(card.getId(), card.getName(), card.getCardType(), card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
             return "redirect:/Card/List";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
@@ -43,15 +46,15 @@ public class CardController {
 
     @PostMapping("/Update")
     public String updateCard(@ModelAttribute Card card, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        Integer userid = (Integer) session.getAttribute("userId");
+        User user = userService.findUserById(userid).orElseThrow();
+
+        if (userid == null) {
             return "redirect:/Login";
         }
-        if (user.getRole() != Role.ADMIN) {
-            model.addAttribute("error", "you do not have permission to update this card");
-        }
+
         cardService.updateCard(
-                user,
+                user.getId(),
                 card.getId(),
                 card.getName(),
                 card.getCardType(),
@@ -63,7 +66,7 @@ public class CardController {
 
 
         );
-        return "redirect:/Card/List";
+        return "redirect:/cards/"+ card.getId();
     }
 }
 

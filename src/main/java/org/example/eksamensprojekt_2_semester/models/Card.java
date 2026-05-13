@@ -4,14 +4,11 @@ import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Card {
     private int id;
     private String name;
     private CardType cardType;
-    private List<ManaColor> colors = new ArrayList<>();
+    private ManaColor colors;
     private String set;
     private Rarity rarity;
     private String ruleText;
@@ -24,7 +21,7 @@ public class Card {
         this.isTradable = isTradable;
     }
 
-    public Card(String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -33,7 +30,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (colors == null || colors.isEmpty()) {
+        if  (colors == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -58,7 +55,7 @@ public class Card {
 
     }
 
-    public Card(int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(int id, String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
         if (id < 0) {
             throw new IllegalArgumentException("Invalid card id");
 
@@ -71,7 +68,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (colors == null || colors.isEmpty()) {
+        if  (colors == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -119,12 +116,12 @@ public class Card {
         this.cardType = cardType;
     }
 
-    public List<ManaColor> getColor() {
+    public ManaColor getColor() {
         return colors;
     }
 
-    public void addColor(ManaColor color) {
-        colors.add(color);
+    public void setColors(ManaColor colors) {
+        this.colors = colors;
     }
 
     public String getSet() {

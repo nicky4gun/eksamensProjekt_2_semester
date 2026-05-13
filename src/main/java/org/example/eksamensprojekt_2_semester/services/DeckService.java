@@ -79,7 +79,7 @@ public class DeckService {
     public void deleteDeck(int deckId, int userId ) {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
 
-        User user = userRepository.findUserById(userId);
+        User user = userRepository.findUserById(userId).orElseThrow();
         if (user.getRole() != Role.ADMIN && deck.getUserId() != userId){
             throw new SecurityException("You cannot delete this deck");
         }

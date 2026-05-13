@@ -10,11 +10,11 @@ public class User {
     private String password;
     private String email;
     private Role role;
-    private Collection collection;
+
 
     public User() {}
 
-    public User(String firstName, String lastName, String username, String password, String email, Role role, Collection collection) {
+    public User(String firstName, String lastName, String username, String password, String email, Role role ) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -37,9 +37,9 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.collection = collection;
+
     }
-    public User( int id, String firstName, String lastName, String username, String password, String email, Role role, Collection collection) {
+    public User( int id, String firstName, String lastName, String username, String password, String email, Role role) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -62,7 +62,6 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.collection = collection;
     }
 
     public int getId() {
@@ -120,11 +119,4 @@ public class User {
         this.role = role;
     }
 
-    public Collection getCollection() {
-        return collection;
-    }
-
-    public void setCollection(Collection collection) {
-        this.collection = collection;
-    }
 }

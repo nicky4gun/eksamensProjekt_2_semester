@@ -12,48 +12,45 @@ import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class CardService {
     private final ICardRepository cardRepository;
     private final IUserRepository userRepository;
 
-    public CardService(ICardRepository cardRepository, IUserRepository userRepository) {this.cardRepository = cardRepository;
+    public CardService(ICardRepository cardRepository, IUserRepository userRepository) {
+        this.cardRepository = cardRepository;
         this.userRepository = userRepository;
     }
 
 
-    public int addCard( int userId, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ) {
-        User user = userRepository.findUserById(userId);
+    public int addCard(int userId, String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+        User user = userRepository.findUserById(userId).orElseThrow();
 
-     if (user.getRole() != Role.ADMIN){
-         throw new SecurityException("You are not allowed to perform this action");
-     }
-
-        validateCard(name,cardType,colors,set,rarity,ruleText,imageUrl);
-        Card card = new Card(name,cardType,colors,set,rarity,ruleText,imageUrl);
-        return cardRepository.createCard(card);
-    }
-    public void updateCard(int userId,int id, String name, CardType cardType, List<ManaColor> colors, String set, Rarity rarity, String ruleText, String imageUrl ){
-        User user = userRepository.findUserById(userId);
-        if (user.getRole() != Role.ADMIN){
+        if (user.getRole() != Role.ADMIN) {
             throw new SecurityException("You are not allowed to perform this action");
         }
-        validateCard(name,cardType,colors,set,rarity,ruleText,imageUrl);
 
-        Card card = new Card( id,  name,  cardType,  colors,  set,  rarity,  ruleText,  imageUrl);
+
+        Card card = new Card(name, cardType, colors, set, rarity, ruleText, imageUrl);
+        return cardRepository.createCard(card);
+    }
+
+    public void updateCard(int userId, int id, String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+        User user = userRepository.findUserById(userId).orElseThrow();
+        if (user.getRole() != Role.ADMIN) {
+            throw new SecurityException("You are not allowed to perform this action");
+        }
+
+
+        Card card = new Card(id, name, cardType, colors, set, rarity, ruleText, imageUrl);
         cardRepository.updateCard(card);
 
     }
 
 
-
-    private void validateCard(String name,CardType cardType, List<ManaColor> colors,String set,Rarity rarity,String ruleText,String imageUrl){
-
-
-
-
-    }
-
-
-
 }
+
+
+
+
