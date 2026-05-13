@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.services.DeckService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,13 @@ public class DeckController {
 
     public DeckController(DeckService deckService) {
         this.deckService = deckService;
+    }
+
+    @GetMapping
+    public String showDecks(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user_id");
+        model.addAttribute("decks", deckService.getDecksByUserId(userId));
+        return "/pages/decks";
     }
 
     @GetMapping("/add")
