@@ -7,8 +7,10 @@ import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,13 +40,26 @@ public class DeckService {
     }
 
     private void addCardsToDeck(Deck deck, List<Integer> cardIds, int userId) {
-        if (cardIds != null && !cardIds.isEmpty()) {
-            List<Card> cards = userRepository.findCardsByUserId(userId, cardIds);
+        if (cardIds == null || cardIds.isEmpty()) return;
 
-            for (Card card : cards) {
-                deckRepository.addCardToDeck(deck.getId(), card.getId());
-                deck.addCard(card);
-            }
+        List<Card> cards = getOwnedCards(cardIds, userId);
+        populateDeck(deck, cards);
+    }
+
+    private List<Card> getOwnedCards(List<Integer> cardIds, int userId) {
+        List<Card> cards = new ArrayList<>();
+
+        for (int cardId : cardIds) {
+            userRepository.findCardByUserId(userId, cardId).ifPresent(cards::add);
+        }
+
+        return cards;
+    }
+
+    private void populateDeck(Deck deck, List<Card> cards) {
+        for (Card card : cards) {
+            deckRepository.addCardToDeck(deck.getId(), card.getId());
+            deck.addCard(card);
         }
     }
 
@@ -74,11 +89,11 @@ public class DeckService {
         deckRepository.removeCardFromDeck(cardId, deckId);
     }
 
-    public void deleteDeck(int deckId, int userId ) {
+    public void deleteDeck(int deckId, int userId) {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
-
         User user = userRepository.findUserById(userId).orElseThrow();
-        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId){
+
+        if (user.getRole() != Role.ADMIN || deck.getUserId() != userId) {
             throw new SecurityException("You cannot delete this deck");
         }
 

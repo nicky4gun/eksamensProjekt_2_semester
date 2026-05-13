@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository {
-    List<Card> findCardsByUserId(int userId, List<Integer> cardIds);
+    Optional<Card> findCardByUserId(int userId, int cardId);
 
     Optional<User> findUserById(int userId);
 

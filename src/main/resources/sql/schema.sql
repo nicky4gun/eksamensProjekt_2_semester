@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_Name VARCHAR(50),
     last_Name VARCHAR(50),
     user_Name VARCHAR(50) not null,
-    pasword VARCHAR(255) not null,
+    password VARCHAR(255) not null,
     email VARCHAR(100) not null
     role VARCHAR(50) not null,
 );
@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS cards (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(150) not null,
-    card_Type VARCHAR(50) not null,
-    colors VARCHAR(50) not null,
+    card_type VARCHAR(50) not null,
+    color VARCHAR(50) not null,
     set VARCHAR(150) not null,
     rarity VARCHAR(40) not null,
     rule_text VARCHAR(500),

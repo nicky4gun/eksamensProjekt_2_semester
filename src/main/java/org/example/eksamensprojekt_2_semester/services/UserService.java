@@ -11,21 +11,19 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-   private final  IUserRepository userRepository;
-   private final ICardRepository cardRepository;
+    private final IUserRepository userRepository;
+    private final ICardRepository cardRepository;
 
-   public UserService(IUserRepository userRepository, ICardRepository cardRepository) {
+    public UserService(IUserRepository userRepository, ICardRepository cardRepository) {
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
     }
 
+    public Optional<Card> findCardByUserId(int userId, int cardId) {
+        return userRepository.findCardByUserId(userId, cardId);
+    }
 
-    public  List<Card> findCardsByUserId(int userId,List<Integer> cardIds){
-
-       return userRepository.findCardsByUserId(userId,cardIds);
-
-   }
-   public Optional<User> findUserById(int userId){
-       return userRepository.findUserById(userId);
-   }
+    public Optional<User> findUserById(int userId) {
+        return userRepository.findUserById(userId);
+    }
 }
