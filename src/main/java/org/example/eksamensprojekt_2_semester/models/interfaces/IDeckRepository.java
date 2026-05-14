@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDeckRepository {
-    void createDeck(Deck deck);
+    int createDeck(Deck deck);
 
     void addCardToDeck(int deckId, int cardId);
 

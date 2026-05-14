@@ -9,7 +9,7 @@ public class Deck {
     private int id;
     private String deckName;
     private Format format;
-    private List<Card> cards = new ArrayList<Card>();
+    private final List<Card> cards = new ArrayList<>();
     private int userId;
 
     public Deck() {}
@@ -43,6 +43,30 @@ public class Deck {
         this.userId = userId;
     }
 
+    public void addCard(Card card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Card cannot be null");
+        }
+
+        cards.add(card);
+    }
+
+    public boolean isValid() {
+        if (cards.isEmpty()) {
+            return false;
+        }
+
+        return cards.size() >= format.getMinCards() && cards.size() <= format.getMaxCards();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDeckName() {
         return deckName;
     }
@@ -53,22 +77,6 @@ public class Deck {
 
     public List<Card> getCards() {
         return cards;
-    }
-
-    public void addCard(Card card) {
-        if (card == null) {
-            throw new IllegalArgumentException("Card cannot be null");
-        }
-
-        cards.add(card);
-    }
-
-    public boolean isValid() {
-        if (cards == null || cards.isEmpty()) {
-            return false;
-        }
-
-        return cards.size() >= format.getMinCards() && cards.size() <= format.getMaxCards();
     }
 
     public Format getFormat() {
@@ -85,13 +93,5 @@ public class Deck {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

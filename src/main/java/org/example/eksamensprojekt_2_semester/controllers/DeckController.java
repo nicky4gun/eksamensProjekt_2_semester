@@ -37,16 +37,15 @@ public class DeckController {
     }
 
     @PostMapping("/add")
-    public String addDeck(@RequestParam String deckName, @RequestParam List<Integer> cardIds,
-                          @RequestParam Format format, HttpSession session) {
+    public String addDeck(@RequestParam String deckName, @RequestParam Format format, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
             return "redirect:/login";
         }
 
-        deckService.addDeck(deckName, cardIds, format, userId);
-        return "redirect:/decks";
+        int deckId = deckService.addDeck(deckName, format, userId);
+        return "redirect:/decks/" + deckId;
     }
 
     @PostMapping("/add-cards")
@@ -57,8 +56,19 @@ public class DeckController {
             return "redirect:/login";
         }
 
-        deckService.addCardsToExistingDeck(deckId, cardIds, userId);
+        deckService.addCardsToDeck(deckId, cardIds, userId);
         return "redirect:/decks";
+    }
+
+    @GetMapping("/{deckId}")
+    public String showDeckInfo(@PathVariable int deckId, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        return "/pages/deck-view";
     }
 
     @PostMapping("/{deckId}/update")

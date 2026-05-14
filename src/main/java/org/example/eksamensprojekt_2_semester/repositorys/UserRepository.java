@@ -1,14 +1,12 @@
 package org.example.eksamensprojekt_2_semester.repositorys;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
-import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.*;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

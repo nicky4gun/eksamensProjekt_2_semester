@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +23,24 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
-    public void createDeck(Deck deck) {
+    public int createDeck(Deck deck) {
         String sql = "INSERT INTO decks (deck_name, format, user_id) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         try {
-            jdbcTemplate.update(sql, deck.getDeckName(), deck.getFormat().name(), deck.getUserId(), keyHolder);
+            jdbcTemplate.update(conn -> {
+                PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                ps.setString(1, deck.getDeckName());
+                ps.setString(2, deck.getFormat().name());
+                ps.setInt(3, deck.getUserId());
+                return ps;
+            }, keyHolder);
 
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke oprette deck, Prøv igen", e);
         }
 
-        deck.setId(keyHolder.getKey().intValue());
+        return keyHolder.getKey().intValue();
     }
 
     @Override
@@ -69,7 +76,7 @@ public class DeckRepository implements IDeckRepository {
     public Optional<Deck> findDeckById(int deckId) {
         String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE deck_id = ?";
 
-        List<Deck> decks  = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
+        List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
                 rs.getInt("id"),
                 rs.getString("deck_name"),
                 Format.valueOf(rs.getString("format")),
@@ -100,7 +107,7 @@ public class DeckRepository implements IDeckRepository {
     @Override
     public void deleteDeck(int deckId) {
         String sql = "DELETE FROM deck WHERE id = ? ";
-        jdbcTemplate.update(sql,deckId);
+        jdbcTemplate.update(sql, deckId);
     }
 }
 

@@ -12,6 +12,7 @@ import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,17 +38,11 @@ public class DeckServiceTests {
     }
 
     @Test
-    void addDeck_ShouldSave_WhenDeckIsValid_WithCards() {
-        List<Integer> cardIds = List.of(1);
-        Card card = new Card(1 ,"Dingus Staff", CardType.ARTIFACT, ManaColor.COLORLESS, "Weatherlight", Rarity.COMMON,
-                "Whenever a creature is put into any graveyard from play, Dingus Staff deals 2 damage to that creatures controller",
-                "");
-        when(userRepository.findCardsByUserId(userId, cardIds)).thenReturn(List.of(card));
-
+    void addDeck_ShouldSave_WhenDeckIsValid() {
         Deck expectedDeck = new Deck(deckName, format, userId);
         when(deckRepository.findDecksByUserId(userId)).thenReturn(List.of(expectedDeck));
 
-        deckService.addDeck(deckName, cardIds, format, userId);
+        deckService.addDeck(deckName, format, userId);
         verify(deckRepository, times(1)).createDeck(any(Deck.class));
 
         List<Deck> savedDecks = deckService.getDecksByUserId(userId);
@@ -56,27 +51,9 @@ public class DeckServiceTests {
     }
 
     @Test
-    void addDeck_ShouldSave_WhenDeckIsValid_WithoutCards() {
-        List<Integer> cardIds = List.of();
-        Deck expectedDeck = new Deck(deckName, format, userId);
-        when(deckRepository.findDecksByUserId(userId)).thenReturn(List.of(expectedDeck));
-
-        deckService.addDeck(deckName, cardIds, format, userId);
-
-        verify(deckRepository, times(1)).createDeck(any(Deck.class));
-
-        List<Deck> results = deckService.getDecksByUserId(userId);
-        assertEquals(1, results.size());
-        assertEquals(deckName, results.getFirst().getDeckName());
-        assertTrue(results.getFirst().getCards().isEmpty());
-    }
-
-    @Test
     void addDeck_ShouldThrowException_WhenDeckNameIsEmpty() {
-        List<Integer> cardIds = List.of();
-
         assertThrows(IllegalArgumentException.class, () ->
-            deckService.addDeck("", cardIds, format, userId)
+            deckService.addDeck("", format, userId)
         );
 
         verify(deckRepository, never()).createDeck(any(Deck.class));
@@ -84,10 +61,8 @@ public class DeckServiceTests {
 
     @Test
     void addDeck_ShouldThrowException_WhenFormatIsNull() {
-        List<Integer> cardIds = List.of();
-
         assertThrows(IllegalArgumentException.class, () ->
-            deckService.addDeck(deckName, cardIds, null, userId)
+            deckService.addDeck(deckName, null, userId)
         );
 
         verify(deckRepository, never()).createDeck(any(Deck.class));
@@ -102,9 +77,10 @@ public class DeckServiceTests {
         Card card2 = new Card(2, "Card 2", CardType.SORCERY, ManaColor.BLUE, "Set", Rarity.RARE, "Text", "URL");
 
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.of(deck));
-        when(userRepository.findCardsByUserId(userId, cardIds)).thenReturn(List.of(card1, card2));
+        when(userRepository.findCardByUserId(userId, card1.getId())).thenReturn(Optional.of(card1));
+        when(userRepository.findCardByUserId(userId, card2.getId())).thenReturn(Optional.of(card2));
 
-        deckService.addCardsToExistingDeck(deckId, cardIds, userId);
+        deckService.addCardsToDeck(deckId, cardIds, userId);
 
         assertEquals(2, deck.getCards().size());
         assertTrue(deck.getCards().contains(card1));
@@ -121,7 +97,7 @@ public class DeckServiceTests {
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.empty());
 
         assertThrows(java.util.NoSuchElementException.class, () ->
-            deckService.addCardsToExistingDeck(deckId, cardIds, userId)
+            deckService.addCardsToDeck(deckId, cardIds, userId)
         );
     }
 }

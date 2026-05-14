@@ -7,7 +7,6 @@ import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +22,12 @@ public class DeckService {
         this.userRepository = userRepository;
     }
 
-    public void addDeck(String deckName, List<Integer> cardIds, Format format, int userId) {
+    public int addDeck(String deckName, Format format, int userId) {
         Deck deck = new Deck(deckName, format, userId);
-        deckRepository.createDeck(deck);
-        addCardsToDeck(deck, cardIds, userId);
+        return deckRepository.createDeck(deck);
     }
 
-    public void addCardsToExistingDeck(int deckId, List<Integer> cardIds, int userId) {
+    public void addCardsToDeck(int deckId, List<Integer> cardIds, int userId) {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
 
         if (deck.getUserId() != userId) {
@@ -93,7 +91,7 @@ public class DeckService {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
         User user = userRepository.findUserById(userId).orElseThrow();
 
-        if (user.getRole() != Role.ADMIN || deck.getUserId() != userId) {
+        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId) {
             throw new SecurityException("You cannot delete this deck");
         }
 
