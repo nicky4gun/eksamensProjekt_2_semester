@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Deck | Deckforge</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
     <!-- Navbar (fragment) -->
+    <main>
+        <h1 th:text="${deck.deckName}"></h1>
+        <p th:text="${deck.format}"></p>
 
-    <!-- Deck title -->
-
-    <!-- Deck format -->
-
-    <h2>Deck</h2>
-
-    <!-- Card grid (Blocks) -->
+        <h2>Deck</h2>
+        
+        <section class="card-grid">
+            <article th:each="deckCard : ${deck.cards}" class="card">
+                <img th:src="${deckCard.imageUrl}" alt="Card Image">
+            </article>
+        </section>
+    </main>
 </body>
 </html>

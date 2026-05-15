@@ -61,6 +61,10 @@ public class DeckService {
         }
     }
 
+    public Deck getDeckById(int deckId) {
+        return deckRepository.findDeckById(deckId).orElseThrow();
+    }
+
     public List<Deck> getDecksByUserId(int userId) {
         return deckRepository.findDecksByUserId(userId);
     }
@@ -97,5 +101,4 @@ public class DeckService {
 
         deckRepository.deleteDeck(deckId);
     }
-
 }

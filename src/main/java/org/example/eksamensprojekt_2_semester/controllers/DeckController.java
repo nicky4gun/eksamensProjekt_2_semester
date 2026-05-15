@@ -1,12 +1,15 @@
 package org.example.eksamensprojekt_2_semester.controllers;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.eksamensprojekt_2_semester.models.Card;
+import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.services.DeckService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,8 +35,9 @@ public class DeckController {
     }
 
     @GetMapping("/add")
-    public String showAddDeckForm() {
-        return "add-deck";
+    public String showAddDeckForm(Model model) {
+        model.addAttribute("formatList", Format.values());
+        return "/pages/add-deck";
     }
 
     @PostMapping("/add")
@@ -62,6 +66,8 @@ public class DeckController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
+        Deck deck = deckService.getDeckById(deckId);
+        model.addAttribute("deck", deck);
         return "/pages/deck-view";
     }
 

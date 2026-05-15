@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Decks | Deckforge</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" >
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
     <!-- Navbar (fragment) -->
-
-    <h1>Mine Decks</h1>
-
-    <!-- Add deck - Button (a-tag link) -->
-
-    <!-- Deck grid (blocks) -->
+    <main>
+        <h1>Mine Decks</h1>
+        <section class="decks-actionbar">
+            <a th:class="btn" href="/decks/add" class="btn">Tilføj Deck</a>
+        </section>
+        <section class="deck-grid">
+            <article th:each="deck : ${decks}" class="card">
+                <div class="deck-card-body">
+                    <h2 th:text="${deck.deckName}"></h2>
+                    <p th:text="${deck.format}"></p>
+                    <span>Card number</span>
+                    <a th:href="@{/decks/{id}(id=${deck.id})}" class="card-link"></a>
+                </div>
+            </article>
+        </section>
+    </main>
 </body>
 </html>

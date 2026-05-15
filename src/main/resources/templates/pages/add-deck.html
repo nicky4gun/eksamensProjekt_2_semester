@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Deck | Deckforge</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <!-- Navbar (fragment) -->
+    <main>
+        <h1>Tilføj nyt Deck</h1>
+
+        <form th:action="@{/decks/add}" method="post" class="add-deck-form">
+            <input type="text" name="deckName" placeholder="Enter deck name here..." required>
+
+            <select name="format" required>
+                <option value="" disabled selected>Select Format</option>
+                <option th:each="format : ${formatList}"
+                        th:value="${format}"
+                        th:text="${format.name}">
+                </option>
+            </select>
+
+            <button type="submit" class="btn">Opret Deck</button>
+        </form>
+    </main>
+</body>
+</html>

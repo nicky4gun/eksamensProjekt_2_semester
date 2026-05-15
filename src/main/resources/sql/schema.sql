@@ -4,11 +4,10 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_Name VARCHAR(50),
     last_Name VARCHAR(50),
-    user_Name VARCHAR(50) not null,
+    username VARCHAR(50) not null,
     password VARCHAR(255) not null,
-    email VARCHAR(100) not null
+    email VARCHAR(100) not null,
     role VARCHAR(50) not null,
-    Image VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS cards (
@@ -16,11 +15,11 @@ CREATE TABLE IF NOT EXISTS cards (
     name VARCHAR(150) not null,
     card_type VARCHAR(50) not null,
     color VARCHAR(50) not null,
-    set VARCHAR(150) not null,
+    expansions VARCHAR(150) not null,
     rarity VARCHAR(40) not null,
     rule_text VARCHAR(500),
-    imageUrl VARCHAR(150),
-    isTradeble BOOLEAN not null
+    image_url VARCHAR(150),
+    tradable BOOLEAN not null
 );
 
 CREATE TABLE IF NOT EXISTS decks (
@@ -32,8 +31,8 @@ CREATE TABLE IF NOT EXISTS decks (
 );
 
 CREATE TABLE IF NOT EXISTS deck_cards (
-    deck_id INT PRIMARY KEY,
-    card_id INT PRIMARY KEY,
+    deck_id INT,
+    card_id INT,
 
     FOREIGN KEY (deck_id) REFERENCES decks(id),
     FOREIGN KEY (card_id) REFERENCES cards(id)
@@ -48,13 +47,9 @@ CREATE TABLE IF NOT EXISTS collections (
 );
 
 CREATE TABLE IF NOT EXISTS collection_cards (
-    collection_id INT PRIMARY KEY,
-    card_id INT PRIMARY KEY,
+    collection_id INT,
+    card_id INT,
 
     FOREIGN KEY (collection_id) REFERENCES collections(id),
     FOREIGN KEY (card_id) REFERENCES cards(id)
 );
-
-
-
-

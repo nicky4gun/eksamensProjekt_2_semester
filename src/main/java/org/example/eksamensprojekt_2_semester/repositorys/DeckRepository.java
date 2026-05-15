@@ -74,7 +74,7 @@ public class DeckRepository implements IDeckRepository {
 
     @Override
     public Optional<Deck> findDeckById(int deckId) {
-        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE deck_id = ?";
+        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE id = ?";
 
         List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
                 rs.getInt("id"),
