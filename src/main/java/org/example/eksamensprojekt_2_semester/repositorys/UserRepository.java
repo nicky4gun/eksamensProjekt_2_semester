@@ -43,12 +43,12 @@ public class UserRepository implements IUserRepository {
 
    @Override
     public Optional<User> findUserById(int userId) {
-       String sql = "SELECT  firstName,lastName,username,password, email, role, image  FROM users WHERE id = ?";
+       String sql = "SELECT  first_Name,last_Name,user_Name,password, email, role, image  FROM users WHERE id = ?";
 
        List<User> user  = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
-               rs.getString("first_name"),
-               rs.getString("last_name"),
-               rs.getString("username"),
+               rs.getString("first_Name"),
+               rs.getString("last_Name"),
+               rs.getString("user_Name"),
                rs.getString("password"),
                rs.getString("email"),
                Role.valueOf(rs.getString("role")),
@@ -58,4 +58,5 @@ public class UserRepository implements IUserRepository {
 
        return user.isEmpty() ? Optional.empty() : Optional.of(user.getFirst());
     }
+
 }

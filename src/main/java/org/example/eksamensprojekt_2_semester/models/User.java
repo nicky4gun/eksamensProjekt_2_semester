@@ -2,20 +2,25 @@ package org.example.eksamensprojekt_2_semester.models;
 
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 
+import java.util.List;
+
 public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private String username;
+    private String userName;
     private String password;
     private String email;
     private Role role;
     private String image;
+    private List<Card> favoriteCards;
 
     public User() {}
-
-    public User(String firstName, String lastName, String username, String password, String email, Role role,String image ) {
-        if (username == null || username.isEmpty()) {
+public User(List<Card> favoriteCards) {
+        this.favoriteCards = favoriteCards;
+}
+    public User(String firstName, String lastName, String userName, String password, String email, Role role, String image ) {
+        if (userName == null || userName.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
@@ -33,15 +38,15 @@ public class User {
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
+        this.userName = userName;
         this.password = password;
         this.email = email;
         this.role = role;
         this.image = image;
 
     }
-    public User( int id, String firstName, String lastName, String username, String password, String email, Role role,String image ) {
-        if (username == null || username.isEmpty()) {
+    public User(int id, String firstName, String lastName, String userName, String password, String email, Role role, String image ) {
+        if (userName == null || userName.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
@@ -59,7 +64,7 @@ public class User {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
+        this.userName = userName;
         this.password = password;
         this.email = email;
         this.role = role;
@@ -89,12 +94,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -126,6 +131,13 @@ public class User {
     }
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Card> getFavoriteCards() {
+        return favoriteCards;
+    }
+    public void setFavoriteCards(List<Card> favoriteCards) {
+        this.favoriteCards = favoriteCards;
     }
 
 }

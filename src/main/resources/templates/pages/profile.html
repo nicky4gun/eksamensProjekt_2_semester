@@ -7,9 +7,9 @@
 <body>
     <!-- Navbar (fragment) -->
     <nav id="navbar">
-        <div id="navbar-header">
+
         <h1 id="company-name">deckforge</h1>
-        </div>
+
         <div class="nav-links">
             <a class="nav-link" href="/home">Home</a>
             <a class="nav-link" href="/decks"> mine Decks</a>
@@ -18,16 +18,63 @@
         </div>
         <a id="logout-button" href="/logout">Logout</a>
 
-       <td><img th:src="@{'/images/' +${user.image}}" alt="user image" width="100"></td>
-    </nav>>
-    <!-- profile image -->
 
-    <!-- profile details (username, name etc.) -->
+    </nav>>
+    <nav class="actions">
+        <a class="btn" herf="/profile/edit"><button type="button">opdater profil</button></a>
+
+        <form class="button" th:action="@{/profile/delete}" method="post"
+              onsubmit="return confirm('Are you sure you want to delete this user?')">
+            <button class="btn btn-danger" type="submit">Slet konto</button>
+        </form>
+    </nav>
+
+    <td><img th:src="@{'/images/' +${user.image}}" alt="user image" width="100"></td>
+     <section class="profile">
+         <h2>Profile Details</h2>
+         <div class="profile-info">
+             <p>Name: <span th:text="${user.firstName}"></span></p>
+             <p>Last name:<span th:text="${user.lastName}"></span></p>
+             <p>Username:<span th:text="${user.userName}"></span></p>
+         </div>
+     </section>
 
     <!-- Samling section -->
+    <h2>din samling</h2>
+    <div class="collection-grid">
+        <div th:each="card : ${collection}" class="card">
+            <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+        </div>
+    </div>
 
     <!-- Deck section -->
+<div th:if="${deck != null}">
+<h1 th:text="${deck.deckName}"></h1>
+    <p>Format:<span th:text="${deck.format}"></span></p>
+</div>
 
+    <h2>Cards in this deck</h2>
+    <div th:each="card : ${cards}">
+        <div class="card">
+            <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+        </div>
+    </div>
     <!-- Favorite section -->
+<h2> your Favorite Cards</h2>
+<div th:each="card : ${collection}">
+    <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+
+    <form action="/collection/favorites/delete" method="post">
+        <input type="hidden" name="cardId" th:value="${card.id}">
+        <button>favorite</button>
+    </form>
+</div>
+<div th:each="card : ${favorites}">
+    <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+    <form action="/collection/favorites/delete" method="post">
+        <input type="hidden" name="cardId" th:value="${card.id}">
+        <button>remove</button>
+    </form>
+</div>
 </body>
 </html>
