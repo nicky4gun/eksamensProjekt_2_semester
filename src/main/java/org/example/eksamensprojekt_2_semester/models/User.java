@@ -10,11 +10,11 @@ public class User {
     private String password;
     private String email;
     private Role role;
-
+    private String image;
 
     public User() {}
 
-    public User(String firstName, String lastName, String username, String password, String email, Role role ) {
+    public User(String firstName, String lastName, String username, String password, String email, Role role,String image ) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -37,9 +37,10 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.image = image;
 
     }
-    public User( int id, String firstName, String lastName, String username, String password, String email, Role role) {
+    public User( int id, String firstName, String lastName, String username, String password, String email, Role role,String image ) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -62,6 +63,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.image = image;
     }
 
     public int getId() {
@@ -117,6 +119,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getImage(){
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

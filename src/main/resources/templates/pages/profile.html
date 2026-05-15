@@ -6,7 +6,20 @@
 </head>
 <body>
     <!-- Navbar (fragment) -->
+    <nav id="navbar">
+        <div id="navbar-header">
+        <h1 id="company-name">deckforge</h1>
+        </div>
+        <div class="nav-links">
+            <a class="nav-link" href="/home">Home</a>
+            <a class="nav-link" href="/decks"> mine Decks</a>
+            <a class="nav-link" href="/collection">min samling</a>
+            <a class="nav-link" href="/profile">Min profil</a>
+        </div>
+        <a id="logout-button" href="/logout">Logout</a>
 
+       <td><img th:src="@{'/images/' +${user.image}}" alt="user image" width="100"></td>
+    </nav>>
     <!-- profile image -->
 
     <!-- profile details (username, name etc.) -->
