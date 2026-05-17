@@ -3,20 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Samling | Deckforge</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" >
 </head>
 <body>
     <!-- Navbar (fragment) -->
 
     <h1>Min Samling</h1>
+<div th:each="card : ${collection}" class="card">
+    <img th:src="${card.imageUrl}" class="card-image">
+</div>
 
     <!-- Sortering -->
 
-    <!-- Filter -->
 
+    <!-- Filter -->
+<from action="/collection" method="get" class="filters">
+    <label><input type="checkbox" name="color" value="Red"> Rød </label>
+    <label><input type="checkbox" name="color" value="Blue"> Blå </label>
+    <label><input type="checkbox" name="color" value="Green"> Grøn </label>
+    <label><input type="checkbox" name="color" value="Black"> Sort </label>
+    <label><input type="checkbox" name="color" value="White"> Hvid </label>
+    <label><input type="checkbox" name="color" value="ColorLess"> FaveLøs </label>
+    <button type="submit" class="btn">Filterer</button>
+
+</from>
     <!-- Search -->
+    <from action="/collection" method="get" class="search-bar">
+        <input type="search" name="search" id="search" placeholder="Søg efter kort">
+        <button type="submit" class="btn">Søg</button>
+    </from>
 
     <!-- Add Card - Button (a-tag link) -->
-
+     <a href="/cards/add" class="btn">Tilføj kort</a>
     <!-- Card-table -->
+<div class="cards-grid">
+    <div th:each="card : ${collection}" class="card">
+        <img th:src="${card.imageUrl}" class="card-image" >
+
+    </div>
+
+</div>
 </body>
 </html>

@@ -31,4 +31,8 @@ public class UserService {
        User user = userRepository.findUserById(userId).orElseThrow();
         return user.getFavoriteCards();
     }
+    public List<Card> findCardsByUserId(int userId) {
+        return userRepository.findCardsByUserId(userId);
+
+    }
 }

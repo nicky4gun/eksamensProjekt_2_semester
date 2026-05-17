@@ -12,5 +12,6 @@ public interface IUserRepository {
     Optional<User> findUserById(int userId);
 
 
+    List<Card> findCardsByUserId(int userId);
 
 }

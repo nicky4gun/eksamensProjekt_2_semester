@@ -58,5 +58,26 @@ public class UserRepository implements IUserRepository {
 
        return user.isEmpty() ? Optional.empty() : Optional.of(user.getFirst());
     }
+    @Override
+    public List<Card> findCardsByUserId(int userId){
+        String sql = """
+        SELECT c.id, c.name, c.card_type, c.color, c.set, c.rarity, c.ruleText, c.imageUrl
+        FROM cards c
+        JOIN collection_cards cc ON c.id = cc.card_id
+        JOIN collections col ON cc.collection_id = col.id
+        WHERE col.user_id = ?
+    """;
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getString("name"),
+                CardType.valueOf(rs.getString("card_type")),
+                ManaColor.valueOf(rs.getString("color")),
+                rs.getString("set"),
+                Rarity.valueOf(rs.getString("rarity")),
+                rs.getString("ruleText"),
+                rs.getString("imageUrl")
+        ), userId);
+    }
+
 
 }

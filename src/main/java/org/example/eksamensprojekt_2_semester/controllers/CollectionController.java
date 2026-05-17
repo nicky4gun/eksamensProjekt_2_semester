@@ -21,14 +21,19 @@ public class CollectionController {
         this.userService = userService;
     }
     @GetMapping
-    public String showCollection(Model model, HttpSession session) {
-        Integer userId =(Integer) session.getAttribute("userId");
-        int cardId = (Integer) session.getAttribute("cardId");
-        if (userId == null) {
-            {userId = 1; session.setAttribute("userId", userId); }
-        }
-        Optional<Card> collection = userService.findCardByUserId(userId,cardId);
-
+    public String showCollection(@RequestParam(required = false) String search,List<String> color, Model model, HttpSession session) {
+      Integer userId = (Integer) session.getAttribute("user_id");
+       if (userId == null){
+           userId = 1;
+       }
+       List<Card> cards = userService.findCardsByUserId(userId);
+       if (search != null && !search.isEmpty()){
+           cards = cards.stream().filter(c->c.getName().toLowerCase().contains(search.toLowerCase())).toList();
+       }
+       if(color != null && !color.isEmpty()){
+           cards = cards.stream().filter(c->color.contains(c.getColor().toString())).toList();
+       }
+       model.addAttribute("collection", cards);
         return "/pages/collection";
     }
     @GetMapping("/favorites")
