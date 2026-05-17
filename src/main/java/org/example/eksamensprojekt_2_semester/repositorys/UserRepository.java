@@ -22,7 +22,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public Optional<Card> findCardByUserId(int userId, int cardId) {
         String sql = """
-                       SELECT c.id, c.name, c.card_type, c.color, c.set, c.rarity, c.ruleText, c.imageUrl
+                       SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
                        FROM cards c
                        JOIN collection_cards cc ON c.id = cc.card_id
                        JOIN collections col ON cc.collection_id = col.id
@@ -43,7 +43,7 @@ public class UserRepository implements IUserRepository {
 
    @Override
     public Optional<User> findUserById(int userId) {
-       String sql = "SELECT  first_Name,last_Name,user_Name,password, email, role, image  FROM users WHERE id = ?";
+       String sql = "SELECT  first_name, last_name, usermame, password, email, role, image  FROM users WHERE id = ?";
 
        List<User> user  = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
                rs.getString("first_Name"),
@@ -61,7 +61,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public List<Card> findCardsByUserId(int userId){
         String sql = """
-        SELECT c.id, c.name, c.card_type, c.color, c.set, c.rarity, c.ruleText, c.imageUrl
+        SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
         FROM cards c
         JOIN collection_cards cc ON c.id = cc.card_id
         JOIN collections col ON cc.collection_id = col.id

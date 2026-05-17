@@ -2,6 +2,7 @@ package org.example.eksamensprojekt_2_semester.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
+import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,48 +18,59 @@ import java.util.Optional;
 @RequestMapping("/collection")
 public class CollectionController {
     private final UserService userService;
+
     public CollectionController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping
-    public String showCollection(@RequestParam(required = false) String search,List<String> color, Model model, HttpSession session) {
-      Integer userId = (Integer) session.getAttribute("user_id");
-       if (userId == null){
-           userId = 1;
-       }
-       List<Card> cards = userService.findCardsByUserId(userId);
-       if (search != null && !search.isEmpty()){
-           cards = cards.stream().filter(c->c.getName().toLowerCase().contains(search.toLowerCase())).toList();
-       }
-       if(color != null && !color.isEmpty()){
-           cards = cards.stream().filter(c->color.contains(c.getColor().toString())).toList();
-       }
-       model.addAttribute("collection", cards);
+    public String showCollection(@RequestParam(required = false) String search, @RequestParam(required = false) List<ManaColor> colors,
+                                 Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            userId = 1;
+        }
+        List<Card> cards = userService.findCardsByUserId(userId);
+        cards = userService.searchCards(cards, search);
+        cards = userService.filterCardsByColor(cards, colors);
+        model.addAttribute("collection", cards);
         return "/pages/collection";
     }
+
     @GetMapping("/favorites")
     public String showFavorites(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
+        if (userId == null) {
+            userId = 1;
+            session.setAttribute("userId", userId);
+        }
 
 
         model.addAttribute("favorites", userService.getFavoriteCards(userId));
         return "/pages/collection";
     }
+
     @PostMapping("/favorites/add")
-    public String addFavorite(@RequestParam int cardId , HttpSession session) {
+    public String addFavorite(@RequestParam int cardId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
+        if (userId == null) {
+            userId = 1;
+            session.setAttribute("userId", userId);
+        }
         // userservice.addFavoriteCard
-        return"redirect:/collection/favorites";
+        return "redirect:/collection/favorites";
 
     }
+
     @PostMapping("/favorites/remove")
-    public String removeFavorite(@RequestParam int cardId , HttpSession session) {
+    public String removeFavorite(@RequestParam int cardId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
+        if (userId == null) {
+            userId = 1;
+            session.setAttribute("userId", userId);
+        }
         // userservice.removeFavoriteCard
-        return"redirect:/collection/favorites";
+        return "redirect:/collection/favorites";
     }
 
 
