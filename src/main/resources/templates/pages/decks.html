@@ -10,8 +10,31 @@
     <main>
         <h1>Mine Decks</h1>
         <section class="decks-actionbar">
-            <a th:class="btn" href="/decks/add" class="btn">Tilføj Deck</a>
+            <button class="btn" onclick="document.getElementById('newDeckModal').showModal()">Tilføj Deck</button>
         </section>
+
+        <dialog id="newDeckModal">
+            <button onclick="document.getElementById('newDeckModal').close();
+            document.getElementById('newDeckModal').querySelector('form').reset();">&times;</button>
+            <h2>Tilføj nyt Deck</h2>
+
+            <form th:action="@{/decks/add}" method="post" class="deck-form">
+                <input type="text" name="deckName" placeholder="Enter deck name here..." required>
+                <select name="format" required>
+                    <option value="" disabled selected>Select Format</option>
+                    <option th:each="format : ${formatList}"
+                            th:value="${format}"
+                            th:text="${format.name}">
+                    </option>
+                </select>
+                <div class="modal-actions">
+                    <button onclick="document.getElementById('newDeckModal').close();
+                    document.getElementById('newDeckModal').querySelector('form').reset();" class="btn">Annuller</button>
+                    <button type="submit" class="btn">Opret Deck</button>
+                </div>
+            </form>
+        </dialog>
+
         <section class="deck-grid">
             <article th:each="deck : ${decks}" class="card">
                 <div class="deck-card-body">

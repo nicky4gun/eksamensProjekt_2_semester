@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS deck_cards (
     deck_id INT,
     card_id INT,
 
-    FOREIGN KEY (deck_id) REFERENCES decks(id),
-    FOREIGN KEY (card_id) REFERENCES cards(id)
+    FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS collections (

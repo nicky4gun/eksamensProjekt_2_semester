@@ -31,13 +31,8 @@ public class DeckController {
 
 
         model.addAttribute("decks", deckService.getDecksByUserId(userId));
-        return "/pages/decks";
-    }
-
-    @GetMapping("/add")
-    public String showAddDeckForm(Model model) {
         model.addAttribute("formatList", Format.values());
-        return "/pages/add-deck";
+        return "/pages/decks";
     }
 
     @PostMapping("/add")
@@ -47,7 +42,7 @@ public class DeckController {
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
         int deckId = deckService.addDeck(deckName, format, userId);
-        return "redirect:/decks/" + deckId;
+        return "redirect:/decks";
     }
 
     @PostMapping("/add-cards")
@@ -67,7 +62,10 @@ public class DeckController {
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
         Deck deck = deckService.getDeckById(deckId);
+        List<Card> deckCards = deckService.getAllCards(deckId);
         model.addAttribute("deck", deck);
+        model.addAttribute("deckCards", deckCards);
+        model.addAttribute("formatList", Format.values());
         return "/pages/deck-view";
     }
 
@@ -92,8 +90,8 @@ public class DeckController {
         return "redirect:/decks/" + deckId;
     }
 
-    @GetMapping("/delete")
-    public String deleteDeck(@RequestParam Integer deckId, HttpSession session) {
+    @GetMapping("/{deckId}/delete")
+    public String deleteDeck(@PathVariable int deckId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }

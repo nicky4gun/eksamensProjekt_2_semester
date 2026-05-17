@@ -69,6 +69,10 @@ public class DeckService {
         return deckRepository.findDecksByUserId(userId);
     }
 
+    public List<Card> getAllCards(int deckId) {
+        return deckRepository.findAllCards(deckId);
+    }
+
     public void updateDeck(int deckId, String deckName, Format format, int userId) {
         Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
 

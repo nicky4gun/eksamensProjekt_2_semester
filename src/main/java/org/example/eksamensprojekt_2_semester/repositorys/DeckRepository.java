@@ -1,7 +1,11 @@
 package org.example.eksamensprojekt_2_semester.repositorys;
 
+import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
+import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
+import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
+import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +92,25 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
+    public List<Card> findAllCards(int deckId) {
+        String sql = """
+                        SELECT c.id, c.name,  c.card_type,  c.color,  c.expansions,  c.rarity,  c.rule_text,  c.image_url FROM cards c
+                        JOIN deck_cards dc ON c.id = dc.card_id
+                        JOIN decks d ON d.id = dc.deck_id
+                        WHERE d.id = ?""";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getInt("id"),
+                rs.getString("name"),
+                CardType.valueOf(rs.getString("card_type")),
+                ManaColor.valueOf(rs.getString("color")),
+                rs.getString("expansions"),
+                Rarity.valueOf(rs.getString("rarity")),
+                rs.getString("rule_text"),
+                rs.getString("image_url")
+        ), deckId);
+    }
+
+    @Override
     public void updateDeck(Deck deck) {
         String sql = "UPDATE decks SET deck_name = ?, format = ? WHERE id = ?";
 
@@ -106,7 +130,7 @@ public class DeckRepository implements IDeckRepository {
 
     @Override
     public void deleteDeck(int deckId) {
-        String sql = "DELETE FROM deck WHERE id = ? ";
+        String sql = "DELETE FROM decks WHERE id = ? ";
         jdbcTemplate.update(sql, deckId);
     }
 }
