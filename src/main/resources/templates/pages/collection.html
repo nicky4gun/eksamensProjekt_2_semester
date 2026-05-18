@@ -3,55 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Samling | Deckforge</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" >
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
     <!-- Navbar (fragment) -->
-    <main >
-    <h1>Min Samling</h1>
+    <main>
+        <h1>Min Samling</h1>
 
-<div class="toolbar">
-
-
-
-    <!-- Sortering -->
+        <div class="toolbar">
 
 
-    <!-- Filter -->
-    <form action="/collection" method="get" class="filters">
-        <select name="colors" id="colors" multiple>
-            <option value="" disabled selected>Filter Colors</option>
-            <option th:each="color : ${manacolor}"
-                    th:value="${color}"
-                    th:text="${color.name}">
-            </option>
+            <!-- Sortering -->
 
 
-        </select>
-        <button type="submit" class="btn">Filter</button>
+            <!-- Filter -->
+            <form action="/collection" method="get" class="filters">
+                <select name="colors" id="colors">
+                    <option value="" disabled selected>Filter Colors</option>
+                    <option th:each="color : ${manacolor}"
+                            th:value="${color}"
+                            th:text="${color.name}">
+                    </option>
+                </select>
+                <button type="submit" class="btn">Filter</button>
+            </form>
 
-    </form>
+            <!-- Search -->
+            <form action="/collection" method="get" class="search-bar">
+                <input type="search" name="search" id="search" placeholder="Søg efter kort">
+                <button type="submit" class="btn">Søg</button>
+            </form>
 
-    <!-- Search -->
-    <form action="/collection" method="get" class="search-bar">
-        <input type="search" name="search" id="search" placeholder="Søg efter kort">
-        <button type="submit" class="btn">Søg</button>
-    </form>
-
-    <!-- Add Card - Button (a-tag link) -->
-     <a href="/cards/add" class="btn">Tilføj kort</a>
-</div>
-
-    <!-- Card-table -->
-    <div class="card-grid">
-        <div th:each="card : ${collection}" class="card">
-            <img th:src="${card.imageUrl}" alt="card image" >
-
+            <!-- Add Card - Button (a-tag link) -->
+            <a href="/cards/add" class="btn">Tilføj kort</a>
         </div>
-    </div>
 
+        <!-- Card-table -->
+        <div class="card-grid">
+            <div th:each="card : ${collection}" class="card">
+                <img th:src="${card.imageUrl}" alt="card image">
+            </div>
+        </div>
     </main>
-
 </body>
-
 </html>

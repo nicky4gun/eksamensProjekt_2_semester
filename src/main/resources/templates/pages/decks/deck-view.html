@@ -16,7 +16,7 @@
         <section class="deck-actionbar">
             <h2>Deck</h2>
             <div>
-                <a href="/" class="btn">Tilføj Kort</a>
+                <a th:href="@{/decks/{deckId}/add-cards(deckId=${deck.id})}" class="btn">Tilføj Kort</a>
                 <button class="btn" onclick="document.getElementById('updateDeckModal').showModal()">Opdater Deck</button>
                 <a th:href="@{/decks/{deckId}/delete(deckId=${deck.id})}" onclick="return confirm('Er du sikker på, at du vil slette dette deck?')"
                    class="btn btn-danger">Slet Deck</a>
@@ -49,6 +49,12 @@
         <section class="card-grid">
             <article th:each="deckCard : ${deckCards}" class="card">
                 <img th:src="${deckCard.imageUrl}" alt="Card Image">
+                <div class="card-overlay">
+                    <form th:action="@{/decks/{deckId}/remove-card(deckId=${deck.id})}" method="post">
+                        <input type="hidden" name="cardId" th:value="${deckCard.id}">
+                        <button type="submit" class="btn btn-danger">Fjern Kort</button>
+                    </form>
+                </div>
             </article>
         </section>
     </main>

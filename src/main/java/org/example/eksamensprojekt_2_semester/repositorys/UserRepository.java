@@ -29,13 +29,14 @@ public class UserRepository implements IUserRepository {
                        WHERE col.user_id = ? AND c.id = ?""";
 
         List<Card> cards = jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getInt("id"),
                 rs.getString("name"),
                 CardType.valueOf(rs.getString("card_type")),
                 ManaColor.valueOf(rs.getString("color")),
                 rs.getString("expansions"),
                 Rarity.valueOf(rs.getString("rarity")),
                 rs.getString("rule_text"),
-               rs.getString("imageUrl")
+               rs.getString("image_url")
         ), userId, cardId);
 
         return cards.isEmpty() ? Optional.empty() : Optional.of(cards.getFirst());

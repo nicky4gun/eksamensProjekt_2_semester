@@ -6,11 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Collection {
+    private int id;
     private int userId;
     private final List<Card> cards = new ArrayList<>();
     private Visibility visibility;
 
     public Collection() {}
+
+    public Collection(int id, int userId, Visibility visibility) {
+        if (userId < 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+
+        if (visibility == null) {
+            throw new IllegalArgumentException("Invalid visibility");
+        }
+
+        this.id = id;
+        this.userId = userId;
+        this.visibility = visibility;
+    }
 
     public Collection(int userId, Visibility visibility) {
         if (userId < 0) {
@@ -23,6 +38,14 @@ public class Collection {
 
         this.userId = userId;
         this.visibility = visibility;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int  getUserId() {

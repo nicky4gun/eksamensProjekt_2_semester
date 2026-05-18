@@ -2,14 +2,15 @@ package org.example.eksamensprojekt_2_semester.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
+import org.example.eksamensprojekt_2_semester.models.Collection;
 import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
+import org.example.eksamensprojekt_2_semester.services.CollectionService;
 import org.example.eksamensprojekt_2_semester.services.DeckService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -17,9 +18,11 @@ import java.util.List;
 public class DeckController {
 
     private final DeckService deckService;
+    private final CollectionService collectionService;
 
-    public DeckController(DeckService deckService) {
+    public DeckController(DeckService deckService, CollectionService collectionService) {
         this.deckService = deckService;
+        this.collectionService = collectionService;
     }
 
     @GetMapping
@@ -32,7 +35,7 @@ public class DeckController {
 
         model.addAttribute("decks", deckService.getDecksByUserId(userId));
         model.addAttribute("formatList", Format.values());
-        return "/pages/decks";
+        return "/pages/decks/decks";
     }
 
     @PostMapping("/add")
@@ -45,14 +48,23 @@ public class DeckController {
         return "redirect:/decks";
     }
 
-    @PostMapping("/add-cards")
-    public String addCardsToDeck(@RequestParam int deckId, @RequestParam List<Integer> cardIds, HttpSession session) {
+    @GetMapping("/{deckId}/add-cards")
+    public String showAddCardsView(@PathVariable int deckId, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
+        model.addAttribute("collectionCards", collectionService.getCards(userId));
+        model.addAttribute("deckId", deckId);
+        return "/pages/decks/add-card";
+    }
+
+    @PostMapping("/{deckId}/add-cards")
+    public String addCardsToDeck(@PathVariable int deckId, @RequestParam List<Integer> cardIds, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
         deckService.addCardsToDeck(deckId, cardIds, userId);
-        return "redirect:/decks";
+        return "redirect:/decks/" + deckId;
     }
 
     @GetMapping("/{deckId}")
@@ -66,7 +78,7 @@ public class DeckController {
         model.addAttribute("deck", deck);
         model.addAttribute("deckCards", deckCards);
         model.addAttribute("formatList", Format.values());
-        return "/pages/deck-view";
+        return "/pages/decks/deck-view";
     }
 
     @PostMapping("/{deckId}/update")
