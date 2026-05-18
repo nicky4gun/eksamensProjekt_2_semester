@@ -34,6 +34,7 @@ public class CollectionController {
         cards = userService.searchCards(cards, search);
         cards = userService.filterCardsByColor(cards, colors);
         model.addAttribute("collection", cards);
+        model.addAttribute("manacolor", ManaColor.values());
         return "/pages/collection";
     }
 

@@ -8,7 +8,7 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private Role role;
@@ -19,8 +19,8 @@ public class User {
 public User(List<Card> favoriteCards) {
         this.favoriteCards = favoriteCards;
 }
-    public User(String firstName, String lastName, String userName, String password, String email, Role role, String image ) {
-        if (userName == null || userName.isEmpty()) {
+    public User(String firstName, String lastName, String username, String password, String email, Role role, String image ) {
+        if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
@@ -38,15 +38,15 @@ public User(List<Card> favoriteCards) {
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.image = image;
 
     }
-    public User(int id, String firstName, String lastName, String userName, String password, String email, Role role, String image ) {
-        if (userName == null || userName.isEmpty()) {
+    public User(int id, String firstName, String lastName, String username, String password, String email, Role role, String image ) {
+        if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
@@ -64,7 +64,7 @@ public User(List<Card> favoriteCards) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
@@ -94,12 +94,12 @@ public User(List<Card> favoriteCards) {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

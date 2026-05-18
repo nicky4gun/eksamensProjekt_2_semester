@@ -33,7 +33,7 @@ public class CardRepository implements ICardRepository {
         String sql = "UPDATE CARD set name = ?, card_type = ?, color = ?, rarity = ?, rule_text = ?, image_url = ? where id = ?";;
 
         jdbcTemplate.update(sql, card.getName(), card.getCardType().toString(), card.getColor().toString(),
-                card.getRuleText(), card.getRarity().toString(), card.getSet(), card.getImageUrl(), card.getId());
+                card.getRuleText(), card.getRarity().toString(), card.getExpansions(), card.getImageUrl(), card.getId());
     }
 
 }

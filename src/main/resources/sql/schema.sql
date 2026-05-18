@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) not null,
     email VARCHAR(100) not null,
     role VARCHAR(50) not null,
+    image_url VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS cards (

@@ -70,13 +70,15 @@ public class UserRepository implements IUserRepository {
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
                 rs.getString("name"),
-                CardType.valueOf(rs.getString("card_type")),
-                ManaColor.valueOf(rs.getString("color")),
+                CardType.valueOf(rs.getString("card_type").trim()),
+                ManaColor.valueOf(rs.getString("color").trim().toUpperCase()),
                 rs.getString("expansions"),
-                Rarity.valueOf(rs.getString("rarity")),
+                Rarity.valueOf(rs.getString("rarity").trim()),
                 rs.getString("rule_text"),
                 rs.getString("image_url")
+
         ), userId);
+
     }
 
 

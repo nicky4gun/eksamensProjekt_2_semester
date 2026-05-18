@@ -37,7 +37,7 @@ public class CardController {
         }
 
         try {
-            cardService.addCard(card.getId(), card.getName(), card.getCardType(), card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
+            cardService.addCard(card.getId(), card.getName(), card.getCardType(), card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
             return "redirect:/Card/List";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
@@ -53,7 +53,7 @@ public class CardController {
 
         User user = userService.findUserById(userId).orElseThrow();
         cardService.updateCard(user.getId(), card.getId(), card.getName(), card.getCardType(),
-                card.getColor(), card.getSet(), card.getRarity(), card.getRuleText(), card.getImageUrl());
+                card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
         return "redirect:/cards/"+ card.getId();
     }
 }

@@ -4,7 +4,7 @@ public enum Rarity {
     COMMON("Common"),
     UNCOMMON("Uncommon"),
     RARE("Rare"),
-    MYTHIC_RARE("Mythic_rare");
+    MYTHIC_RARE("Mythic rare");
 
 
     private String rarity;

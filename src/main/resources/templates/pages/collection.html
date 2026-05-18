@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Samling | Deckforge</title>
@@ -7,24 +7,29 @@
 </head>
 <body>
     <!-- Navbar (fragment) -->
-
+    <main >
     <h1>Min Samling</h1>
-    <div th:each="card : ${collection}" class="card">
-        <img th:src="${card.imageUrl}" class="card-image">
-    </div>
+
+<div class="toolbar">
+
+
 
     <!-- Sortering -->
 
 
     <!-- Filter -->
     <form action="/collection" method="get" class="filters">
-        <label><input type="checkbox" name="color" value="Red"> Rød </label>
-        <label><input type="checkbox" name="color" value="Blue"> Blå </label>
-        <label><input type="checkbox" name="color" value="Green"> Grøn </label>
-        <label><input type="checkbox" name="color" value="Black"> Sort </label>
-        <label><input type="checkbox" name="color" value="White"> Hvid </label>
-        <label><input type="checkbox" name="color" value="ColorLess"> FaveLøs </label>
-        <button type="submit" class="btn">Filterer</button>
+        <select name="colors" id="colors" multiple>
+            <option value="" disabled selected>Filter Colors</option>
+            <option th:each="color : ${manacolor}"
+                    th:value="${color}"
+                    th:text="${color.name}">
+            </option>
+
+
+        </select>
+        <button type="submit" class="btn">Filter</button>
+
     </form>
 
     <!-- Search -->
@@ -35,12 +40,18 @@
 
     <!-- Add Card - Button (a-tag link) -->
      <a href="/cards/add" class="btn">Tilføj kort</a>
+</div>
 
     <!-- Card-table -->
-    <div class="cards-grid">
+    <div class="card-grid">
         <div th:each="card : ${collection}" class="card">
-            <img th:src="${card.imageUrl}" class="card-image" >
+            <img th:src="${card.imageUrl}" alt="card image" >
+
         </div>
     </div>
+
+    </main>
+
 </body>
+
 </html>

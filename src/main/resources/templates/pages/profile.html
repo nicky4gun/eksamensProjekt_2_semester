@@ -11,12 +11,12 @@
 
         <h1 id="company-name">deckforge</h1>
 
-        <div class="nav-links">
+        <nav class="nav-links">
             <a class="nav-link" href="/home">Home</a>
             <a class="nav-link" href="/decks"> mine Decks</a>
             <a class="nav-link" href="/collection">min samling</a>
             <a class="nav-link" href="/profile">Min profil</a>
-        </div>
+        </nav>
         <a id="logout-button" href="/logout">Logout</a>
 
 
@@ -36,7 +36,7 @@
          <div class="profile-info">
              <p>Name: <span th:text="${user.firstName}"></span></p>
              <p>Last name:<span th:text="${user.lastName}"></span></p>
-             <p>Username:<span th:text="${user.userName}"></span></p>
+             <p>Username:<span th:text="${user.username}"></span></p>
          </div>
      </section>
 

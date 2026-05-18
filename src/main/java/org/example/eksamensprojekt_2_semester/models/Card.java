@@ -9,7 +9,7 @@ public class Card {
     private String name;
     private CardType cardType;
     private ManaColor colors;
-    private String set;
+    private String expansions;
     private Rarity rarity;
     private String ruleText;
     private String imageUrl;
@@ -21,7 +21,7 @@ public class Card {
         this.isTradable = isTradable;
     }
 
-    public Card(String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(String name, CardType cardType, ManaColor colors, String expansions, Rarity rarity, String ruleText, String imageUrl) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -34,7 +34,7 @@ public class Card {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
-        if (set == null || set.isEmpty()) {
+        if (expansions == null || expansions.isEmpty()) {
             throw new IllegalArgumentException("Set cannot be null or empty");
         }
 
@@ -48,14 +48,14 @@ public class Card {
         this.name = name;
         this.cardType = cardType;
         this.colors = colors;
-        this.set = set;
+        this.expansions = expansions;
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
 
     }
 
-    public Card(int id, String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(int id, String name, CardType cardType, ManaColor colors, String expansions, Rarity rarity, String ruleText, String imageUrl) {
         if (id < 0) {
             throw new IllegalArgumentException("Invalid card id");
 
@@ -72,7 +72,7 @@ public class Card {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
-        if (set == null || set.isEmpty()) {
+        if (expansions == null || expansions.isEmpty()) {
             throw new IllegalArgumentException("Set cannot be null or empty");
         }
 
@@ -87,7 +87,7 @@ public class Card {
         this.name = name;
         this.cardType = cardType;
         this.colors = colors;
-        this.set = set;
+        this.expansions = expansions;
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
@@ -124,12 +124,12 @@ public class Card {
         this.colors = colors;
     }
 
-    public String getSet() {
-        return set;
+    public String getExpansions() {
+        return expansions;
     }
 
-    public void setSet(String set) {
-        this.set = set;
+    public void setExpansions(String expansions) {
+        this.expansions = expansions;
     }
 
     public Rarity getRarity() {
