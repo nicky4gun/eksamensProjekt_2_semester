@@ -71,6 +71,8 @@ public User(List<Card> favoriteCards) {
         this.image = image;
     }
 
+
+
     public int getId() {
         return id;
     }

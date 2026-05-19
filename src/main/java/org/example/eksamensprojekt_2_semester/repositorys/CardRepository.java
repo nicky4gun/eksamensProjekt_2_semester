@@ -19,7 +19,7 @@ public class CardRepository implements ICardRepository {
 
     @Override
     public int createCard(Card card){
-        String sql = "INSERT INTO CARD (name,  card_type,  color,  expansions,  rarity,  rule_text,  image_url) VALUES (?, ?, ?, ?, ?, ?, ?";
+        String sql = "INSERT INTO CARD (name,  card_type,  color,  expansions,  rarity,  rule_text,  image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(con ->  {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, card.getName());

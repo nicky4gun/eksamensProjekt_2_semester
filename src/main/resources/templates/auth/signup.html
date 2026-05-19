@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link ref="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-page">
+<div id="signup-screen">
+    <h1>Sign Up</h1>
+
+    <form th:object="${member}" method="post" th:action="@{/register}">
+        <div class="input-field">
+            <label for="name">Navn:</label>
+            <input type="text" th:field="*{memberName}" id="name" placeholder="Intast navn...">
+        </div>
+
+        <div class="input-field">
+            <label for="email">Email:</label>
+            <input type="text" th:field="*{email}" id="email" placeholder="Intast email...">
+        </div>
+
+        <div class="input-field">
+            <label for="password">Adgangskode:</label>
+            <input type="password" th:field="*{password}" id="password" placeholder="Intast Adgangskode...">
+        </div>
+
+        <div class="button-field">
+            <button type="submit" id="signup">Tilmeld</button>
+            <a href="/login"><button type="button" id="login">Tilbage til login</button></a>
+        </div>
+
+        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+    </form>
+</div>
+
+</body>
+</html>

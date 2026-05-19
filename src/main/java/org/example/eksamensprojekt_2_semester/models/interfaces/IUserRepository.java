@@ -19,4 +19,6 @@ public interface IUserRepository  {
 
     void saveFavorites(int userId,int cardId);
     void  removeFavorites(int userId,int cardId);
+
+    void createUser(User user);
 }

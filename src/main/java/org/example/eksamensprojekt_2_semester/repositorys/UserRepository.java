@@ -5,8 +5,12 @@ import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.*;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,8 +97,28 @@ public class UserRepository implements IUserRepository {
         String sql = "DELETE FROM favorite_cards WHERE user_id = ? AND card_id = ?";
         jdbcTemplate.update(sql,userId,cardId);
 }
+@Override
+    public void createUser(User user) {
+    String sql = "INSERT INTO User (firstname,lastname,username, email, password,role,image_url) VALUES (?, ?, ?,?,?,?,?)";
 
 
+    jdbcTemplate.update(con -> {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1,user.getFirstName());
+        ps.setString(2,user.getLastName());
+        ps.setString(3, user.getUsername());
+        ps.setString(4, user.getEmail());
+        ps.setString(5, user.getPassword());
+        ps.setString(6, user.getRole().name());
+        ps.setString(7,user.getImage());
+        return ps;
+    });
 
 
 }
+}
+
+
+
+
+

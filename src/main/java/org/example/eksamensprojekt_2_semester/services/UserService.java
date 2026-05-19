@@ -3,8 +3,10 @@ package org.example.eksamensprojekt_2_semester.services;
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
+import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
+import org.example.eksamensprojekt_2_semester.repositorys.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,5 +62,10 @@ public class UserService {
         cardRepository.findCardById(cardId);
 
         userRepository.removeFavorites(userId,cardId);
+    }
+    public void registerUser(String firstname, String lastname, String username, String email, String password, Role role, String image) {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        User user = new User(firstname,lastname,username,email,hashedPassword,role,image);
+        userRepository.createUser(user);
     }
 }
