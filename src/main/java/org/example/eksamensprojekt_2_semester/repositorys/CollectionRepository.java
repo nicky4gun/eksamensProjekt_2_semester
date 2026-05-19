@@ -23,6 +23,12 @@ public class CollectionRepository implements ICollectionRepository {
     }
 
     @Override
+    public void addCard(int collectionId, Integer cardId) {
+        String sql = "INSERT INTO collection_cards (collection_id, card_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, collectionId, cardId);
+    }
+
+    @Override
     public Optional<Collection> findById(int collectionId) {
         String sql = "SELECT id, user_id, visibility FROM collections WHERE id = ?";
 

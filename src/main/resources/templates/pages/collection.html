@@ -20,7 +20,7 @@
             <form action="/collection" method="get" class="filters">
                 <select name="colors" id="colors">
                     <option value="" disabled selected>Filter Colors</option>
-                    <option th:each="color : ${manacolor}"
+                    <option th:each="color : ${manaColor}"
                             th:value="${color}"
                             th:text="${color.name}">
                     </option>
@@ -35,7 +35,7 @@
             </form>
 
             <!-- Add Card - Button (a-tag link) -->
-            <a href="/cards/add" class="btn">Tilføj kort</a>
+            <a th:href="@{/collection/{collectionId}/add-cards(collectionId=${collectionId})}" class="btn">Tilføj kort</a>
         </div>
 
         <!-- Card-table -->

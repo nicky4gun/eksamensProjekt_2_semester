@@ -8,7 +8,7 @@
 <body>
     <header th:replace="~{fragments/navbar :: navbar}"></header>
     <main>
-        <h1>Add Card to Deck</h1>
+        <h1>Add Cards to Deck</h1>
 
         <form th:action="@{/decks/{deckId}/add-cards(deckId=${deckId})}" method="post">
             <div class="add-card-actions">
