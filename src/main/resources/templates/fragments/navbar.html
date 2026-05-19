@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="navbar">
+    <nav id="navbar">
+        <h1 id="company-name">Deckforge</h1>
+        <nav class="nav-links">
+            <a class="nav-link" href="/home">Home</a>
+            <a class="nav-link" href="/decks"> Mine Decks</a>
+            <a class="nav-link" href="/collection">Samling</a>
+            <a class="nav-link" href="/profile">Profil</a>
+        </nav>
+        <a id="logout-button" class="btn" href="/logout">Logout</a>
+    </nav>
+</header>
+
+</body>
+</html>

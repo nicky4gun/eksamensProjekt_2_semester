@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-    <!-- Navbar (fragment) -->
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
     <main>
         <section class="deck-info">
             <h1 th:text="${deck.deckName}"></h1>
@@ -23,28 +23,9 @@
             </div>
         </section>
 
-        <dialog id="updateDeckModal">
-            <button onclick="document.getElementById('updateDeckModal').close();
-            document.getElementById('updateDeckModal').querySelector('form').reset();" >&times;</button>
-            <h2>Opdater Deck</h2>
-
-            <form th:action="@{/decks/{deckId}/update(deckId=${deck.id})}" method="post" class="deck-form">
-                <input type="text" name="deckName" th:value="${deck.deckName}" required>
-                <select name="format" required>
-                    <option value="" disabled selected>Select Format</option>
-                    <option th:each="format : ${formatList}"
-                            th:value="${format}"
-                            th:text="${format.name}"
-                            th:selected="${format == deck.format}">
-                    </option>
-                </select>
-                <div class="modal-actions">
-                    <button onclick="document.getElementById('updateDeckModal').close();
-                    document.getElementById('updateDeckModal').querySelector('form').reset();" class="btn">Annuller</button>
-                    <button type="submit" class="btn">Opdater Deck</button>
-                </div>
-            </form>
-        </dialog>
+        <dialog th:replace="~{fragments/deckFormModal :: deckFormModal ('updateDeckModal',
+            'Opdater Deck', @{/decks/{deckId}/update(deckId=${deck.id})}, 'Opdater Deck', ${deck.deckName},
+            ${deck.format}, ${formatList})}"></dialog>
 
         <section class="card-grid">
             <article th:each="deckCard : ${deckCards}" class="card">

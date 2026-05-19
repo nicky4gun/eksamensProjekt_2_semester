@@ -6,21 +6,8 @@
     <link rel="stylesheet" th:href="@{/styles.css}" >
 </head>
 <body>
-    <!-- Navbar (fragment) -->
-    <nav id="navbar">
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
 
-        <h1 id="company-name">deckforge</h1>
-
-        <nav class="nav-links">
-            <a class="nav-link" href="/home">Home</a>
-            <a class="nav-link" href="/decks"> mine Decks</a>
-            <a class="nav-link" href="/collection">min samling</a>
-            <a class="nav-link" href="/profile">Min profil</a>
-        </nav>
-        <a id="logout-button" href="/logout">Logout</a>
-
-
-    </nav>>
     <nav class="actions">
         <a class="btn" herf="/profile/edit"><button type="button">opdater profil</button></a>
 

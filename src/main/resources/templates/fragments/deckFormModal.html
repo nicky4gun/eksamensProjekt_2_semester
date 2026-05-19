@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<dialog th:fragment="deckFormModal(modalId, modalTitle, formAction,
+submitButtonText, deckNameValue, selectedFormat, formatList)" th:id="${modalId}">
+    <button onclick="this.closest('dialog').close();
+    this.closest('dialog').querySelector('form').reset()">&times;</button>
+    <h2 th:text="${modalTitle}"></h2>
+
+    <form th:action="${formAction}" method="post" class="deck-form">
+        <input type="text" name="deckName"
+               th:placeholder="${modalTitle == 'Tilføj nyt Deck' ? 'Enter deck name here...' : ''}"
+               th:value="${deckNameValue ?: ''}" required>
+        <select name="format" required>
+            <option value="" disabled th:selected="${selectedFormat == null}">Select Format</option>
+            <option th:each="format : ${formatList}"
+                    th:value="${format}"
+                    th:text="${format.name}"
+                    th:selected="${format == selectedFormat}">
+            </option>
+        </select>
+        <div class="modal-actions">
+            <button onclick="this.closest('dialog').close();
+            this.closest('dialog').querySelector('form').reset()" class="btn">Annuller</button>
+            <button type="submit" class="btn" th:text="${submitButtonText}">Submit</button>
+        </div>
+    </form>
+</dialog>
+
+</body>
+</html>

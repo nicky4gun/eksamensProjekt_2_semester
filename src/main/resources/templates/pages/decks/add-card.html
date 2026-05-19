@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
     <main>
         <h1>Add Card to Deck</h1>
 
@@ -15,7 +16,7 @@
                 <button type="submit" class="btn">Tilføj Kort</button>
             </div>
 
-            <section class="card-grid">
+            <section class="card-grid card-grid--select">
                 <article th:each="collectionCard : ${collectionCards}" class="card">
                     <label >
                         <input type="checkbox" name="cardIds" th:value="${collectionCard.id}"/>
