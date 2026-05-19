@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public class UserRepository implements IUserRepository {
 
+
     private final JdbcTemplate jdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
@@ -81,6 +82,19 @@ public class UserRepository implements IUserRepository {
         ), userId);
 
     }
+@Override
+    public void saveFavorites(int userId,int cardId){
+        String sql = "INSERT INTO favorite_cards (user_id,card_id) VALUES (?,?)";
+        jdbcTemplate.update(sql,userId,cardId);
+
+}
+@Override
+    public void removeFavorites(int userId,int cardId){
+        String sql = "DELETE FROM favorite_cards WHERE user_id = ? AND card_id = ?";
+        jdbcTemplate.update(sql,userId,cardId);
+}
+
+
 
 
 }

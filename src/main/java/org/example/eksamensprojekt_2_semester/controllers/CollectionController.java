@@ -58,7 +58,7 @@ public class CollectionController {
             userId = 1;
             session.setAttribute("userId", userId);
         }
-        // userservice.addFavoriteCard
+        userService.addFavoriteCard(userId,cardId);
         return "redirect:/collection/favorites";
 
     }
@@ -70,7 +70,7 @@ public class CollectionController {
             userId = 1;
             session.setAttribute("userId", userId);
         }
-        // userservice.removeFavoriteCard
+        userService.removeFavoriteCard(userId,cardId);
         return "redirect:/collection/favorites";
     }
 

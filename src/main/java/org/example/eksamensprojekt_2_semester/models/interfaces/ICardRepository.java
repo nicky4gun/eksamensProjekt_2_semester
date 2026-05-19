@@ -1,7 +1,6 @@
 package org.example.eksamensprojekt_2_semester.models.interfaces;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
-import org.springframework.stereotype.Repository;
 
 
 public interface ICardRepository {
@@ -9,4 +8,5 @@ public interface ICardRepository {
 
     void updateCard(Card card);
 
+    Card findCardById(int cardId);
 }

@@ -47,4 +47,18 @@ public class UserService {
         if (colors == null || colors.isEmpty()) return cards;
         return cards.stream().filter(c -> colors.contains(c.getColor())).toList();
     }
+    public void addFavoriteCard(int userId, int cardId) {
+        User user = userRepository.findUserById(userId).orElseThrow();
+        Card card = cardRepository.findCardById(cardId);
+        user.getFavoriteCards().add(card);
+        userRepository.saveFavorites(userId,cardId);
+
+
+    }
+    public void removeFavoriteCard(int userId,int cardId) {
+        findUserById(userId).orElseThrow();
+        cardRepository.findCardById(cardId);
+
+        userRepository.removeFavorites(userId,cardId);
+    }
 }

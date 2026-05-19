@@ -54,3 +54,12 @@ CREATE TABLE IF NOT EXISTS collection_cards (
     FOREIGN KEY (collection_id) REFERENCES collections(id),
     FOREIGN KEY (card_id) REFERENCES cards(id)
 );
+
+CREATE TABLE IF NOT EXISTS favorite_cards(
+ user_id INT,
+ card_id INT,
+
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE
+ );

@@ -47,6 +47,10 @@ public class CardService {
         cardRepository.updateCard(card);
 
     }
+    public void findCardById(int  cardId) {
+        cardRepository.findCardById(cardId);
+
+    }
 
 
 }
