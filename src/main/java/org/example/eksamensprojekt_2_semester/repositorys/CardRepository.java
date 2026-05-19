@@ -15,26 +15,47 @@ import java.util.List;
 public class CardRepository implements ICardRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    public CardRepository(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
+
+    public CardRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
-    public int createCard(Card card){
+    public int createCard(Card card) {
         String sql = "INSERT INTO CARD (name,  card_type,  color,  expansions,  rarity,  rule_text,  image_url) VALUES (?, ?, ?, ?, ?, ?, ?";
-        return jdbcTemplate.update(con ->  {
+        return jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, card.getName());
-            ps.setString(2,card.getCardType().toString());
-            ps.setString(3,card.getColor().toString());
-            ps.setString(4,card.getRarity().toString());
-            ps.setString(5,card.getRuleText());
-            ps.setString(6,card.getImageUrl());
+            ps.setString(2, card.getCardType().toString());
+            ps.setString(3, card.getColor().toString());
+            ps.setString(4, card.getRarity().toString());
+            ps.setString(5, card.getRuleText());
+            ps.setString(6, card.getImageUrl());
             return ps;
         });
-
     }
+
     @Override
-    public void updateCard(Card card){
-        String sql = "UPDATE CARD set name = ?, card_type = ?, color = ?, rarity = ?, rule_text = ?, image_url = ? where id = ?";;
+    public List<Card> findAll() {
+        String sql = "SELECT id, name,  card_type,  color,  expansions,  rarity,  rule_text,  image_url FROM cards";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getInt("id"),
+                rs.getString("name"),
+                CardType.valueOf(rs.getString("card_type")),
+                ManaColor.valueOf(rs.getString("color")),
+                rs.getString("expansions"),
+                Rarity.valueOf(rs.getString("rarity")),
+                rs.getString("rule_text"),
+                rs.getString("image_url")
+        ));
+    }
+
+
+    @Override
+    public void updateCard(Card card) {
+        String sql = "UPDATE CARD set name = ?, card_type = ?, color = ?, rarity = ?, rule_text = ?, image_url = ? where id = ?";
+        ;
 
         jdbcTemplate.update(sql, card.getName(), card.getCardType().toString(), card.getColor().toString(),
                 card.getRuleText(), card.getRarity().toString(), card.getExpansions(), card.getImageUrl(), card.getId());

@@ -15,6 +15,18 @@ public class CollectionService {
         this.collectionRepository = collectionRepository;
     }
 
+    public void addCards(List<Integer> cardIds, int collectionId, int UserId) {
+        Collection collection = collectionRepository.findById(collectionId).orElseThrow();
+
+        if (collection.getUserId() != UserId) {
+            throw new IllegalArgumentException("Collection does not belong to the user");
+        }
+
+        for (Integer cardId : cardIds) {
+            collectionRepository.addCard(collectionId, cardId);
+        }
+    }
+
     public List<Card> getCards(int userId) {
         Collection collection = collectionRepository.findByUserId(userId).orElseThrow();
 

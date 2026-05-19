@@ -3,13 +3,13 @@ package org.example.eksamensprojekt_2_semester.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
+import org.example.eksamensprojekt_2_semester.repositorys.CollectionRepository;
+import org.example.eksamensprojekt_2_semester.services.CardService;
+import org.example.eksamensprojekt_2_semester.services.CollectionService;
 import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,13 @@ import java.util.Optional;
 @RequestMapping("/collection")
 public class CollectionController {
     private final UserService userService;
+    private final CardService cardService;
+    private final CollectionService collectionService;
 
-    public CollectionController(UserService userService) {
+    public CollectionController(UserService userService, CardService cardService, CollectionService collectionService) {
         this.userService = userService;
+        this.cardService = cardService;
+        this.collectionService = collectionService;
     }
 
     @GetMapping
@@ -34,8 +38,35 @@ public class CollectionController {
         cards = userService.searchCards(cards, search);
         cards = userService.filterCardsByColor(cards, colors);
         model.addAttribute("collection", cards);
-        model.addAttribute("manacolor", ManaColor.values());
+        model.addAttribute("manaColor", ManaColor.values());
+        model.addAttribute("collectionId", userId);
         return "/pages/collection";
+    }
+
+    @GetMapping("/{collectionId}/add-cards")
+    public String showAddCards(@PathVariable int collectionId, Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            userId = 1;
+            session.setAttribute("userId", userId);
+        }
+
+        model.addAttribute("cardsAvailable", cardService.findAll());
+        return "/pages/add-to-collection";
+    }
+
+    @PostMapping("/{collectionId}/add-cards")
+    public String addCard(@PathVariable int collectionId, @RequestParam List<Integer> cardIds, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            userId = 1;
+            session.setAttribute("userId", userId);
+        }
+
+        collectionService.addCards(cardIds, collectionId, userId);
+        return "redirect:/collection";
     }
 
     @GetMapping("/favorites")

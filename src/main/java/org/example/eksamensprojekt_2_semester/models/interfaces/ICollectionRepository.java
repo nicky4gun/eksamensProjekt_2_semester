@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ICollectionRepository {
+    void addCard(int collectionId, Integer cardId);
+
     Optional<Collection> findById(int collectionId);
 
     Optional<Collection> findByUserId(int userId);

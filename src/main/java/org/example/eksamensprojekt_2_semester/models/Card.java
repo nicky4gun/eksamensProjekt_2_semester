@@ -8,7 +8,7 @@ public class Card {
     private int id;
     private String name;
     private CardType cardType;
-    private ManaColor colors;
+    private ManaColor color;
     private String expansions;
     private Rarity rarity;
     private String ruleText;
@@ -21,7 +21,7 @@ public class Card {
         this.isTradable = isTradable;
     }
 
-    public Card(String name, CardType cardType, ManaColor colors, String expansions, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(String name, CardType cardType, ManaColor color, String expansions, Rarity rarity, String ruleText, String imageUrl) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -30,7 +30,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (colors == null) {
+        if  (color == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -42,24 +42,21 @@ public class Card {
             throw new IllegalArgumentException("Invalid rarity");
         }
 
-
-
-
         this.name = name;
         this.cardType = cardType;
-        this.colors = colors;
+        this.color = color;
         this.expansions = expansions;
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
-
     }
 
-    public Card(int id, String name, CardType cardType, ManaColor colors, String expansions, Rarity rarity, String ruleText, String imageUrl) {
+    public Card(int id, String name, CardType cardType, ManaColor color, String expansions, Rarity rarity, String ruleText, String imageUrl) {
         if (id < 0) {
             throw new IllegalArgumentException("Invalid card id");
 
         }
+
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -68,7 +65,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (colors == null) {
+        if  (color == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -83,16 +80,17 @@ public class Card {
         if (ruleText == null || ruleText.isEmpty()) {
             throw new IllegalArgumentException("Rule text cannot be null or empty");
         }
+
         this.id = id;
         this.name = name;
         this.cardType = cardType;
-        this.colors = colors;
+        this.color = color;
         this.expansions = expansions;
         this.rarity = rarity;
         this.ruleText = ruleText;
         this.imageUrl = imageUrl;
-
     }
+
     public int getId() {
         return id;
     }
@@ -117,11 +115,11 @@ public class Card {
     }
 
     public ManaColor getColor() {
-        return colors;
+        return color;
     }
 
-    public void setColors(ManaColor colors) {
-        this.colors = colors;
+    public void setColor(ManaColor colors) {
+        this.color = color;
     }
 
     public String getExpansions() {
@@ -163,6 +161,4 @@ public class Card {
     public void setIsTradable(boolean isTradable) {
         this.isTradable = isTradable;
     }
-
-
 }

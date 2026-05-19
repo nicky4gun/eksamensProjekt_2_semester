@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add To Collection | Deckforge</title>
+  <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+  <header th:replace="~{fragments/navbar :: navbar}"></header>
+  <main>
+    <h1>Add Cards to Collection</h1>
+
+    <form th:action="@{/collection/{collectionId}/add-cards(collectionId=${collectionId})}" method="post">
+      <div class="add-card-actions">
+        <a th:href="@{/collection}" class="btn">Annuller</a>
+        <button type="submit" class="btn">Tilføj Kort</button>
+      </div>
+
+      <section class="card-grid card-grid--select">
+        <article th:each="availableCard : ${cardsAvailable}" class="card">
+          <label>
+            <input type="checkbox" name="cardIds" th:value="${availableCard.id}"/>
+            <img th:src="${availableCard.imageUrl}" alt="Card Image">
+          </label>
+        </article>
+      </section>
+    </form>
+  </main>
+</body>
+</html>
