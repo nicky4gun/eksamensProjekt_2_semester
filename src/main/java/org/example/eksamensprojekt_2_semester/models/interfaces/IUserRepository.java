@@ -11,13 +11,10 @@ public interface IUserRepository  {
 
     Optional<User> findUserById(int userId);
 
-
     List<Card> findCardsByUserId(int userId);
 
-
-
-
     void saveFavorites(int userId,int cardId);
+
     void  removeFavorites(int userId,int cardId);
 
     int createUser(User user);

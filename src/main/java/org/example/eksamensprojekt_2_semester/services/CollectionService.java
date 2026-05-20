@@ -16,7 +16,7 @@ public class CollectionService {
     }
 
     public void addCards(List<Integer> cardIds, int collectionId, int UserId) {
-        Collection collection = collectionRepository.findById(collectionId).orElseThrow();
+        Collection collection = getCollectionByUserId(UserId);
 
         if (collection.getUserId() != UserId) {
             throw new IllegalArgumentException("Collection does not belong to the user");
@@ -28,12 +28,16 @@ public class CollectionService {
     }
 
     public List<Card> getCards(int userId) {
-        Collection collection = collectionRepository.findByUserId(userId).orElseThrow();
+        Collection collection = getCollectionByUserId(userId);
 
         if (collection.getUserId() != userId) {
             throw new IllegalArgumentException("Collection does not belong to the user");
         }
 
         return collectionRepository.findAllCards(collection.getUserId());
+    }
+
+    public Collection getCollectionByUserId(int userId) {
+        return collectionRepository.findByUserId(userId).orElseThrow();
     }
 }

@@ -5,6 +5,8 @@ import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
+import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
+import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,8 @@ public class DeckService {
         return deckRepository.createDeck(deck);
     }
 
-    public void addCardsToDeck(int deckId, List<Integer> cardIds, int userId) {
-        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+    public void addCards(int deckId, List<Integer> cardIds, int userId) {
+        Deck deck = getDeckById(deckId);
 
         if (deck.getUserId() != userId) {
             throw new SecurityException("Decket tilhører ikke denne bruger");
@@ -40,11 +42,11 @@ public class DeckService {
     private void addCardsToDeck(Deck deck, List<Integer> cardIds, int userId) {
         if (cardIds == null || cardIds.isEmpty()) return;
 
-        List<Card> cards = getOwnedCards(cardIds, userId);
-        populateDeck(deck, cards);
+        List<Card> cards = fetchOwnedCards(cardIds, userId);
+        linkCardsToDeck(deck, cards);
     }
 
-    private List<Card> getOwnedCards(List<Integer> cardIds, int userId) {
+    private List<Card> fetchOwnedCards(List<Integer> cardIds, int userId) {
         List<Card> cards = new ArrayList<>();
 
         for (int cardId : cardIds) {
@@ -54,7 +56,7 @@ public class DeckService {
         return cards;
     }
 
-    private void populateDeck(Deck deck, List<Card> cards) {
+    private void linkCardsToDeck(Deck deck, List<Card> cards) {
         for (Card card : cards) {
             deckRepository.addCardToDeck(deck.getId(), card.getId());
             deck.addCard(card);
@@ -62,7 +64,9 @@ public class DeckService {
     }
 
     public Deck getDeckById(int deckId) {
-        return deckRepository.findDeckById(deckId).orElseThrow();
+        return deckRepository.findDeckById(deckId).orElseThrow(
+                () -> new DeckNotFoundException("Ingen deck fundet med ID " + deckId)
+        );
     }
 
     public List<Deck> getDecksByUserId(int userId) {
@@ -74,7 +78,7 @@ public class DeckService {
     }
 
     public void updateDeck(int deckId, String deckName, Format format, int userId) {
-        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+        Deck deck = getDeckById(deckId);
 
         if (deck.getUserId() != userId) {
             throw new SecurityException("Decket tilhører ikke denne bruger");
@@ -86,7 +90,7 @@ public class DeckService {
     }
 
     public void removeCardFromDeck(int userId, int cardId, int deckId) {
-        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
+        Deck deck = getDeckById(deckId);
 
         if (deck.getUserId() != userId) {
             throw new SecurityException("Decket tilhører ikke denne bruger");
@@ -96,8 +100,9 @@ public class DeckService {
     }
 
     public void deleteDeck(int deckId, int userId) {
-        Deck deck = deckRepository.findDeckById(deckId).orElseThrow();
-        User user = userRepository.findUserById(userId).orElseThrow();
+        Deck deck = getDeckById(deckId);
+        User user = userRepository.findUserById(userId).orElseThrow(
+                () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
 
         if (user.getRole() != Role.ADMIN && deck.getUserId() != userId) {
             throw new SecurityException("You cannot delete this deck");

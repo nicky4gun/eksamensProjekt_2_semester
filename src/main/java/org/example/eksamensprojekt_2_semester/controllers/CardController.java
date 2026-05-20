@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/Card")
+@RequestMapping("/cards")
 public class CardController {
     private final CardService cardService;
     private final UserService userService;
@@ -23,17 +23,17 @@ public class CardController {
         this.userService = userService;
     }
 
-    @PostMapping("/Create")
+    @PostMapping("/create")
     public String createCard(@ModelAttribute Card card, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        User user = userService.findUserById(userId).orElseThrow();
+        User user = userService.findUserById(userId);
 
         if (user.getRole() != Role.ADMIN) {
-            model.addAttribute("error", "you do not have permission to create this card");
-            return "Create";
+            model.addAttribute("error", "You do not have permission to create this card");
+            return "create";
         }
 
         try {
@@ -45,13 +45,13 @@ public class CardController {
         }
     }
 
-    @PostMapping("/Update")
+    @PostMapping("/update")
     public String updateCard(@ModelAttribute Card card, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        User user = userService.findUserById(userId).orElseThrow();
+        User user = userService.findUserById(userId);
         cardService.updateCard(user.getId(), card.getId(), card.getName(), card.getCardType(),
                 card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
         return "redirect:/cards/"+ card.getId();

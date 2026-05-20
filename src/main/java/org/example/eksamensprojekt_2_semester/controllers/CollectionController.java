@@ -3,7 +3,6 @@ package org.example.eksamensprojekt_2_semester.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
-import org.example.eksamensprojekt_2_semester.repositorys.CollectionRepository;
 import org.example.eksamensprojekt_2_semester.services.CardService;
 import org.example.eksamensprojekt_2_semester.services.CollectionService;
 import org.example.eksamensprojekt_2_semester.services.UserService;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/collection")
@@ -72,11 +70,11 @@ public class CollectionController {
     @GetMapping("/favorites")
     public String showFavorites(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
+
         if (userId == null) {
             userId = 1;
             session.setAttribute("userId", userId);
         }
-
 
         model.addAttribute("favorites", userService.getFavoriteCards(userId));
         return "/pages/collection";
@@ -85,25 +83,26 @@ public class CollectionController {
     @PostMapping("/favorites/add")
     public String addFavorite(@RequestParam int cardId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
+
         if (userId == null) {
             userId = 1;
             session.setAttribute("userId", userId);
         }
+
         userService.addFavoriteCard(userId,cardId);
         return "redirect:/collection/favorites";
-
     }
 
     @PostMapping("/favorites/remove")
     public String removeFavorite(@RequestParam int cardId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
+
         if (userId == null) {
             userId = 1;
             session.setAttribute("userId", userId);
         }
+
         userService.removeFavoriteCard(userId,cardId);
         return "redirect:/collection/favorites";
     }
-
-
 }

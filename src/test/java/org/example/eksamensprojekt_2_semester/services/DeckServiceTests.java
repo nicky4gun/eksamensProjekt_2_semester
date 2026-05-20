@@ -80,7 +80,7 @@ public class DeckServiceTests {
         when(userRepository.findCardByUserId(userId, card1.getId())).thenReturn(Optional.of(card1));
         when(userRepository.findCardByUserId(userId, card2.getId())).thenReturn(Optional.of(card2));
 
-        deckService.addCardsToDeck(deckId, cardIds, userId);
+        deckService.addCards(deckId, cardIds, userId);
 
         assertEquals(2, deck.getCards().size());
         assertTrue(deck.getCards().contains(card1));
@@ -97,7 +97,7 @@ public class DeckServiceTests {
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.empty());
 
         assertThrows(java.util.NoSuchElementException.class, () ->
-            deckService.addCardsToDeck(deckId, cardIds, userId)
+            deckService.addCards(deckId, cardIds, userId)
         );
     }
 }

@@ -44,14 +44,16 @@ public class DeckController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        int deckId = deckService.addDeck(deckName, format, userId);
+        deckService.addDeck(deckName, format, userId);
         return "redirect:/decks";
     }
 
     @GetMapping("/{deckId}/add-cards")
     public String showAddCardsView(@PathVariable int deckId, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
+
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
+
         model.addAttribute("collectionCards", collectionService.getCards(userId));
         model.addAttribute("deckId", deckId);
         return "/pages/decks/add-card";
@@ -63,7 +65,7 @@ public class DeckController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        deckService.addCardsToDeck(deckId, cardIds, userId);
+        deckService.addCards(deckId, cardIds, userId);
         return "redirect:/decks/" + deckId;
     }
 
@@ -73,10 +75,8 @@ public class DeckController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        Deck deck = deckService.getDeckById(deckId);
-        List<Card> deckCards = deckService.getAllCards(deckId);
-        model.addAttribute("deck", deck);
-        model.addAttribute("deckCards", deckCards);
+        model.addAttribute("deck", deckService.getDeckById(deckId));
+        model.addAttribute("deckCards", deckService.getAllCards(deckId));
         model.addAttribute("formatList", Format.values());
         return "/pages/decks/deck-view";
     }

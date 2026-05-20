@@ -15,19 +15,17 @@ public class User {
     private String image;
 
     public User() {}
-public User(List<Card> favoriteCards) {
-        this.favoriteCards = favoriteCards;
-}
-    public User(String firstName, String lastName, String username, String password, String email, Role role, String image ) {
+
+    public User(String firstName, String lastName, String username, String password, String email, Role role, String image) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
-        if (password == null || password.isEmpty() ) {
+        if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
 
-        if (email == null || email.isEmpty() ) {
+        if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
 
@@ -42,24 +40,25 @@ public User(List<Card> favoriteCards) {
         this.email = email;
         this.role = role;
         this.image = image;
-
     }
-    public User(int id, String firstName, String lastName, String username, String password, String email, Role role, String image ) {
+
+    public User(int id, String firstName, String lastName, String username, String password, String email, Role role, String image) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
-        if (password == null || password.isEmpty() ) {
+        if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
 
-        if (email == null || email.isEmpty() ) {
+        if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
 
         if (role == null) {
             throw new IllegalArgumentException("Invalid role");
         }
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -83,6 +82,7 @@ public User(List<Card> favoriteCards) {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -135,18 +135,11 @@ public User(List<Card> favoriteCards) {
         this.role = role;
     }
 
-    public String getImage(){
+    public String getImage() {
         return image;
     }
+
     public void setImage(String image) {
         this.image = image;
     }
-
-    public List<Card> getFavoriteCards() {
-        return favoriteCards;
-    }
-    public void setFavoriteCards(List<Card> favoriteCards) {
-        this.favoriteCards = favoriteCards;
-    }
-
 }

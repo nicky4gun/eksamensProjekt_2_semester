@@ -27,11 +27,11 @@ public class UserRepository implements IUserRepository {
     @Override
     public Optional<Card> findCardByUserId(int userId, int cardId) {
         String sql = """
-                       SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
-                       FROM cards c
-                       JOIN collection_cards cc ON c.id = cc.card_id
-                       JOIN collections col ON cc.collection_id = col.id
-                       WHERE col.user_id = ? AND c.id = ?""";
+                SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
+                FROM cards c
+                JOIN collection_cards cc ON c.id = cc.card_id
+                JOIN collections col ON cc.collection_id = col.id
+                WHERE col.user_id = ? AND c.id = ?""";
 
         List<Card> cards = jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
                 rs.getInt("id"),
@@ -41,38 +41,39 @@ public class UserRepository implements IUserRepository {
                 rs.getString("expansions"),
                 Rarity.valueOf(rs.getString("rarity")),
                 rs.getString("rule_text"),
-               rs.getString("image_url")
+                rs.getString("image_url")
         ), userId, cardId);
 
         return cards.isEmpty() ? Optional.empty() : Optional.of(cards.getFirst());
     }
 
-   @Override
-    public Optional<User> findUserById(int userId) {
-       String sql = "SELECT  first_name, last_name, username, password, email, role, image_url  FROM users WHERE id = ?";
-
-       List<User> user  = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
-               rs.getString("first_name"),
-               rs.getString("last_name"),
-               rs.getString("username"),
-               rs.getString("password"),
-               rs.getString("email"),
-               Role.valueOf(rs.getString("role")),
-               rs.getString("image_url")
-
-       ), userId);
-
-       return user.isEmpty() ? Optional.empty() : Optional.of(user.getFirst());
-    }
     @Override
-    public List<Card> findCardsByUserId(int userId){
+    public Optional<User> findUserById(int userId) {
+        String sql = "SELECT  first_name, last_name, username, password, email, role, image_url  FROM users WHERE id = ?";
+
+        List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("email"),
+                Role.valueOf(rs.getString("role")),
+                rs.getString("image_url")
+
+        ), userId);
+
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.getFirst());
+    }
+
+    @Override
+    public List<Card> findCardsByUserId(int userId) {
         String sql = """
-        SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
-        FROM cards c
-        JOIN collection_cards cc ON c.id = cc.card_id
-        JOIN collections col ON cc.collection_id = col.id
-        WHERE col.user_id = ?
-    """;
+                    SELECT c.id, c.name, c.card_type, c.color, c.expansions, c.rarity, c.rule_text, c.image_url
+                    FROM cards c
+                    JOIN collection_cards cc ON c.id = cc.card_id
+                    JOIN collections col ON cc.collection_id = col.id
+                    WHERE col.user_id = ?
+                """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
                 rs.getString("name"),
@@ -84,16 +85,24 @@ public class UserRepository implements IUserRepository {
                 rs.getString("image_url")
 
         ), userId);
-
     }
-@Override
-    public void saveFavorites(int userId,int cardId){
-        String sql = "INSERT INTO favorite_cards (user_id,card_id) VALUES (?,?)";
-        jdbcTemplate.update(sql,userId,cardId);
 
-}
-@Override
-    public void removeFavorites(int userId,int cardId){
+    @Override
+    public List<Card> getFavorites(int userId) {
+        String sql = "SELECT card_id where user_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getInt("id")
+        ));
+    }
+
+    @Override
+    public void saveFavorites(int userId, int cardId) {
+        String sql = "INSERT INTO favorite_cards (user_id,card_id) VALUES (?,?)";
+        jdbcTemplate.update(sql, userId, cardId);
+    }
+
+    @Override
+    public void removeFavorites(int userId, int cardId) {
         String sql = "DELETE FROM favorite_cards WHERE user_id = ? AND card_id = ?";
         jdbcTemplate.update(sql, userId, cardId);
     }
@@ -149,8 +158,3 @@ public class UserRepository implements IUserRepository {
         jdbcTemplate.update(sql, username, email, password, id);
     }
 }
-
-
-
-
-

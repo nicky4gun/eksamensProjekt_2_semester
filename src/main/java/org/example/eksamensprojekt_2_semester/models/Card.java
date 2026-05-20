@@ -17,7 +17,7 @@ public class Card {
 
     public Card() {}
 
-    public Card(boolean isTradable){
+    public Card(boolean isTradable) {
         this.isTradable = isTradable;
     }
 
@@ -30,7 +30,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (color == null) {
+        if (color == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -65,7 +65,7 @@ public class Card {
             throw new IllegalArgumentException("Invalid card type");
         }
 
-        if  (color == null) {
+        if (color == null) {
             throw new IllegalArgumentException("Colors cannot be null or empty");
         }
 
@@ -98,6 +98,7 @@ public class Card {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }

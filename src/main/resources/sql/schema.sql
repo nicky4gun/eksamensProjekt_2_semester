@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS decks (
     deck_Name VARCHAR(50) not null,
     format VARCHAR(50) not null,
     user_id INT not null,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS deck_cards (
@@ -44,22 +45,21 @@ CREATE TABLE IF NOT EXISTS collections (
     user_id INT,
     visibility VARCHAR(40),
 
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS collection_cards (
     collection_id INT,
     card_id INT,
 
-    FOREIGN KEY (collection_id) REFERENCES collections(id),
-    FOREIGN KEY (card_id) REFERENCES cards(id)
+    FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS favorite_cards(
- user_id INT,
- card_id INT,
-
+    user_id INT,
+    card_id INT,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE
- );
+);
