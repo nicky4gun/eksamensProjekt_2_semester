@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error | Deckforge</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+    <h1>Ups, der skete en fejl!</h1>
+    <p th:text="${errorMessage}"></p>
+</body>
+</html>
