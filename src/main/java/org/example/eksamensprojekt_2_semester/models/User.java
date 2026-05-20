@@ -13,7 +13,6 @@ public class User {
     private String email;
     private Role role;
     private String image;
-    private List<Card> favoriteCards;
 
     public User() {}
 public User(List<Card> favoriteCards) {
@@ -71,7 +70,15 @@ public User(List<Card> favoriteCards) {
         this.image = image;
     }
 
-
+    public User(int id, String firstName, String lastName, String email, String password, Role role, String image) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.image = image;
+    }
 
     public int getId() {
         return id;

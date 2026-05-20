@@ -91,6 +91,10 @@ public class Card {
         this.imageUrl = imageUrl;
     }
 
+    public Card(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

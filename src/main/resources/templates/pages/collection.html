@@ -38,7 +38,6 @@
             <a th:href="@{/collection/{collectionId}/add-cards(collectionId=${collectionId})}" class="btn">Tilføj kort</a>
         </div>
 
-        <!-- Card-table -->
         <div class="card-grid">
             <div th:each="card : ${collection}" class="card">
                 <img th:src="${card.imageUrl}" alt="card image">

@@ -20,6 +20,11 @@ public class UserService {
     public UserService(IUserRepository userRepository, ICardRepository cardRepository) {
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
+        this.collectionRepository = collectionRepository;
+    }
+
+    public void removeUser(int id) {
+        userRepository.removeUser(id);
     }
 
     public Optional<Card> findCardByUserId(int userId, int cardId) {
@@ -50,12 +55,7 @@ public class UserService {
         return cards.stream().filter(c -> colors.contains(c.getColor())).toList();
     }
     public void addFavoriteCard(int userId, int cardId) {
-        User user = userRepository.findUserById(userId).orElseThrow();
-        Card card = cardRepository.findCardById(cardId);
-        user.getFavoriteCards().add(card);
-        userRepository.saveFavorites(userId,cardId);
-
-
+        userRepository.saveFavorites(userId, cardId);
     }
     public void removeFavoriteCard(int userId,int cardId) {
         findUserById(userId).orElseThrow();
@@ -67,5 +67,25 @@ public class UserService {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
         User user = new User(firstname,lastname,username,email,hashedPassword,role,image);
         userRepository.createUser(user);
+    }
+
+    public User loginUser(String username, String password) {
+        User existingUser = userRepository.findUserByUsername(username).orElseThrow(
+                () -> new UserNotFoundException("Ingen bruger fundet!"));
+
+        if (existingUser != null && passwordEncoder.matches(password, existingUser.getPassword())) {
+            return existingUser;
+        }
+
+        return null;
+    }
+
+    public void updateUser(int id, String username, String email, String password) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Uyldigt bruger ID, Prøv igen!");
+        }
+
+        String hashedPassword = passwordEncoder.encode(password);
+        userRepository.updateUser(id, username, email, hashedPassword);
     }
 }

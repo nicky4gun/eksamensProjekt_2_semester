@@ -95,27 +95,59 @@ public class UserRepository implements IUserRepository {
 @Override
     public void removeFavorites(int userId,int cardId){
         String sql = "DELETE FROM favorite_cards WHERE user_id = ? AND card_id = ?";
-        jdbcTemplate.update(sql,userId,cardId);
-}
-@Override
-    public void createUser(User user) {
-    String sql = "INSERT INTO User (firstname,lastname,username, email, password,role,image_url) VALUES (?, ?, ?,?,?,?,?)";
+        jdbcTemplate.update(sql, userId, cardId);
+    }
 
+    @Override
+    public int createUser(User user) {
+        String sql = "INSERT INTO users (first_name, last_name, username, password , email, role, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-    jdbcTemplate.update(con -> {
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1,user.getFirstName());
-        ps.setString(2,user.getLastName());
-        ps.setString(3, user.getUsername());
-        ps.setString(4, user.getEmail());
-        ps.setString(5, user.getPassword());
-        ps.setString(6, user.getRole().name());
-        ps.setString(7,user.getImage());
-        return ps;
-    });
+        jdbcTemplate.update(con  -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getUsername());
+            ps.setString(5, user.getPassword());
+            ps.setString(4, user.getEmail());
+            ps.setString(6, user.getRole().name());
+            ps.setString(7, user.getImage());
+            return ps;
+        }, keyHolder);
 
+        return keyHolder.getKey().intValue();
+    }
 
-}
+    @Override
+    public Optional<User> findUserByUsername(String username) {
+        String sql = "SELECT id, first_name, last_name, username, password, email, role, image_url FROM users WHERE username = ?";
+
+        List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
+                rs.getInt("id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("email"),
+                Role.valueOf(rs.getString("role")),
+                rs.getString("image_url")
+
+        ), username);
+
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.getFirst());
+    }
+
+    @Override
+    public void removeUser(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public void updateUser(int id, String username, String email, String password) {
+        String sql = "UPDATE users set username = ?, email = ?, password = ? WHERE id = ?";
+        jdbcTemplate.update(sql, username, email, password, id);
+    }
 }
 
 

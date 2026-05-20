@@ -20,5 +20,13 @@ public interface IUserRepository  {
     void saveFavorites(int userId,int cardId);
     void  removeFavorites(int userId,int cardId);
 
-    void createUser(User user);
+    int createUser(User user);
+
+    Optional<User> findUserByUsername(String username);
+
+    void removeUser(int id);
+
+    void updateUser(int id, String username, String email, String password);
+
+    List<Card> getFavorites(int userId);
 }
