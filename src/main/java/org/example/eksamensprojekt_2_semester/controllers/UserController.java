@@ -3,6 +3,7 @@ package org.example.eksamensprojekt_2_semester.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
+import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +19,20 @@ public class UserController {
 
     @GetMapping("/profile")
     public String showProfile(Model model, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userid");
+        Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             userId = 1;
             session.setAttribute("userId", userId);
         }
-        User user = userService.findUserById(userId);
-        model.addAttribute("user", user);
-        return "/pages/users/profile";
+
+        try {
+            User user = userService.findUserById(userId);
+            model.addAttribute("user", user);
+            return "/pages/users/profile";
+        } catch (UserNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/pages/users/profile";
+        }
     }
 
     @GetMapping("/register")
@@ -35,9 +42,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
-        userService.registerUser(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getPassword(), Role.USER, user.getImage());
-        return "redirect:/login";
+    public String register(@ModelAttribute User user, Model model) {
+        try {
+            userService.registerUser(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getPassword(), Role.USER, user.getImage());
+            return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/pages/auth/signup";
+        }
     }
 
     @GetMapping("/login")
@@ -67,9 +79,14 @@ public class UserController {
             return "redirect:/login";
         }
 
-        User user = userService.findUserById(userId);
-        model.addAttribute("user", user);
-        return "pages/users/update";
+        try {
+            User user = userService.findUserById(userId);
+            model.addAttribute("user", user);
+            return "pages/users/update";
+        } catch (UserNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "pages/users/update";
+        }
     }
 
     @PostMapping("/profile/update")
@@ -79,9 +96,14 @@ public class UserController {
             return "/pages/users/update";
         }
 
-        userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), password);
-        session.setAttribute("userId", user.getId());
-        return "redirect:/profile";
+        try {
+            userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), password);
+            session.setAttribute("userId", user.getId());
+            return "redirect:/profile";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/pages/users/update";
+        }
     }
 
     @PostMapping("/members/delete/{id}")

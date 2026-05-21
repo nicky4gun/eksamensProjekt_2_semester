@@ -7,6 +7,7 @@ import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 import org.example.eksamensprojekt_2_semester.models.enums.Visibility;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,38 +26,62 @@ public class CollectionRepository implements ICollectionRepository {
     @Override
     public void createCollection(int userId, Visibility visibility) {
         String sql = "INSERT INTO collections (user_id, visibility) VALUES (?, ?)";
-        jdbcTemplate.update(sql, userId, visibility.name());
+
+        try {
+            jdbcTemplate.update(sql, userId, visibility.name());
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke oprette collection for bruger med ID " + userId, e);
+        }
     }
 
     @Override
     public void addCard(int collectionId, Integer cardId) {
         String sql = "INSERT INTO collection_cards (collection_id, card_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, collectionId, cardId);
+
+        try {
+            jdbcTemplate.update(sql, collectionId, cardId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke tilføje kort med ID " + cardId +
+                    " til collection med ID " + collectionId, e);
+        }
     }
 
     @Override
     public Optional<Collection> findById(int collectionId) {
         String sql = "SELECT id, user_id, visibility FROM collections WHERE id = ?";
 
-        List<Collection> collections = jdbcTemplate.query(sql, (rs, rowNum) -> new Collection(
-                rs.getInt("id"),
-                rs.getInt("user_id"),
-                Visibility.valueOf(rs.getString("visibility"))
-        ), collectionId);
+        try {
+            List<Collection> collections = jdbcTemplate.query(sql, (rs, rowNum) -> new Collection(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    Visibility.valueOf(rs.getString("visibility"))
+            ), collectionId);
 
-        return collections.isEmpty() ? Optional.empty() : Optional.of(collections.getFirst()) ;
+            return collections.isEmpty() ? Optional.empty() : Optional.of(collections.getFirst());
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finder samling med ID " + collectionId, e);
+        }
     }
 
     @Override
     public Optional<Collection> findByUserId(int userId) {
         String sql = "SELECT id, user_id, visibility FROM collections WHERE user_id = ?";
-        List<Collection> collections = jdbcTemplate.query(sql, (rs, rowNum) -> new Collection(
-                rs.getInt("id"),
-                rs.getInt("user_id"),
-                Visibility.valueOf(rs.getString("visibility"))
-        ), userId);
 
-        return collections.isEmpty() ? Optional.empty() : Optional.of(collections.getFirst()) ;
+        try {
+            List<Collection> collections = jdbcTemplate.query(sql, (rs, rowNum) -> new Collection(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    Visibility.valueOf(rs.getString("visibility"))
+            ), userId);
+
+            return collections.isEmpty() ? Optional.empty() : Optional.of(collections.getFirst()) ;
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde samling for bruger med ID " + userId, e);
+        }
     }
 
     @Override
@@ -69,15 +94,20 @@ public class CollectionRepository implements ICollectionRepository {
                 WHERE col.id = ?
                 """;
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
-                rs.getInt("id"),
-                rs.getString("name"),
-                CardType.valueOf(rs.getString("card_type")),
-                ManaColor.valueOf(rs.getString("color")),
-                rs.getString("expansions"),
-                Rarity.valueOf(rs.getString("rarity")),
-                rs.getString("rule_text"),
-                rs.getString("image_url")
-        ), collectionId);
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    CardType.valueOf(rs.getString("card_type")),
+                    ManaColor.valueOf(rs.getString("color")),
+                    rs.getString("expansions"),
+                    Rarity.valueOf(rs.getString("rarity")),
+                    rs.getString("rule_text"),
+                    rs.getString("image_url")
+            ), collectionId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde nogle kort for samling med ID " + collectionId, e);
+        }
     }
 }

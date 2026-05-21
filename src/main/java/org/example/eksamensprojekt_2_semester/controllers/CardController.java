@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
+import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.services.CardService;
 import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -29,19 +30,19 @@ public class CardController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        User user = userService.findUserById(userId);
-
-        if (user.getRole() != Role.ADMIN) {
-            model.addAttribute("error", "You do not have permission to create this card");
-            return "create";
-        }
-
         try {
+            User user = userService.findUserById(userId);
+
+            if (user.getRole() != Role.ADMIN) {
+                model.addAttribute("error", "Du har ikke tilladelse til at oprette dette kort!");
+                return "create";
+            }
+
             cardService.addCard(card.getId(), card.getName(), card.getCardType(), card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
             return "redirect:/Card/List";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | UserNotFoundException e) {
             model.addAttribute("error", e.getMessage());
-            return "Create";
+            return "create";
         }
     }
 
@@ -51,9 +52,17 @@ public class CardController {
 
         if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
 
-        User user = userService.findUserById(userId);
-        cardService.updateCard(user.getId(), card.getId(), card.getName(), card.getCardType(),
-                card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
-        return "redirect:/cards/"+ card.getId();
+        try {
+            User user = userService.findUserById(userId);
+
+            cardService.updateCard(user.getId(), card.getId(), card.getName(), card.getCardType(),
+                    card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
+
+            return "redirect:/cards/"+ card.getId();
+
+        } catch (IllegalArgumentException | UserNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "update";
+        }
     }
 }

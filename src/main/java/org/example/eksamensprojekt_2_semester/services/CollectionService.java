@@ -2,6 +2,7 @@ package org.example.eksamensprojekt_2_semester.services;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Collection;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class CollectionService {
         Collection collection = getCollectionByUserId(UserId);
 
         if (collection.getUserId() != UserId) {
-            throw new IllegalArgumentException("Collection does not belong to the user");
+            throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
         }
 
         for (Integer cardId : cardIds) {
@@ -31,13 +32,15 @@ public class CollectionService {
         Collection collection = getCollectionByUserId(userId);
 
         if (collection.getUserId() != userId) {
-            throw new IllegalArgumentException("Collection does not belong to the user");
+            throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
         }
 
         return collectionRepository.findAllCards(collection.getUserId());
     }
 
     public Collection getCollectionByUserId(int userId) {
-        return collectionRepository.findByUserId(userId).orElseThrow();
+        return collectionRepository.findByUserId(userId).orElseThrow(
+                () -> new CollectionNotFoundException("Samling for bruger med ID " + userId + " ikke fundet!")
+        );
     }
 }

@@ -5,6 +5,7 @@ import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.enums.Visibility;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
@@ -33,7 +34,9 @@ public class UserService {
     }
 
     public Card findCardByUserId(int userId, int cardId) {
-        return userRepository.findCardByUserId(userId, cardId).orElseThrow();
+        return userRepository.findCardByUserId(userId, cardId).orElseThrow(
+                () -> new CardNotFoundException("Kort med ID " + cardId + " ikke fundet i brugerens samling!")
+        );
     }
 
     public User findUserById(int userId) {
@@ -82,7 +85,7 @@ public class UserService {
         User existingUser = userRepository.findUserByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("Ingen bruger fundet!"));
 
-        if (existingUser != null && passwordEncoder.matches(password, existingUser.getPassword())) {
+        if (passwordEncoder.matches(password, existingUser.getPassword())) {
             return existingUser;
         }
 
@@ -91,7 +94,7 @@ public class UserService {
 
     public void updateUser(int id, String username, String email, String password) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Uyldigt bruger ID, Prøv igen!");
+            throw new IllegalArgumentException("Ugyldigt bruger ID, Prøv igen!");
         }
 
         String hashedPassword = passwordEncoder.encode(password);

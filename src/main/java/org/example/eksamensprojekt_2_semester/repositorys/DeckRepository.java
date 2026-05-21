@@ -56,7 +56,7 @@ public class DeckRepository implements IDeckRepository {
             jdbcTemplate.update(sql, deckId, cardId);
 
         } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke tilføje kort til deck, Prøv igen", e);
+            throw new RuntimeException("Kunne ikke tilføje kort med ID " + cardId + " til deck", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class DeckRepository implements IDeckRepository {
             ), userId);
 
         } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke finde nogle decks, Prøv igen", e);
+            throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
         }
     }
 
@@ -81,14 +81,18 @@ public class DeckRepository implements IDeckRepository {
     public Optional<Deck> findDeckById(int deckId) {
         String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE id = ?";
 
-        List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                rs.getInt("id"),
-                rs.getString("deck_name"),
-                Format.valueOf(rs.getString("format")),
-                rs.getInt("user_id")
-        ), deckId);
+        try {
+            List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
+                    rs.getInt("id"),
+                    rs.getString("deck_name"),
+                    Format.valueOf(rs.getString("format")),
+                    rs.getInt("user_id")
+            ), deckId);
 
-        return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
+            return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde deck med ID " + deckId, e);
+        }
     }
 
     @Override
@@ -98,16 +102,22 @@ public class DeckRepository implements IDeckRepository {
                         JOIN deck_cards dc ON c.id = dc.card_id
                         JOIN decks d ON d.id = dc.deck_id
                         WHERE d.id = ?""";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
-                rs.getInt("id"),
-                rs.getString("name"),
-                CardType.valueOf(rs.getString("card_type")),
-                ManaColor.valueOf(rs.getString("color")),
-                rs.getString("expansions"),
-                Rarity.valueOf(rs.getString("rarity")),
-                rs.getString("rule_text"),
-                rs.getString("image_url")
-        ), deckId);
+
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    CardType.valueOf(rs.getString("card_type")),
+                    ManaColor.valueOf(rs.getString("color")),
+                    rs.getString("expansions"),
+                    Rarity.valueOf(rs.getString("rarity")),
+                    rs.getString("rule_text"),
+                    rs.getString("image_url")
+            ), deckId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde kort i deck med ID " + deckId, e);
+        }
     }
 
     @Override
@@ -125,13 +135,25 @@ public class DeckRepository implements IDeckRepository {
     @Override
     public void removeCardFromDeck(int cardId, int deckId) {
         String sql = "DELETE FROM deck_cards WHERE card_id = ? AND deck_id = ?";
-        jdbcTemplate.update(sql, cardId, deckId);
+
+        try {
+            jdbcTemplate.update(sql, cardId, deckId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke fjerne kort med ID " + cardId + " fra deck med ID " + deckId, e);
+        }
     }
 
     @Override
     public void deleteDeck(int deckId) {
         String sql = "DELETE FROM decks WHERE id = ? ";
-        jdbcTemplate.update(sql, deckId);
+
+        try {
+            jdbcTemplate.update(sql, deckId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke slette deck med ID " + deckId, e);
+        }
     }
 }
 

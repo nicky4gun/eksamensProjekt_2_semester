@@ -105,7 +105,7 @@ public class DeckService {
                 () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
 
         if (user.getRole() != Role.ADMIN && deck.getUserId() != userId) {
-            throw new SecurityException("You cannot delete this deck");
+            throw new SecurityException("Du har ikke tilladelse til at slette dette deck!");
         }
 
         deckRepository.deleteDeck(deckId);
