@@ -112,6 +112,10 @@ public class DeckService {
         deckRepository.deleteDeck(deckId);
     }
 
+    public int getCardAmount(int userId) {
+        return deckRepository.getTotalCardAmount(userId);
+    }
+
     public List<Deck>  getDecksByUserIdOnly5(Integer userId) {
         return deckRepository.getDecksByUserIdOnly5(userId);
 

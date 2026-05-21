@@ -10,8 +10,13 @@
             <a class="nav-link" href="/decks"> Mine Decks</a>
             <a class="nav-link" href="/collection">Samling</a>
             <a class="nav-link" href="/profile">Profil</a>
+            <p> | </p>
+            <a th:if="${session.userId == null}" id="login-button" href="/login">Log ind</a>
+            <a th:if="${session.userId != null}" id="logout-button" href="/logout">Log ud</a>
         </nav>
-        <a id="logout-button" class="btn" href="/logout">Logout</a>
+        <button id="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+            &#9776;
+        </button>
     </nav>
 </header>
 

@@ -15,6 +15,8 @@ public interface IDeckRepository {
 
     Optional<Deck> findDeckById(int deckId);
 
+    Optional<Deck> findDeckByUserId(int userId);
+
     List<Card> findAllCards(int deckId);
 
     void updateDeck(Deck deck);
@@ -22,6 +24,8 @@ public interface IDeckRepository {
     void removeCardFromDeck(int cardId, int deckId);
 
     void deleteDeck(int deckId);
+
+    int getTotalCardAmount(int userId);
 
     List<Deck> getDecksByUserIdOnly5(Integer userId);
 

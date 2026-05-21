@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Add To Collection | Deckforge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
@@ -10,7 +11,7 @@
   <main>
     <h1>Add Cards to Collection</h1>
 
-    <form th:action="@{/collection/{collectionId}/add-cards(collectionId=${collectionId})}" method="post">
+    <form th:action="@{/collection/add-cards}" method="post">
       <div class="add-card-actions">
         <a th:href="@{/collection}" class="btn">Annuller</a>
         <button type="submit" class="btn">Tilføj Kort</button>

@@ -68,8 +68,8 @@ public class CollectionController {
         }
     }
 
-    @PostMapping("/{collectionId}/add-cards")
-    public String addCard(@PathVariable int collectionId, @RequestParam List<Integer> cardIds, HttpSession session, Model model) {
+    @PostMapping("/add-cards")
+    public String addCard(@RequestParam List<Integer> cardIds, HttpSession session, Model model) {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
@@ -78,7 +78,7 @@ public class CollectionController {
         }
 
         try {
-            collectionService.addCards(cardIds, collectionId, userId);
+            collectionService.addCards(cardIds, userId);
             return "redirect:/collection";
         } catch (IllegalArgumentException | CollectionNotFoundException e) {
             model.addAttribute("error", e.getMessage());

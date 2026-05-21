@@ -256,7 +256,7 @@ select {
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
-    height: 60px;
+    height: 70px;
     background-color: #1f1f1f;
     border-bottom: 1px solid #333;
 }
@@ -282,14 +282,122 @@ select {
 
 .nav-link:hover {
     color: white;
+    text-decoration: underline;
 }
 
-#logout-button {
+#logout-button, #login-button {
     color: white;
     text-decoration: none;
-    display: inline-block;
+    font-weight: bold;
 }
 
-#logout-button:hover {
-    opacity: 0.8;
+#logout-button:hover, #login-button:hover {
+    text-decoration: underline;
+}
+
+#hamburger {
+    display: none;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .deck-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+    }
+
+    .filters,
+    .search-bar {
+        flex: 1 1 100%;
+    }
+
+    .decks-actionbar {
+        margin-top: 10px;
+    }
+
+    .decks-actionbar {
+        margin-top: 10px;
+    }
+
+    .deck-actionbar {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .deck-actionbar div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .decks-actionbar button a {
+        margin-top: 8px;
+    }
+
+    .add-card-actions {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: #1f1f1f;
+        padding: 16px;
+        border-bottom: 1px solid #333;
+        gap: 16px;
+        z-index: 99;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links p {
+        display: none;
+    }
+
+    #navbar {
+        height: 70px;
+    }
+
+    #company-name {
+        font-size: 1.6rem;
+    }
+
+    #hamburger {
+        font-size: 35px;
+    }
+
+    #hamburger {
+        display: flex;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    #logout-button, #login-button {
+        padding-top: 8px;
+        border-top: 1px solid #333;
+        margin-top: 8px;
+    }
 }

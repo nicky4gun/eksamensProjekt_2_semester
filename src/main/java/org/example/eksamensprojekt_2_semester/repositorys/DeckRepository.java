@@ -96,6 +96,25 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
+    public Optional<Deck> findDeckByUserId(int userId) {
+        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE user_id = ?";
+
+        try {
+            List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
+                    rs.getInt("id"),
+                    rs.getString("deck_name"),
+                    Format.valueOf(rs.getString("format")),
+                    rs.getInt("user_id")
+            ), userId);
+
+            return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
+        }
+    }
+
+    @Override
     public List<Card> findAllCards(int deckId) {
         String sql = """
                         SELECT c.id, c.name,  c.card_type,  c.color,  c.expansions,  c.rarity,  c.rule_text,  c.image_url FROM cards c
@@ -172,6 +191,21 @@ public class DeckRepository implements IDeckRepository {
             throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
         }
 
+    }
+
+    @Override
+    public int getTotalCardAmount(int userId) {
+        String sql = """
+            SELECT COUNT(*) FROM deck_cards dc
+            JOIN decks d ON d.id = dc.deck_id
+            WHERE d.user_id = ?
+            """;
+        return jdbcTemplate.query(sql, (rs) -> {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }, userId);
     }
 }
 

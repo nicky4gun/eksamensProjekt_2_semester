@@ -16,15 +16,15 @@ public class CollectionService {
         this.collectionRepository = collectionRepository;
     }
 
-    public void addCards(List<Integer> cardIds, int collectionId, int UserId) {
-        Collection collection = getCollectionByUserId(UserId);
+    public void addCards(List<Integer> cardIds, int userId) {
+        Collection collection = getCollectionByUserId(userId);
 
-        if (collection.getUserId() != UserId) {
+        if (collection.getUserId() != userId) {
             throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
         }
 
         for (Integer cardId : cardIds) {
-            collectionRepository.addCard(collectionId, cardId);
+            collectionRepository.addCard(collection.getId(), cardId);
         }
     }
 
