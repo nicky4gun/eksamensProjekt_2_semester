@@ -17,7 +17,7 @@
         <dialog th:replace="~{fragments/deckFormModal :: deckFormModal ('newDeckModal', 'Tilføj nyt Deck',
             @{/decks/add}, 'Opret Deck', null, null, ${formatList})}"></dialog>
 
-        <section class="deck-grid">
+        <section class="deck-grid" >
             <article th:each="deck : ${decks}" class="card">
                 <div class="deck-card-body">
                     <h2 th:text="${deck.deckName}"></h2>

@@ -74,6 +74,20 @@ header {
     gap: 8px;
     padding: 10px;
     color: black;
+
+}
+.deck-grid .deck-card-body:nth-child(4n){
+    background-color: blue;
+}
+.deck-grid .deck-card-body:nth-child(4n+1){
+    background-color: red;
+}
+.deck-grid .deck-card-body:nth-child(4n+2){
+    background-color: green;
+}
+.deck-grid .deck-card-body:nth-child(4n+3){
+    background-color: white;
+
 }
 
 .card-link {
@@ -400,4 +414,9 @@ select {
         border-top: 1px solid #333;
         margin-top: 8px;
     }
+
+
+
+
+
 }
