@@ -11,6 +11,7 @@ public class Deck {
     private Format format;
     private final List<Card> cards = new ArrayList<>();
     private int userId;
+    private int cardCount;
 
     public Deck() {}
 
@@ -94,4 +95,8 @@ public class Deck {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public int getCardCount() { return cardCount; }
+
+    public void setCardCount(int cardCount) { this.cardCount = cardCount; }
 }

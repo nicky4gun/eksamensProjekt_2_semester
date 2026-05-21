@@ -17,12 +17,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/collection")
 public class CollectionController {
-    private final UserService userService;
     private final CardService cardService;
     private final CollectionService collectionService;
 
-    public CollectionController(UserService userService, CardService cardService, CollectionService collectionService) {
-        this.userService = userService;
+    public CollectionController(CardService cardService, CollectionService collectionService) {
         this.cardService = cardService;
         this.collectionService = collectionService;
     }
@@ -36,9 +34,9 @@ public class CollectionController {
         }
 
         try {
-            List<Card> cards = userService.findCardsByUserId(userId);
-            cards = userService.searchCards(cards, search);
-            cards = userService.filterCardsByColor(cards, colors);
+            List<Card> cards = collectionService.findCardsByUserId(userId);
+            cards = cardService.searchCards(cards, search);
+            cards = cardService.filterCardsByColor(cards, colors);
             model.addAttribute("collection", cards);
             model.addAttribute("manaColor", ManaColor.values());
             model.addAttribute("collectionId", userId);
@@ -96,7 +94,7 @@ public class CollectionController {
         }
 
         try {
-            model.addAttribute("favorites", userService.getFavoriteCards(userId));
+            model.addAttribute("favorites", collectionService.getFavoriteCards(userId));
             return "/pages/collection";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
@@ -114,7 +112,7 @@ public class CollectionController {
         }
 
         try {
-            userService.addFavoriteCard(userId,cardId);
+            collectionService.addFavoriteCard(userId, cardId);
             return "redirect:/collection/favorites";
         } catch (IllegalArgumentException e) {
             session.setAttribute("error", e.getMessage());
@@ -132,7 +130,7 @@ public class CollectionController {
         }
 
         try {
-            userService.removeFavoriteCard(userId,cardId);
+            collectionService.removeFavoriteCard(userId, cardId);
             return "redirect:/collection/favorites";
         } catch (IllegalArgumentException | UserNotFoundException e) {
             model.addAttribute("error", e.getMessage());

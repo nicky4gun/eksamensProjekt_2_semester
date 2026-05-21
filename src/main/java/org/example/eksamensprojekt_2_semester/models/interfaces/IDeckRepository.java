@@ -25,8 +25,6 @@ public interface IDeckRepository {
 
     void deleteDeck(int deckId);
 
-    int getTotalCardAmount(int userId);
-
     List<Deck> getDecksByUserIdOnly5(Integer userId);
 
 }

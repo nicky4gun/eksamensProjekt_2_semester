@@ -38,7 +38,6 @@ public class DeckController {
         try {
             model.addAttribute("decks", deckService.getDecksByUserId(userId));
             model.addAttribute("formatList", Format.values());
-            model.addAttribute("cardAmount", deckService.getCardAmount(userId));
             return "/pages/decks/decks";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());

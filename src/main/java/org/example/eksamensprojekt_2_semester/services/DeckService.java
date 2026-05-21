@@ -7,9 +7,9 @@ import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
+import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +19,12 @@ import java.util.List;
 public class DeckService {
     private final IDeckRepository deckRepository;
     private final IUserRepository userRepository;
+    private final ICollectionRepository collectionRepository;
 
-    public DeckService(IDeckRepository deckRepository, IUserRepository userRepository) {
+    public DeckService(IDeckRepository deckRepository, IUserRepository userRepository, ICollectionRepository collectionRepository) {
         this.deckRepository = deckRepository;
         this.userRepository = userRepository;
+        this.collectionRepository = collectionRepository;
     }
 
     public int addDeck(String deckName, Format format, int userId) {
@@ -51,7 +53,7 @@ public class DeckService {
         List<Card> cards = new ArrayList<>();
 
         for (int cardId : cardIds) {
-            userRepository.findCardByUserId(userId, cardId).ifPresent(cards::add);
+            collectionRepository.findCardByUserId(userId, cardId).ifPresent(cards::add);
         }
 
         return cards;
@@ -112,12 +114,7 @@ public class DeckService {
         deckRepository.deleteDeck(deckId);
     }
 
-    public int getCardAmount(int userId) {
-        return deckRepository.getTotalCardAmount(userId);
-    }
-
     public List<Deck>  getDecksByUserIdOnly5(Integer userId) {
         return deckRepository.getDecksByUserIdOnly5(userId);
-
     }
 }

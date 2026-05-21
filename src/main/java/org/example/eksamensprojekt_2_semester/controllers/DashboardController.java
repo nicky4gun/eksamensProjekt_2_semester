@@ -19,37 +19,25 @@ import java.util.List;
 @Controller
 @RequestMapping("/home")
 public class DashboardController {
-    private final UserService userService;
-    private final CardService cardService;
     private final CollectionService collectionService;
     private final DeckService deckService;
 
-    public DashboardController(UserService userService, CardService cardService, CollectionService collectionService, DeckService deckService) {
-        this.userService = userService;
-        this.cardService = cardService;
+    public DashboardController(CollectionService collectionService, DeckService deckService) {
         this.collectionService = collectionService;
         this.deckService = deckService;
     }
 
     @GetMapping
     public String showDashboard(Model model, HttpSession session) {
-       Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = (Integer) session.getAttribute("userId");
         Collection collection = collectionService.getCollectionByUserId(userId);
 
-            model.addAttribute("collection", collectionService.findTheFirst10Cards(collection.getId()));
-        model.addAttribute("favorites", userService.getFavoriteCardsLimitBy10(userId));
+        model.addAttribute("collection", collectionService.findTheFirst10Cards(collection.getId()));
+        model.addAttribute("favorites", collectionService.getFavoriteCardsLimitBy10(userId));
         model.addAttribute("decks", deckService.getDecksByUserIdOnly5(userId));
         model.addAttribute("formatList", Format.values());
-            model.addAttribute("collectionId", collection.getId());
+        model.addAttribute("collectionId", collection.getId());
 
         return "pages/dashboard";
-
-
     }
-
-
-
-
-
-
 }

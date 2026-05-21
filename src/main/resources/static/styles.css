@@ -24,7 +24,7 @@ header {
 .btn {
     display: inline-block;
     text-decoration: none;
-    background-color: #757171;
+    background-color: #448a30;
     color: white;
     padding: 10px;
     border-radius: 10px;
@@ -244,20 +244,20 @@ select {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 12px;
-
+    gap: 8px;
     margin-bottom: 20px;
     flex-wrap: nowrap;
-
 }
 
 .filters,
 .search-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
     margin: 0;
-    flex: 0 0 auto;
+    gap: 5px;
+    width: auto;
+    min-width: 200px;
+    flex-shrink: 0;
 }
 
 select {
@@ -414,9 +414,4 @@ select {
         border-top: 1px solid #333;
         margin-top: 8px;
     }
-
-
-
-
-
 }

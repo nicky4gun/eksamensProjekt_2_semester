@@ -48,6 +48,17 @@ public class CardService {
         );
     }
 
+    public List<Card> searchCards(List<Card> cards, String query) {
+        if (query == null || query.isEmpty()) return cards;
+        return cards.stream().filter(c -> c.getName().toLowerCase()
+                .contains(query.toLowerCase())).toList();
+    }
+
+    public List<Card> filterCardsByColor(List<Card> cards, List<ManaColor> colors) {
+        if (colors == null || colors.isEmpty()) return cards;
+        return cards.stream().filter(c -> colors.contains(c.getColor())).toList();
+    }
+
     public void updateCard(int userId, int id, String name, CardType cardType, ManaColor colors, String set, Rarity rarity, String ruleText, String imageUrl) {
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
@@ -59,8 +70,6 @@ public class CardService {
         Card card = new Card(id, name, cardType, colors, set, rarity, ruleText, imageUrl);
         cardRepository.updateCard(card);
     }
-
-
 }
 
 

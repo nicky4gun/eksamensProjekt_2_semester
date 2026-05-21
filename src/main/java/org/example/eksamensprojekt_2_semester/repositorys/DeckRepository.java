@@ -62,15 +62,24 @@ public class DeckRepository implements IDeckRepository {
 
     @Override
     public List<Deck> findDecksByUserId(int userId) {
-        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE user_id = ?";
+        String sql = """
+                        SELECT d.id, d.deck_name, d.format, d.user_id, COUNT(dc.card_id) AS card_count
+                        FROM decks d
+                        LEFT JOIN deck_cards dc ON d.id = dc.deck_id
+                        WHERE d.user_id = ?
+                        GROUP BY d.id, d.deck_name, d.format, d.user_id""";
 
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                    rs.getInt("id"),
-                    rs.getString("deck_name"),
-                    Format.valueOf(rs.getString("format")),
-                    rs.getInt("user_id")
-            ), userId);
+            return jdbcTemplate.query(sql, (rs, rowNum) -> {
+                Deck deck = new Deck(
+                        rs.getInt("id"),
+                        rs.getString("deck_name"),
+                        Format.valueOf(rs.getString("format")),
+                        rs.getInt("user_id")
+                );
+                deck.setCardCount(rs.getInt("card_count"));
+                return deck;
+            }, userId);
 
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
@@ -97,7 +106,7 @@ public class DeckRepository implements IDeckRepository {
 
     @Override
     public Optional<Deck> findDeckByUserId(int userId) {
-        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE user_id = ?";
+        String sql = "SELECT id, deck_name, format, user_id, FROM decks WHERE user_id = ?";
 
         try {
             List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
@@ -191,21 +200,6 @@ public class DeckRepository implements IDeckRepository {
             throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
         }
 
-    }
-
-    @Override
-    public int getTotalCardAmount(int userId) {
-        String sql = """
-            SELECT COUNT(*) FROM deck_cards dc
-            JOIN decks d ON d.id = dc.deck_id
-            WHERE d.user_id = ?
-            """;
-        return jdbcTemplate.query(sql, (rs) -> {
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-        }, userId);
     }
 }
 
