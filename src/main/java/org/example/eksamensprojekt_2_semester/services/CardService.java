@@ -11,6 +11,7 @@ import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundExce
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +59,8 @@ public class CardService {
         Card card = new Card(id, name, cardType, colors, set, rarity, ruleText, imageUrl);
         cardRepository.updateCard(card);
     }
+
+
 }
 
 

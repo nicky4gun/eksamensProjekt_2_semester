@@ -110,4 +110,26 @@ public class CollectionRepository implements ICollectionRepository {
             throw new RuntimeException("Kunne ikke finde nogle kort for samling med ID " + collectionId, e);
         }
     }
+    @Override
+    public List<Card> findTheFirst10Cards(int collectionId) {
+        String sql = """
+                SELECT c.id, c.name,  c.card_type,  c.color,  c.expansions,  c.rarity,  c.rule_text,  c.image_url
+                FROM cards c
+                JOIN collection_cards cc ON c.id = cc.card_id
+                JOIN collections col ON col.id = cc.collection_id
+                WHERE col.id = ? 
+                LIMIT 10 
+                """;
+
+         return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                rs.getInt("id"),
+                rs.getString("name"),
+                CardType.valueOf(rs.getString("card_type")),
+                ManaColor.valueOf(rs.getString("color")),
+                rs.getString("expansions"),
+                Rarity.valueOf(rs.getString("rarity")),
+                rs.getString("rule_text"),
+                rs.getString("image_url")
+        ),collectionId);
+    }
 }

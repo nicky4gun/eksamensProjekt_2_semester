@@ -115,6 +115,19 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public List<Card> getFavoritesLimitBy10(Integer userId) {
+        String sql = "SELECT card_id where user_id = ? LIMIT 10";
+
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
+                    rs.getInt("id")
+            ));
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke hente favoritkort for bruger med ID " + userId, e);
+        }
+    }
+
+    @Override
     public void saveFavorites(int userId, int cardId) {
         String sql = "INSERT INTO favorite_cards (user_id,card_id) VALUES (?,?)";
 

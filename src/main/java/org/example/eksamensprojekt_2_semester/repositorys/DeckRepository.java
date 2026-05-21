@@ -155,5 +155,23 @@ public class DeckRepository implements IDeckRepository {
             throw new RuntimeException("Kunne ikke slette deck med ID " + deckId, e);
         }
     }
+
+    @Override
+    public List<Deck> getDecksByUserIdOnly5(Integer userId) {
+        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE user_id = ? LIMIT 5";
+
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
+                    rs.getInt("id"),
+                    rs.getString("deck_name"),
+                    Format.valueOf(rs.getString("format")),
+                    rs.getInt("user_id")
+            ), userId);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
+        }
+
+    }
 }
 

@@ -10,6 +10,7 @@ import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundExce
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -99,5 +100,12 @@ public class UserService {
 
         String hashedPassword = passwordEncoder.encode(password);
         userRepository.updateUser(id, username, email, hashedPassword);
+    }
+
+    public List<Card>  getFavoriteCardsLimitBy10(Integer userId) {
+        return userRepository.getFavoritesLimitBy10(userId);
+
+
+
     }
 }

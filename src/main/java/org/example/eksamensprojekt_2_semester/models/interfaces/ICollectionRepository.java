@@ -17,4 +17,6 @@ public interface ICollectionRepository {
     Optional<Collection> findByUserId(int userId);
 
     List<Card> findAllCards(int collectionId);
+
+    List<Card> findTheFirst10Cards(int collectionId);
 }

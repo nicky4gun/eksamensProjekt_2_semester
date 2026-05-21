@@ -22,4 +22,7 @@ public interface IDeckRepository {
     void removeCardFromDeck(int cardId, int deckId);
 
     void deleteDeck(int deckId);
+
+    List<Deck> getDecksByUserIdOnly5(Integer userId);
+
 }

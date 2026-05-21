@@ -176,9 +176,8 @@ select {
 }
 
 .card-grid--select .card input[type="checkbox"]:checked + img {
-    outline: 3px solid #4caf50;
     border-radius: 10px;
-    opacity: 0.9;
+    opacity: 0.7;
 }
 
 .card-grid--select .card img {
@@ -202,7 +201,7 @@ select {
 .card-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;

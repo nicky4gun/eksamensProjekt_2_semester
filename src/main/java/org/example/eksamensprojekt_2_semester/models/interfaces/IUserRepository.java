@@ -26,4 +26,7 @@ public interface IUserRepository  {
     void updateUser(int id, String username, String email, String password);
 
     List<Card> getFavorites(int userId);
+
+    List<Card> getFavoritesLimitBy10(Integer userId);
+
 }

@@ -14,4 +14,6 @@ public interface ICardRepository {
     void updateCard(Card card);
 
     Optional<Card> findCardById(int cardId);
+
+
 }

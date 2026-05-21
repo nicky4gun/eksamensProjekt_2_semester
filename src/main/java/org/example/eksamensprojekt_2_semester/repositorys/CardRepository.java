@@ -101,4 +101,7 @@ public class CardRepository implements ICardRepository {
             throw new RuntimeException("Kunne ikke finde kort med ID " + cardId, e);
         }
     }
+
+
+
 }

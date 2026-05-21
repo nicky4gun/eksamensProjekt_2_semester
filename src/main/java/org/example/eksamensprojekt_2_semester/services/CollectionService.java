@@ -35,12 +35,15 @@ public class CollectionService {
             throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
         }
 
-        return collectionRepository.findAllCards(collection.getUserId());
+        return collectionRepository.findAllCards(collection.getId());
     }
 
     public Collection getCollectionByUserId(int userId) {
         return collectionRepository.findByUserId(userId).orElseThrow(
                 () -> new CollectionNotFoundException("Samling for bruger med ID " + userId + " ikke fundet!")
         );
+    }
+    public List<Card> findTheFirst10Cards(int collectionId ) {
+       return collectionRepository.findTheFirst10Cards(collectionId);
     }
 }

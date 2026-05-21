@@ -6,7 +6,43 @@
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-    <header th:replace="~{fragments/navbar :: navbar}"></header>
-    <!-- Dashboard contents -->
+<header th:replace="~{fragments/navbar :: navbar}"></header>
+<!-- Dashboard contents -->
+
+
+<h2>Dine decks</h2>
+<section class="deck-grid">
+    <article th:each="deck : ${decks}" class="card">
+        <div class="deck-card-body">
+            <h2 th:text="${deck.deckName}"></h2>
+            <p th:text="${deck.format}"></p>
+            <span>Card number</span>
+            <a th:href="@{/decks/{id}(id=${deck.id})}" class="card-link"></a>
+        </div>
+    </article>
+</section>
+
+<h2> din card samling</h2>
+<div class="card-grid" th:if="${collcetion != null}">
+    <div th:each="card : ${collection}" class="card">
+        <img th:src="${card.imageUrl}" alt="card image">
+    </div>
+
+    <h2> your Favorite Cards</h2>
+    <div th:each="card : ${collection}">
+        <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+
+        <form action="/collection/favorites/delete" method="post">
+            <input type="hidden" name="cardId" th:value="${card.id}">
+            <button>favorite</button>
+        </form>
+    </div>
+    <div th:each="card : ${favorites}">
+        <img th:src="@{'/images/' +${card.image}}" alt="card image" width="100">
+        <form action="/collection/favorites/delete" method="post">
+            <input type="hidden" name="cardId" th:value="${card.id}">
+            <button>remove</button>
+        </form>
+    </div>
 </body>
 </html>
