@@ -79,8 +79,9 @@ public class DeckServiceTests {
         Card card2 = new Card(2, "Card 2", CardType.SORCERY, ManaColor.BLUE, "Set", Rarity.RARE, "Text", "URL");
 
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.of(deck));
-        when(userRepository.findCardByUserId(userId, card1.getId())).thenReturn(Optional.of(card1));
-        when(userRepository.findCardByUserId(userId, card2.getId())).thenReturn(Optional.of(card2));
+        when(collectionRepository.findCardByUserId(userId, card1.getId())).thenReturn(Optional.of(card1));
+        when(collectionRepository.findCardByUserId(userId, card2.getId())).thenReturn(Optional.of(card2));
+
 
         deckService.addCards(deckId, cardIds, userId);
 
