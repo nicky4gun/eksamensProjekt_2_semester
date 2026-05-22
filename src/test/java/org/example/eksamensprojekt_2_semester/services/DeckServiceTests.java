@@ -6,6 +6,7 @@ import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
+import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class DeckServiceTests {
     private IDeckRepository deckRepository;
     private IUserRepository userRepository;
-
+    private ICollectionRepository collectionRepository;
     private DeckService deckService;
 
     private final String deckName = "Test";
@@ -33,8 +34,9 @@ public class DeckServiceTests {
     void setUp() {
         deckRepository = mock(IDeckRepository.class);
         userRepository = mock(IUserRepository.class);
+        collectionRepository = mock(ICollectionRepository.class);
 
-        deckService = new DeckService(deckRepository, userRepository);
+        deckService = new DeckService(deckRepository, userRepository,collectionRepository);
     }
 
     @Test
