@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Decks | Deckforge</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <header th:replace="~{fragments/navbar :: navbar}"></header>
@@ -14,15 +14,14 @@
             <button class="btn" onclick="document.getElementById('newDeckModal').showModal()">Tilføj Deck</button>
         </section>
 
-        <dialog th:replace="~{fragments/deckFormModal :: deckFormModal ('newDeckModal', 'Tilføj nyt Deck',
-            @{/decks/add}, 'Opret Deck', null, null, ${formatList})}"></dialog>
+        <dialog th:replace="~{fragments/addDeckModal :: addDeckModal (${formatList})}"></dialog>
 
         <section class="deck-grid" >
             <article th:each="deck : ${decks}" class="card">
                 <div class="deck-card-body">
                     <h2 th:text="${deck.deckName}"></h2>
                     <p th:text="${deck.format}"></p>
-                    <span th:text="${cardAmount} + ' kort'"></span>
+                    <span th:text="${deck.cardCount} + ' kort'"></span>
                     <a th:href="@{/decks/{id}(id=${deck.id})}" class="card-link"></a>
                 </div>
             </article>

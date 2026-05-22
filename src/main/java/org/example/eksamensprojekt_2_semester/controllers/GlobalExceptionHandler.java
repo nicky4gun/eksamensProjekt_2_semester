@@ -1,5 +1,7 @@
 package org.example.eksamensprojekt_2_semester.controllers;
 
+import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.springframework.ui.Model;
@@ -29,6 +31,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UserNotFoundException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/pages/auth/error";
+    }
+
+    @ExceptionHandler(CardNotFoundException.class)
+    public String handleCardNotFoundException(CardNotFoundException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/pages/auth/error";
+    }
+
+    @ExceptionHandler(CollectionNotFoundException.class)
+    public String handleCollectionNotFoundException(CollectionNotFoundException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/pages/auth/error";
     }

@@ -33,7 +33,6 @@ public class DashboardController {
         Collection collection = collectionService.getCollectionByUserId(userId);
 
         model.addAttribute("collection", collectionService.findTheFirst10Cards(collection.getId()));
-        model.addAttribute("favorites", collectionService.getFavoriteCardsLimitBy10(userId));
         model.addAttribute("decks", deckService.getDecksByUserIdOnly5(userId));
         model.addAttribute("formatList", Format.values());
         model.addAttribute("collectionId", collection.getId());

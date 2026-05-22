@@ -1,13 +1,7 @@
 package org.example.eksamensprojekt_2_semester.controllers;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.eksamensprojekt_2_semester.models.Card;
-import org.example.eksamensprojekt_2_semester.models.Collection;
-import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
-import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
-import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
-import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.services.CollectionService;
 import org.example.eksamensprojekt_2_semester.services.DeckService;
 import org.springframework.stereotype.Controller;
@@ -31,129 +25,63 @@ public class DeckController {
     @GetMapping
     public String showDecks(Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null)
-            {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            model.addAttribute("decks", deckService.getDecksByUserId(userId));
-            model.addAttribute("formatList", Format.values());
-            return "/pages/decks/decks";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/decks";
-        }
+        model.addAttribute("decks", deckService.getDecksByUserId(userId));
+        model.addAttribute("formatList", Format.values());
+        return "/pages/decks/decks";
     }
 
     @PostMapping("/add")
     public String addDeck(@RequestParam String deckName, @RequestParam Format format,
-                          HttpSession session, Model model) {
+                          HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            deckService.addDeck(deckName, format, userId);
-            return "redirect:/decks";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/decks";
-        }
+        deckService.addDeck(deckName, format, userId);
+        return "redirect:/decks";
     }
 
     @GetMapping("/{deckId}/add-cards")
     public String showAddCardsView(@PathVariable int deckId, Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            model.addAttribute("collectionCards", collectionService.getCards(userId));
-            model.addAttribute("deckId", deckId);
-            return "/pages/decks/add-card";
-        } catch (IllegalArgumentException | CollectionNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/add-card";
-        }
+        model.addAttribute("collectionCards", collectionService.getCards(userId));
+        model.addAttribute("deckId", deckId);
+        return "/pages/decks/add-card";
     }
 
     @PostMapping("/{deckId}/add-cards")
-    public String addCardsToDeck(@PathVariable int deckId, @RequestParam List<Integer> cardIds,
-                                 HttpSession session, Model model) {
+    public String addCardsToDeck(@PathVariable int deckId, @RequestParam(required = false) List<Integer> cardIds,
+                                 HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            deckService.addCards(deckId, cardIds, userId);
-            return "redirect:/decks/" + deckId;
-        } catch (IllegalArgumentException | DeckNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/add-card";
-        }
+        deckService.addCards(deckId, cardIds, userId);
+        return "redirect:/decks/" + deckId;
     }
 
     @GetMapping("/{deckId}")
-    public String showDeckInfo(@PathVariable int deckId, Model model, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            model.addAttribute("deck", deckService.getDeckById(deckId));
-            model.addAttribute("deckCards", deckService.getAllCards(deckId));
-            model.addAttribute("formatList", Format.values());
-            return "/pages/decks/deck-view";
-        } catch (IllegalArgumentException | DeckNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/deck-view";
-        }
+    public String showDeckInfo(@PathVariable int deckId, Model model) {
+        model.addAttribute("deck", deckService.getDeckById(deckId));
+        model.addAttribute("deckCards", deckService.getAllCards(deckId));
+        model.addAttribute("formatList", Format.values());
+        return "/pages/decks/deck-view";
     }
 
     @PostMapping("/{deckId}/update")
     public String updateDeck(@PathVariable int deckId, @RequestParam String deckName,
-                             @RequestParam Format format, HttpSession session, Model model)  {
+                             @RequestParam Format format, HttpSession session)  {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            deckService.updateDeck(deckId, deckName, format, userId);
-            return "redirect:/decks/" + deckId;
-        } catch (IllegalArgumentException | DeckNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/update-deck";
-        }
+        deckService.updateDeck(deckId, deckName, format, userId);
+        return "redirect:/decks/" + deckId;
     }
     
     @PostMapping("/{deckId}/remove-card")
     public String removeCardFromDeck(@PathVariable int deckId, @RequestParam int cardId,
-                                     HttpSession session, Model model) {
+                                     HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            deckService.removeCardFromDeck(userId, cardId, deckId);
-            return "redirect:/decks/" + deckId;
-        } catch (IllegalArgumentException | DeckNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/remove-card";
-        }
+        deckService.removeCardFromDeck(userId, cardId, deckId);
+        return "redirect:/decks/" + deckId;
     }
 
     @GetMapping("/{deckId}/delete")
-    public String deleteDeck(@PathVariable int deckId, HttpSession session, Model model) {
+    public String deleteDeck(@PathVariable int deckId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {userId = 1; session.setAttribute("userId", userId); }
-
-        try {
-            deckService.deleteDeck(deckId, userId);
-            return "redirect:/decks";
-        } catch (IllegalArgumentException | DeckNotFoundException | UserNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/decks/delete-deck";
-        }
+        deckService.deleteDeck(deckId, userId);
+        return "redirect:/decks";
     }
 }

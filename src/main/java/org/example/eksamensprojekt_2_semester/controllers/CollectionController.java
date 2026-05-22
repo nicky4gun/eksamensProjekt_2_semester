@@ -3,11 +3,8 @@ package org.example.eksamensprojekt_2_semester.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
-import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
-import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.services.CardService;
 import org.example.eksamensprojekt_2_semester.services.CollectionService;
-import org.example.eksamensprojekt_2_semester.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,112 +26,27 @@ public class CollectionController {
     public String showCollection(@RequestParam(required = false) String search, @RequestParam(required = false) List<ManaColor> colors,
                                  Model model, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {
-            userId = 1;
-        }
 
-        try {
-            List<Card> cards = collectionService.findCardsByUserId(userId);
-            cards = cardService.searchCards(cards, search);
-            cards = cardService.filterCardsByColor(cards, colors);
-            model.addAttribute("collection", cards);
-            model.addAttribute("manaColor", ManaColor.values());
-            model.addAttribute("collectionId", userId);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/collection";
-        }
+        List<Card> cards = collectionService.findCardsByUserId(userId);
+        cards = cardService.searchCards(cards, search);
+        cards = cardService.filterCardsByColor(cards, colors);
+        model.addAttribute("collection", cards);
+        model.addAttribute("manaColor", ManaColor.values());
+        model.addAttribute("collectionId", userId);
 
-        return "/pages/collection";
+        return "/pages/collections/collection";
     }
 
     @GetMapping("/{collectionId}/add-cards")
-    public String showAddCards(@PathVariable int collectionId, Model model, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {
-            userId = 1;
-            session.setAttribute("userId", userId);
-        }
-
-        try {
-            model.addAttribute("cardsAvailable", cardService.findAll());
-            return "/pages/add-to-collection";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/collection";
-        }
+    public String showAddCards(@PathVariable int collectionId, Model model) {
+        model.addAttribute("cardsAvailable", cardService.findAll());
+        return "/pages/collections/add-to-collection";
     }
 
     @PostMapping("/add-cards")
-    public String addCard(@RequestParam List<Integer> cardIds, HttpSession session, Model model) {
+    public String addCard(@RequestParam(required = false) List<Integer> cardIds, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {
-            userId = 1;
-            session.setAttribute("userId", userId);
-        }
-
-        try {
-            collectionService.addCards(cardIds, userId);
-            return "redirect:/collection";
-        } catch (IllegalArgumentException | CollectionNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/collection";
-        }
-    }
-
-    @GetMapping("/favorites")
-    public String showFavorites(Model model, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {
-            userId = 1;
-            session.setAttribute("userId", userId);
-        }
-
-        try {
-            model.addAttribute("favorites", collectionService.getFavoriteCards(userId));
-            return "/pages/collection";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/collection";
-        }
-    }
-
-    @PostMapping("/favorites/add")
-    public String addFavorite(@RequestParam int cardId, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {
-            userId = 1;
-            session.setAttribute("userId", userId);
-        }
-
-        try {
-            collectionService.addFavoriteCard(userId, cardId);
-            return "redirect:/collection/favorites";
-        } catch (IllegalArgumentException e) {
-            session.setAttribute("error", e.getMessage());
-            return "redirect:/collection/favorites";
-        }
-    }
-
-    @PostMapping("/favorites/remove")
-    public String removeFavorite(@RequestParam int cardId, HttpSession session, Model model) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null) {
-            userId = 1;
-            session.setAttribute("userId", userId);
-        }
-
-        try {
-            collectionService.removeFavoriteCard(userId, cardId);
-            return "redirect:/collection/favorites";
-        } catch (IllegalArgumentException | UserNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "/pages/collection";
-        }
+        collectionService.addCards(cardIds, userId);
+        return "redirect:/collection";
     }
 }

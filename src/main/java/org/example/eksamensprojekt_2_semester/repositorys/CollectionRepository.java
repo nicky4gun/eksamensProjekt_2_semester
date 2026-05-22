@@ -172,8 +172,8 @@ public class CollectionRepository implements ICollectionRepository {
                 FROM cards c
                 JOIN collection_cards cc ON c.id = cc.card_id
                 JOIN collections col ON col.id = cc.collection_id
-                WHERE col.id = ? 
-                LIMIT 10 
+                WHERE col.id = ?
+                LIMIT 10
                 """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
@@ -186,53 +186,5 @@ public class CollectionRepository implements ICollectionRepository {
             rs.getString("rule_text"),
             rs.getString("image_url")
         ),collectionId);
-    }
-
-    @Override
-    public List<Card> getFavorites(int userId) {
-        String sql = "SELECT card_id where user_id = ?";
-
-        try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
-                    rs.getInt("id")
-            ));
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke hente favoritkort for bruger med ID " + userId, e);
-        }
-    }
-
-    @Override
-    public List<Card> getFavoritesLimitBy10(Integer userId) {
-        String sql = "SELECT card_id where user_id = ? LIMIT 10";
-
-        try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
-                    rs.getInt("id")
-            ));
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke hente favoritkort for bruger med ID " + userId, e);
-        }
-    }
-
-    @Override
-    public void saveFavorites(int userId, int cardId) {
-        String sql = "INSERT INTO favorite_cards (user_id,card_id) VALUES (?,?)";
-
-        try {
-            jdbcTemplate.update(sql, userId, cardId);
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke gemme favoritkort med ID " + cardId, e);
-        }
-    }
-
-    @Override
-    public void removeFavorites(int userId, int cardId) {
-        String sql = "DELETE FROM favorite_cards WHERE user_id = ? AND card_id = ?";
-
-        try {
-            jdbcTemplate.update(sql, userId, cardId);
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke fjerne favoritkort med ID " + cardId, e);
-        }
     }
 }

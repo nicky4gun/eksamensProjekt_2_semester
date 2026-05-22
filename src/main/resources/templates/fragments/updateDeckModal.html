@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<dialog th:fragment="updateDeckModal(deck, formatList)" id="updateDeckModal">
+    <button type="button" onclick="this.closest('dialog').close();
+    this.closest('dialog').querySelector('form').reset()">&times;</button>
+    <h2>Opdater Deck</h2>
+
+    <form th:action="@{/decks/{deckId}/update(deckId=${deck.id})}" method="post" class="deck-form">
+        <input type="text" name="deckName" th:value="${deck.deckName}" required>
+        <select name="format" required>
+            <option th:each="format : ${formatList}"
+                    th:value="${format}"
+                    th:text="${format.name}"
+                    th:selected="${format == deck.format}">
+            </option>
+        </select>
+        <div class="modal-actions">
+            <button type="button" onclick="this.closest('dialog').close();
+            this.closest('dialog').querySelector('form').reset()" class="btn">Annuller</button>
+            <button type="submit" class="btn">Opdater Deck</button>
+        </div>
+    </form>
+</dialog>
+
+</body>
+</html>

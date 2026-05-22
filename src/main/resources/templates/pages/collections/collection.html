@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Samling | Deckforge</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <header th:replace="~{fragments/navbar :: navbar}"></header>
@@ -12,12 +12,6 @@
         <h1>Min Samling</h1>
 
         <div class="toolbar">
-
-
-            <!-- Sortering -->
-
-
-            <!-- Filter -->
             <form action="/collection" method="get" class="filters">
                 <select name="colors" id="colors">
                     <option value="" disabled selected>Filter Colors</option>

@@ -23,12 +23,4 @@ public interface ICollectionRepository {
     List<Card> findCardsByUserId(int userId);
 
     List<Card> findTheFirst10Cards(int collectionId);
-
-    List<Card> getFavorites(int userId);
-
-    List<Card> getFavoritesLimitBy10(Integer userId);
-
-    void saveFavorites(int userId,int cardId);
-
-    void  removeFavorites(int userId,int cardId);
 }
