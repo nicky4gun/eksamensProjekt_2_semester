@@ -60,7 +60,7 @@ public class UserController {
         Integer userId = (Integer) session.getAttribute("userId");
         User user = userService.findUserById(userId);
         model.addAttribute("user", user);
-        return "pages/users/update";
+        return "/pages/users/update";
     }
 
     @PostMapping("/profile/update")

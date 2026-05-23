@@ -183,7 +183,16 @@ header {
 }
 
 .deck-grid > article:nth-of-type(4n) {
-    border-color: #5f7fa0; /* Blue */
+    border-color: #5f7fa0;
+}
+/* Update */
+
+
+.update-user-form .input-field input {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
 }
 
 .card img {
