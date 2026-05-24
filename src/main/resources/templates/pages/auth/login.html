@@ -7,29 +7,28 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body class="auth-page">
-    <div id="login-screen">
-        <header th:replace="~{fragments/navbar :: navbar}"></header>
-
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+    <main id="login-screen">
         <h1>Login</h1>
 
         <form th:object="${user}" method="post" th:action="@{/login}">
             <div class="input-field">
-                <label for="username">username:</label>
+                <label for="username">Brugernavn:</label>
                 <input type="text" th:field="*{username}" id="username" placeholder="Intast brugernavn...">
             </div>
 
             <div class="input-field">
-                <label for="password">Password:</label>
-                <input type="password" th:field="*{password}" id="password" placeholder="Intast Adgangskode...">
+                <label for="password">Adgangskode:</label>
+                <input type="password" th:field="*{password}" id="password" placeholder="Intast adgangskode...">
             </div>
 
             <div class="button-field">
-                <a href="/register"><button type="button" id="signup">Tilmeld</button></a>
-                <button type="submit" id="login">Login</button>
+                <a href="/register" class="btn" id="sign-up">Tilmeld</a>
+                <button type="submit" class="btn" id="login">Login</button>
             </div>
 
             <p th:if="${error}" th:text="${error}" style="color:red;"></p>
         </form>
-    </div>
+    </main>
 </body>
 </html>

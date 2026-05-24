@@ -12,9 +12,7 @@
     <h1> Opdater din profil</h1>
 
     <form class="update-user-form" th:object="${user}" method="post" th:action="@{/profile/update}">
-
-        <input type="hidden" th:field="*{id}">
-
+        <input type="hidden" name="id" th:value="*{id}">
         <div class="input-field">
             <label for="username">Navn:</label>
             <input type="text" th:field="*{username}" id="username" placeholder="Indtast navn...">
@@ -24,6 +22,7 @@
             <label for="email">Email:</label>
             <input type="text" th:field="*{email}" id="email" placeholder="Indtast email...">
         </div>
+
 
         <div class="input-field">
             <label for="password">Ny adgangskode:</label>
@@ -42,7 +41,6 @@
 
         <p th:if="${error}" th:text="${error}" style="color:red;"></p>
     </form>
-
 
 </body>
 </html>

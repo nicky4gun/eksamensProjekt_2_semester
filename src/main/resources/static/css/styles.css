@@ -57,8 +57,9 @@ header {
 .card {
     position: relative;
     background: black;
-   border: 3px solid transparent;
-
+    border: 3px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -73,17 +74,15 @@ header {
     padding: 10px;
     color: white;
 }
+
 .deck-card-body::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 8px;
-        width: 100%;
-        border-radius: 10px 10px 0 0;
-
-
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 8px;
+    width: 100%;
 }
+
 .deck-grid > article:nth-of-type(4n) {
     border-color: #5f7fa0; /* Blue */
 }
@@ -99,8 +98,6 @@ header {
 .deck-grid > article:nth-of-type(4n+3) {
     border-color: #d0c7b4; /* White */
 }
-
-
 
 .deck-grid > article:nth-of-type(4n) .deck-card-body::before {
     background-color: #5f7fa0;
@@ -171,8 +168,6 @@ header {
     border: none;
 }
 
-
-
 .btn-edit {
     background-color: #4a7fb8;
     color: white;
@@ -206,337 +201,371 @@ header {
     gap: 12px;
     margin-bottom: 20px;
 }
-    .card-link {
-        position: absolute;
-        inset: 0;
+.card-link {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+/* deck form modal */
+
+dialog {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    color: white;
+    margin: auto;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+dialog h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+dialog > button {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+dialog > button:hover {
+    opacity: 0.7;
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.deck-form {
+    gap: 15px;
+    width: 100%;
+    padding-top: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+select {
+    cursor: pointer;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Deck info page */
+
+.deck-info {
+    margin-bottom: 50px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.card-grid .card {
+    border: 1px solid white;
+}
+
+.card-grid--select .card label {
+    display: block;
+    height: 100%;
+    cursor: pointer;
+}
+
+.card-grid--select .card input[type="checkbox"] {
+    display: none;
+}
+
+.card-grid--select .card input[type="checkbox"]:checked + img {
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+.card-grid--select .card img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.deck-actionbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.deck-actionbar form {
+    display: inline;
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border-radius: inherit;
+}
+
+.card:hover .card-overlay {
+    opacity: 1;
+}
+
+/* Add card to deck */
+
+.add-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Collection  */
+
+#collection {
+    width: 100%;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+}
+
+.filters,
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    gap: 5px;
+    width: auto;
+    min-width: 200px;
+    flex-shrink: 0;
+}
+
+select {
+    height: 38px;
+}
+
+/* Navbar */
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    height: 70px;
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #333;
+}
+
+#company-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-link {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+#logout-button, #login-button {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#logout-button:hover, #login-button:hover {
+    text-decoration: underline;
+}
+
+#hamburger {
+    display: none;
+}
+
+/* login page */
+#login-screen,
+#signup-screen {
+    display: flex;
+    flex-direction: column;
+    max-width: 750px;
+    min-height: 90vh;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    gap: 20px;
+}
+
+#login-screen .input-field,
+#signup-screen .input-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 459px;
+}
+
+#login-screen .input-field label,
+#signup-screen .input-field label {
+    margin-bottom: 8px;
+}
+
+#login-screen .button-field,
+#signup-screen .button-field{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+#sign-up {
+    padding: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .btn {
+        display: block;
         width: 100%;
-        z-index: 1;
+        text-align: center;
     }
 
-    /* deck form modal */
-
-    dialog {
-        background-color: #2a2a2a;
-        border: 1px solid #444;
-        border-radius: 15px;
-        padding: 30px;
-        max-width: 500px;
-        width: 100%;
-        color: white;
-        margin: auto;
-    }
-
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(4px);
-    }
-
-    dialog h2 {
-        margin-bottom: 20px;
-        font-size: 1.5em;
-    }
-
-    dialog > button {
-        position: absolute;
-        top: 25px;
-        right: 30px;
-        color: white;
-        font-size: 28px;
-        cursor: pointer;
-        background: none;
-        border: none;
-    }
-
-    dialog > button:hover {
-        opacity: 0.7;
-    }
-
-    dialog form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .deck-form {
-        gap: 15px;
-        width: 100%;
-        padding-top: 10px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid black;
-    }
-
-    select {
-        cursor: pointer;
-    }
-
-    .modal-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-    }
-
-    /* Deck info page */
-
-    .deck-info {
-        margin-bottom: 50px;
+    .deck-grid {
+        grid-template-columns: 1fr;
     }
 
     .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .card-grid .card {
-        border: 1px solid white;
-    }
-
-    .card-grid--select .card label {
-        display: block;
-        height: 100%;
-        cursor: pointer;
-    }
-
-    .card-grid--select .card input[type="checkbox"] {
-        display: none;
-    }
-
-    .card-grid--select .card input[type="checkbox"]:checked + img {
-        border-radius: 10px;
-        opacity: 0.7;
-    }
-
-    .card-grid--select .card img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .deck-actionbar {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .deck-actionbar form {
-        display: inline;
-    }
-
-    .card-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.85);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        border-radius: inherit;
-    }
-
-    .card:hover .card-overlay {
-        opacity: 1;
-    }
-
-    /* Add card to deck */
-
-    .add-card-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-    }
-
-    /* Collection  */
-
-    #collection {
-        width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     }
 
     .toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-bottom: 20px;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
 
     .filters,
     .search-bar {
+        flex: 1 1 100%;
+    }
+
+    .decks-actionbar {
+        margin-top: 10px;
+    }
+
+    .decks-actionbar {
+        margin-top: 10px;
+    }
+
+    .deck-actionbar {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .deck-actionbar div {
         display: flex;
-        align-items: center;
-        margin: 0;
+        flex-direction: column;
         gap: 5px;
-        width: auto;
-        min-width: 200px;
-        flex-shrink: 0;
+        width: 100%;
     }
 
-    select {
-        height: 38px;
+    .decks-actionbar button a {
+        margin-top: 8px;
     }
 
-    /* Navbar */
-
-    #navbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 15px;
-        height: 70px;
-        background-color: #1f1f1f;
-        border-bottom: 1px solid #333;
-    }
-
-    #company-name {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: white;
-        letter-spacing: 1px;
+    .add-card-actions {
+        flex-direction: column;
     }
 
     .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: #1f1f1f;
+        padding: 16px;
+        border-bottom: 1px solid #333;
+        gap: 16px;
+        z-index: 99;
+    }
+
+    .nav-links.open {
         display: flex;
-        gap: 24px;
     }
 
-    .nav-link {
-        color: #ccc;
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: color 0.2s;
-    }
-
-    .nav-link:hover {
-        color: white;
-        text-decoration: underline;
-    }
-
-    #logout-button, #login-button {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    #logout-button:hover, #login-button:hover {
-        text-decoration: underline;
-    }
-
-    #hamburger {
+    .nav-links p {
         display: none;
     }
 
-
-    /* Mobile responsiveness */
-    @media (max-width: 600px) {
-        .btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-
-        .deck-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .card-grid {
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        }
-
-        .toolbar {
-            flex-wrap: wrap;
-        }
-
-        .filters,
-        .search-bar {
-            flex: 1 1 100%;
-        }
-
-        .decks-actionbar {
-            margin-top: 10px;
-        }
-
-        .decks-actionbar {
-            margin-top: 10px;
-        }
-
-        .deck-actionbar {
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .deck-actionbar div {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            width: 100%;
-        }
-
-        .decks-actionbar button a {
-            margin-top: 8px;
-        }
-
-        .add-card-actions {
-            flex-direction: column;
-        }
-
-        .nav-links {
-            display: none;
-            flex-direction: column;
-            position: absolute;
-            top: 60px;
-            left: 0;
-            right: 0;
-            background-color: #1f1f1f;
-            padding: 16px;
-            border-bottom: 1px solid #333;
-            gap: 16px;
-            z-index: 99;
-        }
-
-        .nav-links.open {
-            display: flex;
-        }
-
-        .nav-links p {
-            display: none;
-        }
-
-        #navbar {
-            height: 70px;
-        }
-
-        #company-name {
-            font-size: 1.6rem;
-        }
-
-        #hamburger {
-            font-size: 35px;
-        }
-
-        #hamburger {
-            display: flex;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        #logout-button, #login-button {
-            padding-top: 8px;
-            border-top: 1px solid #333;
-            margin-top: 8px;
-        }
+    #navbar {
+        height: 70px;
     }
 
+    #company-name {
+        font-size: 1.6rem;
+    }
 
+    #hamburger {
+        font-size: 35px;
+    }
 
+    #hamburger {
+        display: flex;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    #logout-button, #login-button {
+        padding-top: 8px;
+        border-top: 1px solid #333;
+        margin-top: 8px;
+    }
+}
