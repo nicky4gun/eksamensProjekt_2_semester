@@ -99,4 +99,8 @@ public class Deck {
     public int getCardCount() { return cardCount; }
 
     public void setCardCount(int cardCount) { this.cardCount = cardCount; }
+
+    public boolean isNotOwnedBy(int userId) {
+        return getUserId() != userId;
+    }
 }

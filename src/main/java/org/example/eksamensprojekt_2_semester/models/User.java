@@ -2,8 +2,6 @@ package org.example.eksamensprojekt_2_semester.models;
 
 import org.example.eksamensprojekt_2_semester.models.enums.Role;
 
-import java.util.List;
-
 public class User {
     private int id;
     private String firstName;
@@ -141,5 +139,9 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isNotAdmin() {
+        return getRole() != Role.ADMIN;
     }
 }

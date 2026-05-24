@@ -17,10 +17,6 @@ public class Card {
 
     public Card() {}
 
-    public Card(boolean isTradable) {
-        this.isTradable = isTradable;
-    }
-
     public Card(String name, CardType cardType, ManaColor color, String expansions, Rarity rarity, String ruleText, String imageUrl) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
@@ -123,7 +119,7 @@ public class Card {
         return color;
     }
 
-    public void setColor(ManaColor colors) {
+    public void setColor(ManaColor color) {
         this.color = color;
     }
 

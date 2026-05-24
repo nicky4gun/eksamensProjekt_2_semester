@@ -71,4 +71,8 @@ public class Collection {
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
+
+    public boolean isNotOwnedBy(int userId) {
+        return getUserId() != userId;
+    }
 }

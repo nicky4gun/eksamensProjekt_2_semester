@@ -6,12 +6,10 @@ import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
-import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +28,7 @@ public class CardService {
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
 
-        if (user.getRole() != Role.ADMIN) {
-            throw new SecurityException("Du har ikke tilladelse til at udføre denne handling");
-        }
+        validateAdminPermission(user);
 
         Card card = new Card(name, cardType, colors, set, rarity, ruleText, imageUrl);
         return cardRepository.createCard(card);
@@ -63,12 +59,16 @@ public class CardService {
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
 
-        if (user.getRole() != Role.ADMIN) {
-            throw new SecurityException("Du har ikke tilladelse til at udføre denne handling");
-        }
+        validateAdminPermission(user);
 
         Card card = new Card(id, name, cardType, colors, set, rarity, ruleText, imageUrl);
         cardRepository.updateCard(card);
+    }
+
+    private void validateAdminPermission(User user) {
+        if (user.isNotAdmin()) {
+            throw new SecurityException("Du har ikke tilladelse til at udføre denne handling");
+        }
     }
 }
 

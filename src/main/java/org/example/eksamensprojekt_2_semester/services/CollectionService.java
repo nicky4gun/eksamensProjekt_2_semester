@@ -4,10 +4,7 @@ import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Collection;
 import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
-import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
-import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
-import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +18,7 @@ public class CollectionService {
     }
 
     public void addCards(List<Integer> cardIds, int userId) {
-        Collection collection = getCollectionByUserId(userId);
-
-        if (collection.getUserId() != userId) {
-            throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
-        }
+        Collection collection = validateCollectionOwnership(userId);
 
         if (cardIds == null || cardIds.isEmpty()) return;
 
@@ -35,13 +28,18 @@ public class CollectionService {
     }
 
     public List<Card> getCards(int userId) {
+        Collection collection = validateCollectionOwnership(userId);
+        return collectionRepository.findAllCards(collection.getId());
+    }
+
+    private Collection validateCollectionOwnership(int userId) {
         Collection collection = getCollectionByUserId(userId);
 
-        if (collection.getUserId() != userId) {
+        if (collection.isNotOwnedBy(userId)) {
             throw new IllegalArgumentException("Samlingen tilhører ikke denne bruger");
         }
 
-        return collectionRepository.findAllCards(collection.getId());
+        return collection;
     }
 
     public Collection getCollectionByUserId(int userId) {

@@ -4,7 +4,6 @@ import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
-import org.example.eksamensprojekt_2_semester.models.enums.Role;
 import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
@@ -33,12 +32,7 @@ public class DeckService {
     }
 
     public void addCards(int deckId, List<Integer> cardIds, int userId) {
-        Deck deck = getDeckById(deckId);
-
-        if (deck.getUserId() != userId) {
-            throw new SecurityException("Decket tilhører ikke denne bruger");
-        }
-
+        Deck deck = validateDeckOwnership(userId, deckId);
         addCardsToDeck(deck, cardIds, userId);
     }
 
@@ -53,7 +47,11 @@ public class DeckService {
         List<Card> cards = new ArrayList<>();
 
         for (int cardId : cardIds) {
-            collectionRepository.findCardByUserId(userId, cardId).ifPresent(cards::add);
+            Card card = collectionRepository.findCardByUserId(userId, cardId).orElseThrow(
+                    () -> new IllegalArgumentException("Kort med ID " + cardId + " ikke fundet i samling!")
+            );
+
+            cards.add(card);
         }
 
         return cards;
@@ -81,25 +79,25 @@ public class DeckService {
     }
 
     public void updateDeck(int deckId, String deckName, Format format, int userId) {
-        Deck deck = getDeckById(deckId);
-
-        if (deck.getUserId() != userId) {
-            throw new SecurityException("Decket tilhører ikke denne bruger");
-        }
-
+        Deck deck = validateDeckOwnership(userId, deckId);
         deck.setDeckName(deckName);
         deck.setFormat(format);
         deckRepository.updateDeck(deck);
     }
 
     public void removeCardFromDeck(int userId, int cardId, int deckId) {
+        validateDeckOwnership(userId, deckId);
+        deckRepository.removeCardFromDeck(cardId, deckId);
+    }
+
+    private Deck validateDeckOwnership(int userId, int deckId) {
         Deck deck = getDeckById(deckId);
 
-        if (deck.getUserId() != userId) {
+        if (deck.isNotOwnedBy(userId)) {
             throw new SecurityException("Decket tilhører ikke denne bruger");
         }
 
-        deckRepository.removeCardFromDeck(cardId, deckId);
+        return deck;
     }
 
     public void deleteDeck(int deckId, int userId) {
@@ -107,7 +105,7 @@ public class DeckService {
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
 
-        if (user.getRole() != Role.ADMIN && deck.getUserId() != userId) {
+        if (user.isNotAdmin() && deck.isNotOwnedBy(userId)) {
             throw new SecurityException("Du har ikke tilladelse til at slette dette deck!");
         }
 
