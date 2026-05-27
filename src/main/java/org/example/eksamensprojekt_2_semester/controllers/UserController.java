@@ -31,8 +31,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
-        userService.registerUser(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getPassword(), Role.USER, user.getImage());
+    public String register(@ModelAttribute User user, Model model) {
+        try {
+            userService.registerUser(user.getFirstName(), user.getLastName(), user.getUsername(),
+                    user.getEmail(), user.getPassword(), Role.USER);
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/pages/auth/signup";
+        }
+
         return "redirect:/login";
     }
 
@@ -44,13 +52,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(HttpSession session, Model model, @ModelAttribute User user) {
-        User loggedIn = userService.loginUser(user.getUsername(), user.getPassword());
+        try {
+            User loggedIn = userService.loginUser(user.getUsername(), user.getPassword());
 
-        if (loggedIn != null) {
             session.setAttribute("userId", loggedIn.getId());
             return "redirect:/home";
-        } else {
-            model.addAttribute("error", "Invalid username or password");
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
             return "/pages/auth/login";
         }
     }
@@ -64,7 +73,8 @@ public class UserController {
     }
 
     @PostMapping("/profile/update")
-    public String updateProfile(HttpSession session, Model model, @ModelAttribute User user, @RequestParam String password, @RequestParam String confirmPassword) {
+    public String updateProfile(HttpSession session, Model model, @ModelAttribute User user,
+                                @RequestParam String password, @RequestParam String confirmPassword) {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match");
             return "/pages/users/update";

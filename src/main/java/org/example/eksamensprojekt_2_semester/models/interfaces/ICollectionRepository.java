@@ -12,8 +12,6 @@ public interface ICollectionRepository {
 
     void addCard(int collectionId, Integer cardId);
 
-    Optional<Collection> findById(int collectionId);
-
     Optional<Collection> findByUserId(int userId);
 
     Optional<Card> findCardByUserId(int userId, int cardId);

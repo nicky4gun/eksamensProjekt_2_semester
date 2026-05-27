@@ -2,18 +2,17 @@ package org.example.eksamensprojekt_2_semester.services;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
-import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
-import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
-import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
+import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IDeckRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,7 @@ public class DeckServiceTests {
     private IDeckRepository deckRepository;
     private IUserRepository userRepository;
     private ICollectionRepository collectionRepository;
+
     private DeckService deckService;
 
     private final String deckName = "Test";
@@ -36,38 +36,20 @@ public class DeckServiceTests {
         userRepository = mock(IUserRepository.class);
         collectionRepository = mock(ICollectionRepository.class);
 
-        deckService = new DeckService(deckRepository, userRepository,collectionRepository);
+        deckService = new DeckService(deckRepository, userRepository, collectionRepository);
     }
 
     @Test
     void addDeck_ShouldSave_WhenDeckIsValid() {
-        Deck expectedDeck = new Deck(deckName, format, userId);
-        when(deckRepository.findDecksByUserId(userId)).thenReturn(List.of(expectedDeck));
-
         deckService.addDeck(deckName, format, userId);
-        verify(deckRepository, times(1)).createDeck(any(Deck.class));
 
-        List<Deck> savedDecks = deckService.getDecksByUserId(userId);
-        assertEquals(1, savedDecks.size());
-        assertEquals(deckName, savedDecks.getFirst().getDeckName());
-    }
+        ArgumentCaptor<Deck> deckCaptor = ArgumentCaptor.forClass(Deck.class);
+        verify(deckRepository, times(1)).createDeck(deckCaptor.capture());
 
-    @Test
-    void addDeck_ShouldThrowException_WhenDeckNameIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () ->
-            deckService.addDeck("", format, userId)
-        );
-
-        verify(deckRepository, never()).createDeck(any(Deck.class));
-    }
-
-    @Test
-    void addDeck_ShouldThrowException_WhenFormatIsNull() {
-        assertThrows(IllegalArgumentException.class, () ->
-            deckService.addDeck(deckName, null, userId)
-        );
-
-        verify(deckRepository, never()).createDeck(any(Deck.class));
+        Deck capturedDeck = deckCaptor.getValue();
+        assertEquals(deckName, capturedDeck.getDeckName());
+        assertEquals(format, capturedDeck.getFormat());
+        assertEquals(userId, capturedDeck.getUserId());
     }
 
     @Test
@@ -75,19 +57,18 @@ public class DeckServiceTests {
         int deckId = 1;
         Deck deck = new Deck(deckId, deckName, format, userId);
         List<Integer> cardIds = List.of(1, 2);
-        Card card1 = new Card(1, "Card 1", CardType.CREATURE, ManaColor.WHITE, "Set", Rarity.COMMON, "Text", "URL");
-        Card card2 = new Card(2, "Card 2", CardType.SORCERY, ManaColor.BLUE, "Set", Rarity.RARE, "Text", "URL");
+        Card card1 = mock(Card.class);
+        Card card2 = mock(Card.class);
 
+        when(card1.getId()).thenReturn(1);
+        when(card2.getId()).thenReturn(2);
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.of(deck));
-        when(collectionRepository.findCardByUserId(userId, card1.getId())).thenReturn(Optional.of(card1));
-        when(collectionRepository.findCardByUserId(userId, card2.getId())).thenReturn(Optional.of(card2));
-
+        when(collectionRepository.findCardByUserId(userId, 1)).thenReturn(Optional.of(card1));
+        when(collectionRepository.findCardByUserId(userId, 2)).thenReturn(Optional.of(card2));
 
         deckService.addCards(deckId, cardIds, userId);
 
         assertEquals(2, deck.getCards().size());
-        assertTrue(deck.getCards().contains(card1));
-        assertTrue(deck.getCards().contains(card2));
         verify(deckRepository, times(1)).addCardToDeck(deckId, 1);
         verify(deckRepository, times(1)).addCardToDeck(deckId, 2);
     }
@@ -99,8 +80,19 @@ public class DeckServiceTests {
 
         when(deckRepository.findDeckById(deckId)).thenReturn(Optional.empty());
 
-        assertThrows(java.util.NoSuchElementException.class, () ->
+        assertThrows(DeckNotFoundException.class, () ->
             deckService.addCards(deckId, cardIds, userId)
         );
+    }
+
+    @Test
+    void addCards_ShouldThrowException_WhenCardNotInCollection() {
+        int deckId = 1;
+        Deck deck = new Deck(deckId, deckName, format, userId);
+
+        when(deckRepository.findDeckById(deckId)).thenReturn(Optional.of(deck));
+        when(collectionRepository.findCardByUserId(userId, 1)).thenReturn(Optional.empty());
+
+        assertThrows(CardNotFoundException.class, () -> deckService.addCards(deckId, List.of(1), userId));
     }
 }

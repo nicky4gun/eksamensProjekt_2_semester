@@ -2,7 +2,6 @@ package org.example.eksamensprojekt_2_semester.services;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Collection;
-import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.CollectionNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
 import org.springframework.stereotype.Service;
@@ -45,12 +44,6 @@ public class CollectionService {
     public Collection getCollectionByUserId(int userId) {
         return collectionRepository.findByUserId(userId).orElseThrow(
                 () -> new CollectionNotFoundException("Samling for bruger med ID " + userId + " ikke fundet!")
-        );
-    }
-
-    public Card findCardByUserId(int userId, int cardId) {
-        return collectionRepository.findCardByUserId(userId, cardId).orElseThrow(
-                () -> new CardNotFoundException("Kort med ID " + cardId + " ikke fundet i brugerens samling!")
         );
     }
 

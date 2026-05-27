@@ -1,4 +1,4 @@
-package org.example.eksamensprojekt_2_semester.repositorys;
+package org.example.eksamensprojekt_2_semester.infrastructure;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
@@ -13,8 +13,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.awt.*;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,12 +72,7 @@ public class DeckRepository implements IDeckRepository {
 
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) -> {
-                Deck deck = new Deck(
-                        rs.getInt("id"),
-                        rs.getString("deck_name"),
-                        Format.valueOf(rs.getString("format")),
-                        rs.getInt("user_id")
-                );
+                Deck deck = mapDeck(rs);
                 deck.setCardCount(rs.getInt("card_count"));
                 return deck;
             }, userId);
@@ -91,42 +87,19 @@ public class DeckRepository implements IDeckRepository {
         String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE id = ?";
 
         try {
-            List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                    rs.getInt("id"),
-                    rs.getString("deck_name"),
-                    Format.valueOf(rs.getString("format")),
-                    rs.getInt("user_id")
-            ), deckId);
-
+            List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> mapDeck(rs), deckId);
             return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
+
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke finde deck med ID " + deckId, e);
         }
     }
 
     @Override
-    public Optional<Deck> findDeckByUserId(int userId) {
-        String sql = "SELECT id, deck_name, format, user_id, FROM decks WHERE user_id = ?";
-
-        try {
-            List<Deck> decks = jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                    rs.getInt("id"),
-                    rs.getString("deck_name"),
-                    Format.valueOf(rs.getString("format")),
-                    rs.getInt("user_id")
-            ), userId);
-
-            return decks.isEmpty() ? Optional.empty() : Optional.of(decks.getFirst());
-
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
-        }
-    }
-
-    @Override
     public List<Card> findAllCards(int deckId) {
         String sql = """
-                        SELECT c.id, c.name,  c.card_type,  c.color,  c.expansions,  c.rarity,  c.rule_text,  c.image_url FROM cards c
+                        SELECT c.id, c.name,  c.card_type,  c.color,  c.expansions,  c.rarity,
+                               c.rule_text,  c.image_url FROM cards c
                         JOIN deck_cards dc ON c.id = dc.card_id
                         JOIN decks d ON d.id = dc.deck_id
                         WHERE d.id = ?""";
@@ -185,21 +158,35 @@ public class DeckRepository implements IDeckRepository {
     }
 
     @Override
-    public List<Deck> getDecksByUserIdOnly5(Integer userId) {
-        String sql = "SELECT id, deck_name, format, user_id FROM decks WHERE user_id = ? LIMIT 5";
+    public List<Deck> getDecksByUserIdOnly5(int userId) {
+        String sql = """
+                        SELECT d.id, d.deck_name, d.format, d.user_id, COUNT(dc.card_id) AS card_count
+                        FROM decks d
+                        LEFT JOIN deck_cards dc ON d.id = dc.deck_id
+                        WHERE d.user_id = ?
+                        GROUP BY d.id, d.deck_name, d.format, d.user_id
+                        LIMIT 5""";
 
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Deck(
-                    rs.getInt("id"),
-                    rs.getString("deck_name"),
-                    Format.valueOf(rs.getString("format")),
-                    rs.getInt("user_id")
-            ), userId);
+            return jdbcTemplate.query(sql, (rs, rowNum) -> {
+                        Deck deck = mapDeck(rs);
+                        deck.setCardCount(rs.getInt("card_count"));
+                        return deck;
+                    }, userId);
 
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke finde nogle decks med bruger ID "+ userId, e);
         }
 
+    }
+
+    private Deck mapDeck(ResultSet rs) throws SQLException {
+        return new Deck(
+                rs.getInt("id"),
+                rs.getString("deck_name"),
+                Format.valueOf(rs.getString("format")),
+                rs.getInt("user_id")
+        );
     }
 }
 

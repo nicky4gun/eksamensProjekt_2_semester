@@ -37,8 +37,8 @@ public class CollectionController {
         return "/pages/collections/collection";
     }
 
-    @GetMapping("/{collectionId}/add-cards")
-    public String showAddCards(@PathVariable int collectionId, Model model) {
+    @GetMapping("/add-cards")
+    public String showAddCards(Model model) {
         model.addAttribute("cardsAvailable", cardService.findAll());
         return "/pages/collections/add-to-collection";
     }

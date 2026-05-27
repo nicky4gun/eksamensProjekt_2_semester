@@ -4,6 +4,7 @@ import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Deck;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.Format;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.DeckNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICollectionRepository;
@@ -48,7 +49,7 @@ public class DeckService {
 
         for (int cardId : cardIds) {
             Card card = collectionRepository.findCardByUserId(userId, cardId).orElseThrow(
-                    () -> new IllegalArgumentException("Kort med ID " + cardId + " ikke fundet i samling!")
+                    () -> new CardNotFoundException("Kort med ID " + cardId + " ikke fundet i samling!")
             );
 
             cards.add(card);
@@ -112,7 +113,7 @@ public class DeckService {
         deckRepository.deleteDeck(deckId);
     }
 
-    public List<Deck>  getDecksByUserIdOnly5(Integer userId) {
+    public List<Deck> getDecksByUserIdOnly5(int userId) {
         return deckRepository.getDecksByUserIdOnly5(userId);
     }
 }

@@ -1,4 +1,4 @@
-package org.example.eksamensprojekt_2_semester.repositorys;
+package org.example.eksamensprojekt_2_semester.infrastructure;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.Collection;
@@ -45,24 +45,6 @@ public class CollectionRepository implements ICollectionRepository {
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke tilføje kort med ID " + cardId +
                     " til collection med ID " + collectionId, e);
-        }
-    }
-
-    @Override
-    public Optional<Collection> findById(int collectionId) {
-        String sql = "SELECT id, user_id, visibility FROM collections WHERE id = ?";
-
-        try {
-            List<Collection> collections = jdbcTemplate.query(sql, (rs, rowNum) -> new Collection(
-                    rs.getInt("id"),
-                    rs.getInt("user_id"),
-                    Visibility.valueOf(rs.getString("visibility"))
-            ), collectionId);
-
-            return collections.isEmpty() ? Optional.empty() : Optional.of(collections.getFirst());
-
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke finder samling med ID " + collectionId, e);
         }
     }
 

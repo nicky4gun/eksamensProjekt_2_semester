@@ -3,7 +3,6 @@ package org.example.eksamensprojekt_2_semester.models.interfaces;
 import org.example.eksamensprojekt_2_semester.models.Card;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface ICardRepository {
@@ -12,6 +11,4 @@ public interface ICardRepository {
     List<Card> findAll();
 
     void updateCard(Card card);
-
-    Optional<Card> findCardById(int cardId);
 }

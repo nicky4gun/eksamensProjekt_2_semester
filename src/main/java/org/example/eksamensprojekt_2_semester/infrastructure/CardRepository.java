@@ -1,4 +1,4 @@
-package org.example.eksamensprojekt_2_semester.repositorys;
+package org.example.eksamensprojekt_2_semester.infrastructure;
 
 import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.enums.CardType;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class CardRepository implements ICardRepository {
@@ -79,29 +78,4 @@ public class CardRepository implements ICardRepository {
             throw new RuntimeException("Kunne ikke opdatere kort med ID " + card.getId(), e);
         }
     }
-
-    @Override
-    public Optional<Card> findCardById(int cardId) {
-        String sql = "SELECT name, card_type, color,expaintions, rarity, rule_text, image_url FROM card WHERE id = ?";
-
-        try {
-            List<Card> cards = jdbcTemplate.query(sql, (rs, rowNum) -> new Card(
-                    rs.getString("name"),
-                    CardType.valueOf(rs.getString("card_type")),
-                    ManaColor.valueOf(rs.getString("color")),
-                    rs.getString("expansions"),
-                    Rarity.valueOf(rs.getString("rarity")),
-                    rs.getString("rule_text"),
-                    rs.getString("image_url")
-            ), cardId);
-
-            return cards.isEmpty() ? Optional.empty() : Optional.of(cards.getFirst());
-
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Kunne ikke finde kort med ID " + cardId, e);
-        }
-    }
-
-
-
 }

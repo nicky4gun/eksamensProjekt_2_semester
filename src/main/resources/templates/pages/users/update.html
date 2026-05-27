@@ -2,45 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update Profile | Deckforge</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <header th:replace="~{fragments/navbar :: navbar}"></header>
 
-    <h1> Opdater din profil</h1>
+    <main id="update-profile">
+        <h1> Opdater din profil</h1>
 
-    <form class="update-user-form" th:object="${user}" method="post" th:action="@{/profile/update}">
-        <input type="hidden" name="id" th:value="*{id}">
-        <div class="input-field">
-            <label for="username">Navn:</label>
-            <input type="text" th:field="*{username}" id="username" placeholder="Indtast navn...">
-        </div>
+        <form class="update-user-form" th:object="${user}" method="post" th:action="@{/profile/update}">
+            <input type="hidden" name="id" th:value="*{id}">
+            <div class="input-field">
+                <label for="username">Navn:</label>
+                <input type="text" th:field="*{username}" id="username" placeholder="Indtast navn...">
+            </div>
 
-        <div class="input-field">
-            <label for="email">Email:</label>
-            <input type="text" th:field="*{email}" id="email" placeholder="Indtast email...">
-        </div>
+            <div class="input-field">
+                <label for="email">Email:</label>
+                <input type="text" th:field="*{email}" id="email" placeholder="Indtast email...">
+            </div>
 
 
-        <div class="input-field">
-            <label for="password">Ny adgangskode:</label>
-            <input type="password" name="password" id="password" placeholder="Indtast ny adgangskode...">
-        </div>
+            <div class="input-field">
+                <label for="password">Ny adgangskode:</label>
+                <input type="password" name="password" id="password" placeholder="Indtast ny adgangskode...">
+            </div>
 
-        <div class="input-field">
-            <label for="confirmPassword">Gentag adgangskode:</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Gentag adgangskode...">
-        </div>
+            <div class="input-field">
+                <label for="confirmPassword">Gentag adgangskode:</label>
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Gentag adgangskode...">
+            </div>
 
-        <div class="form-actions">
-            <a href="/profile" class="btn">Gå tilbage</a>
-            <button class="btn" type="submit">Opdater</button>
-        </div>
+            <div class="form-actions">
+                <a href="/profile" class="btn">Gå tilbage</a>
+                <button class="btn" type="submit">Opdater</button>
+            </div>
 
-        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
-    </form>
-
+            <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+        </form>
+    </main>
 </body>
 </html>

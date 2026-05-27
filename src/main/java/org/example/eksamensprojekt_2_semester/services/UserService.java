@@ -21,27 +21,35 @@ public class UserService {
         this.collectionRepository = collectionRepository;
     }
 
-    public User findUserById(int userId) {
-        return userRepository.findUserById(userId).orElseThrow(
-                () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
-    }
+    public void registerUser(String firstname, String lastname, String username, String email, String password, Role role) {
+        if (userRepository.findUserByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Brugernavn allerede i brug, Prøv igen!");
+        }
 
-    public void registerUser(String firstname, String lastname, String username, String email, String password, Role role, String image) {
+        if (userRepository.findUserByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("Email allerede i brug, Prøv igen!");
+        }
+
         String hashedPassword = passwordEncoder.encode(password);
-        User user = new User(firstname, lastname, username, email, hashedPassword, role, image);
+        User user = new User(firstname, lastname, username, email, hashedPassword, role);
         int userId = userRepository.createUser(user);
         collectionRepository.createCollection(userId, Visibility.PRIVATE);
     }
 
     public User loginUser(String username, String password) {
         User existingUser = userRepository.findUserByUsername(username).orElseThrow(
-                () -> new UserNotFoundException("Ingen bruger fundet!"));
+                () -> new IllegalArgumentException("Forkert brugernavn eller adgangskode!"));
 
         if (passwordEncoder.matches(password, existingUser.getPassword())) {
             return existingUser;
         }
 
-        return null;
+        throw new IllegalArgumentException("Forkert brugernavn eller adgangskode!");
+    }
+
+    public User findUserById(int userId) {
+        return userRepository.findUserById(userId).orElseThrow(
+                () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
     }
 
     public void updateUser(int id, String username, String email, String password) {
@@ -54,6 +62,10 @@ public class UserService {
     }
 
     public void removeUser(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Ugyldigt bruger ID!");
+        }
+
         userRepository.removeUser(id);
     }
 }

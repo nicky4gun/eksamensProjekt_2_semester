@@ -13,7 +13,7 @@ body {
 
 main {
     padding: 15px;
-}
+    margin-top: 20px; }
 
 header {
     position: sticky;
@@ -33,13 +33,8 @@ header {
     font-size: 14px;
 }
 
-.btn:hover {
-    opacity: 0.8;
-}
-
-.btn-danger {
-    background-color: red;
-}
+.btn:hover { opacity: 0.8; }
+.btn-danger { background-color: red; }
 
 /* All decks page */
 .decks-actionbar {
@@ -62,10 +57,7 @@ header {
     overflow: hidden;
 }
 
-.card:hover {
-    opacity: 0.8;
-    cursor: pointer;
-}
+.card:hover { opacity: 0.8; cursor: pointer; }
 
 .deck-card-body {
     display: flex;
@@ -83,38 +75,15 @@ header {
     width: 100%;
 }
 
-.deck-grid > article:nth-of-type(4n) {
-    border-color: #5f7fa0; /* Blue */
-}
+.deck-grid > article:nth-of-type(4n) { border-color: #5f7fa0; /* Blue */ }
+.deck-grid > article:nth-of-type(4n+1) { border-color: #9f4c3f; /* Red */ }
+.deck-grid > article:nth-of-type(4n+2) { border-color: #4f6f4a; /* Green */ }
+.deck-grid > article:nth-of-type(4n+3) { border-color: #d0c7b4; /* White */ }
 
-.deck-grid > article:nth-of-type(4n+1) {
-    border-color: #9f4c3f; /* Red */
-}
-
-.deck-grid > article:nth-of-type(4n+2) {
-    border-color: #4f6f4a; /* Green */
-}
-
-.deck-grid > article:nth-of-type(4n+3) {
-    border-color: #d0c7b4; /* White */
-}
-
-.deck-grid > article:nth-of-type(4n) .deck-card-body::before {
-    background-color: #5f7fa0;
-
-}
-
-.deck-grid > article:nth-of-type(4n+1) .deck-card-body::before {
-    background-color: #9f4c3f;
-}
-
-.deck-grid > article:nth-of-type(4n+2) .deck-card-body::before {
-    background-color: #4f6f4a;
-}
-
-.deck-grid > article:nth-of-type(4n+3) .deck-card-body::before {
-    background-color: #d0c7b4;
-}
+.deck-grid > article:nth-of-type(4n) .deck-card-body::before { background-color: #5f7fa0; }
+.deck-grid > article:nth-of-type(4n+1) .deck-card-body::before { background-color: #9f4c3f; }
+.deck-grid > article:nth-of-type(4n+2) .deck-card-body::before { background-color: #4f6f4a;}
+.deck-grid > article:nth-of-type(4n+3) .deck-card-body::before { background-color: #d0c7b4; }
 
 /* Profile */
 .profile-layout {
@@ -123,7 +92,6 @@ header {
     gap: 30px;
     padding: 30px;
 }
-
 
 .profile-panel {
     background-color: #2b2f3a;
@@ -146,7 +114,6 @@ header {
     margin: 8px 0;
 }
 
-
 .profile-actions {
     margin-top: 20px;
     display: flex;
@@ -156,39 +123,31 @@ header {
 
 .btn-edit,
 .btn-delete {
-    display: block;
     width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    text-decoration: none;
     text-align: center;
     font-weight: bold;
-    color: white;
-    cursor: pointer;
-    border: none;
 }
 
-.btn-edit {
-    background-color: #4a7fb8;
-    color: white;
-}
-.btn-delete {
-    background-color: red;
-    color: white;
-}
+.btn-edit { background-color: #4a7fb8; }
+.btn-delete {background-color: red; }
 
-.deck-grid > article:nth-of-type(4n) {
-    border-color: #5f7fa0;
-}
-/* Update */
-
-
-.update-user-form .input-field input {
-    width: 250px;
+/* profile Update */
+#update-profile {
     display: flex;
     flex-direction: column;
+    width: 450px;
+}
+
+#update-profile h1 { margin-bottom: 20px; }
+
+.update-user-form .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 15px;
 }
+
+.update-user-form .input-field input { width: 100%; }
 
 .card img {
     width: 100%;
@@ -197,10 +156,10 @@ header {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 12px;
     margin-bottom: 20px;
 }
+
 .card-link {
     position: absolute;
     inset: 0;
@@ -209,7 +168,6 @@ header {
 }
 
 /* deck form modal */
-
 dialog {
     background-color: #2a2a2a;
     border: 1px solid #444;
@@ -242,9 +200,7 @@ dialog > button {
     border: none;
 }
 
-dialog > button:hover {
-    opacity: 0.7;
-}
+dialog > button:hover { opacity: 0.7; }
 
 dialog form {
     display: flex;
@@ -265,9 +221,7 @@ input, select {
     border: 1px solid black;
 }
 
-select {
-    cursor: pointer;
-}
+select { cursor: pointer; }
 
 .modal-actions {
     display: flex;
@@ -276,10 +230,7 @@ select {
 }
 
 /* Deck info page */
-
-.deck-info {
-    margin-bottom: 50px;
-}
+.deck-info { margin-bottom: 50px; }
 
 .card-grid {
     display: grid;
@@ -288,9 +239,7 @@ select {
     margin-top: 10px;
 }
 
-.card-grid .card {
-    border: 1px solid white;
-}
+.card-grid .card { border: 1px solid white; }
 
 .card-grid--select .card label {
     display: block;
@@ -298,9 +247,7 @@ select {
     cursor: pointer;
 }
 
-.card-grid--select .card input[type="checkbox"] {
-    display: none;
-}
+.card-grid--select .card input[type="checkbox"] { display: none; }
 
 .card-grid--select .card input[type="checkbox"]:checked + img {
     border-radius: 10px;
@@ -321,9 +268,7 @@ select {
     justify-content: space-between;
 }
 
-.deck-actionbar form {
-    display: inline;
-}
+.deck-actionbar form { display: inline; }
 
 .card-overlay {
     position: absolute;
@@ -337,12 +282,9 @@ select {
     border-radius: inherit;
 }
 
-.card:hover .card-overlay {
-    opacity: 1;
-}
+.card:hover .card-overlay { opacity: 1; }
 
 /* Add card to deck */
-
 .add-card-actions {
     display: flex;
     justify-content: flex-end;
@@ -350,10 +292,7 @@ select {
 }
 
 /* Collection  */
-
-#collection {
-    width: 100%;
-}
+#collection { width: 100%; }
 
 .toolbar {
     display: flex;
@@ -375,12 +314,9 @@ select {
     flex-shrink: 0;
 }
 
-select {
-    height: 38px;
-}
+select { height: 38px; }
 
 /* Navbar */
-
 #navbar {
     display: flex;
     align-items: center;
@@ -425,11 +361,9 @@ select {
     text-decoration: underline;
 }
 
-#hamburger {
-    display: none;
-}
+#hamburger { display: none; }
 
-/* login page */
+/* login and signup page */
 #login-screen,
 #signup-screen {
     display: flex;
@@ -447,13 +381,11 @@ select {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
-    width: 459px;
+    width: 450px;
 }
 
 #login-screen .input-field label,
-#signup-screen .input-field label {
-    margin-bottom: 8px;
-}
+#signup-screen .input-field label { margin-bottom: 8px; }
 
 #login-screen .button-field,
 #signup-screen .button-field{
@@ -463,9 +395,20 @@ select {
     margin-top: 20px;
 }
 
-#sign-up {
-    padding: 10px;
+#sign-up { padding: 10px; }
+
+#login-screen form p,
+#signup-screen form p {
+    text-align: center;
+    margin-top: 15px;
+    color: red;
 }
+
+/* Home page */
+#home-page .deck-grid { margin-bottom: 20px; }
+
+/* Error page */
+#error-btn { margin-top: 20px; }
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
@@ -475,30 +418,12 @@ select {
         text-align: center;
     }
 
-    .deck-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .card-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    }
-
-    .toolbar {
-        flex-wrap: wrap;
-    }
-
+    .deck-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .toolbar { flex-wrap: wrap;}
     .filters,
-    .search-bar {
-        flex: 1 1 100%;
-    }
-
-    .decks-actionbar {
-        margin-top: 10px;
-    }
-
-    .decks-actionbar {
-        margin-top: 10px;
-    }
+    .search-bar { flex: 1 1 100%; }
+    .decks-actionbar { margin-top: 10px; }
 
     .deck-actionbar {
         flex-direction: column;
@@ -512,12 +437,10 @@ select {
         width: 100%;
     }
 
-    .decks-actionbar button a {
-        margin-top: 8px;
-    }
-
-    .add-card-actions {
-        flex-direction: column;
+    .decks-actionbar button a { margin-top: 8px; }
+    .add-card-actions { flex-direction: column; }
+    #navbar {
+        width: 100%;
     }
 
     .nav-links {
@@ -534,32 +457,16 @@ select {
         z-index: 99;
     }
 
-    .nav-links.open {
-        display: flex;
-    }
-
-    .nav-links p {
-        display: none;
-    }
-
-    #navbar {
-        height: 70px;
-    }
-
-    #company-name {
-        font-size: 1.6rem;
-    }
-
-    #hamburger {
-        font-size: 35px;
-    }
+    .nav-links.open { display: flex; }
+    .nav-links p { display: none; }
+    #company-name { font-size: 1.6rem; }
 
     #hamburger {
         display: flex;
         background: none;
         border: none;
         color: white;
-        font-size: 24px;
+        font-size: 35px;
         cursor: pointer;
     }
 

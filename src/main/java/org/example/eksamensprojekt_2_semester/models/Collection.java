@@ -15,11 +15,11 @@ public class Collection {
 
     public Collection(int id, int userId, Visibility visibility) {
         if (userId < 0) {
-            throw new IllegalArgumentException("Invalid user ID");
+            throw new IllegalArgumentException("Ugyldigt bruger ID");
         }
 
         if (visibility == null) {
-            throw new IllegalArgumentException("Invalid visibility");
+            throw new IllegalArgumentException("Ugyldig synlighed!");
         }
 
         this.id = id;
@@ -29,11 +29,11 @@ public class Collection {
 
     public Collection(int userId, Visibility visibility) {
         if (userId < 0) {
-            throw new IllegalArgumentException("Invalid user ID");
+            throw new IllegalArgumentException("Ugyldigt bruger ID");
         }
 
         if (visibility == null) {
-            throw new IllegalArgumentException("Invalid visibility");
+            throw new IllegalArgumentException("Ugyldig synlighed!");
         }
 
         this.userId = userId;

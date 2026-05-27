@@ -6,7 +6,6 @@ import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
-import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
@@ -36,12 +35,6 @@ public class CardService {
 
     public List<Card> findAll() {
         return cardRepository.findAll();
-    }
-
-    public Card findCardById(int cardId) {
-        return cardRepository.findCardById(cardId).orElseThrow(
-                () -> new CardNotFoundException("Kort med ID " + cardId + " ikke fundet!")
-        );
     }
 
     public List<Card> searchCards(List<Card> cards, String query) {

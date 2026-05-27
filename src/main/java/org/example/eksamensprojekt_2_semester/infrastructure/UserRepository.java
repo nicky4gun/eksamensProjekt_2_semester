@@ -1,13 +1,11 @@
-package org.example.eksamensprojekt_2_semester.repositorys;
+package org.example.eksamensprojekt_2_semester.infrastructure;
 
-import org.example.eksamensprojekt_2_semester.models.Card;
 import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.*;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -18,7 +16,6 @@ import java.util.Optional;
 @Repository
 public class UserRepository implements IUserRepository {
 
-
     private final JdbcTemplate jdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
@@ -27,7 +24,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Optional<User> findUserById(int userId) {
-        String sql = "SELECT  first_name, last_name, username, password, email, role, image_url  FROM users WHERE id = ?";
+        String sql = "SELECT  first_name, last_name, username, password, email, role  FROM users WHERE id = ?";
 
         try {
             List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
@@ -36,8 +33,7 @@ public class UserRepository implements IUserRepository {
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("email"),
-                    Role.valueOf(rs.getString("role")),
-                    rs.getString("image_url")
+                    Role.valueOf(rs.getString("role"))
 
             ), userId);
 
@@ -49,7 +45,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public int createUser(User user) {
-        String sql = "INSERT INTO users (first_name, last_name, username, password , email, role, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (first_name, last_name, username, password , email, role) VALUES (?, ?, ?, ?, ?, ?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         try {
@@ -61,7 +57,6 @@ public class UserRepository implements IUserRepository {
                 ps.setString(5, user.getPassword());
                 ps.setString(4, user.getEmail());
                 ps.setString(6, user.getRole().name());
-                ps.setString(7, user.getImage());
                 return ps;
             }, keyHolder);
 
@@ -74,7 +69,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Optional<User> findUserByUsername(String username) {
-        String sql = "SELECT id, first_name, last_name, username, password, email, role, image_url FROM users WHERE username = ?";
+        String sql = "SELECT id, first_name, last_name, username, password, email, role FROM users WHERE username = ?";
 
         try {
             List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
@@ -84,14 +79,33 @@ public class UserRepository implements IUserRepository {
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("email"),
-                    Role.valueOf(rs.getString("role")),
-                    rs.getString("image_url")
-
+                    Role.valueOf(rs.getString("role"))
             ), username);
 
             return users.isEmpty() ? Optional.empty() : Optional.of(users.getFirst());
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke finde nogen bruger med username: " + username, e);
+        }
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        String sql = "SELECT id, first_name, last_name, username, password, email, role FROM users WHERE email = ?";
+
+        try {
+            List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    Role.valueOf(rs.getString("role"))
+            ), email);
+
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.getFirst());
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Kunne ikke finde nogen bruger med email: " + email, e);
         }
     }
 

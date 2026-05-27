@@ -17,11 +17,11 @@ public class Deck {
 
     public Deck(String deckName, Format format, int userId) {
         if (deckName == null || deckName.isEmpty()) {
-            throw new IllegalArgumentException("The deck must have a name");
+            throw new IllegalArgumentException("Angiv venligst navn på Decket!");
         }
 
         if (format == null) {
-            throw new IllegalArgumentException("Format is required");
+            throw new IllegalArgumentException("Vælg venligst et format!");
         }
 
         this.deckName = deckName;
@@ -31,11 +31,11 @@ public class Deck {
 
     public Deck(int id, String deckName, Format format, int userId) {
         if (deckName == null || deckName.isEmpty()) {
-            throw new IllegalArgumentException("The deck must have a name");
+            throw new IllegalArgumentException("Angiv venligst navn på Decket!");
         }
 
         if (format == null) {
-            throw new IllegalArgumentException("Format is required");
+            throw new IllegalArgumentException("Vælg venligst et format!");
         }
 
         this.id = id;
@@ -46,18 +46,10 @@ public class Deck {
 
     public void addCard(Card card) {
         if (card == null) {
-            throw new IllegalArgumentException("Card cannot be null");
+            throw new IllegalArgumentException("Vælg venligst et kort at tilføje!");
         }
 
         cards.add(card);
-    }
-
-    public boolean isValid() {
-        if (cards.isEmpty()) {
-            return false;
-        }
-
-        return cards.size() >= format.getMinCards() && cards.size() <= format.getMaxCards();
     }
 
     public int getId() {
@@ -73,6 +65,10 @@ public class Deck {
     }
 
     public void setDeckName(String deckName) {
+        if (deckName == null || deckName.isEmpty()) {
+            throw new IllegalArgumentException("Angiv venligst navn på Decket!");
+        }
+
         this.deckName = deckName;
     }
 
@@ -85,6 +81,10 @@ public class Deck {
     }
 
     public void setFormat(Format format) {
+        if (format == null) {
+            throw new IllegalArgumentException("Vælg venligst et format!");
+        }
+
         this.format = format;
     }
 
