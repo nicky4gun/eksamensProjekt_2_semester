@@ -34,7 +34,7 @@ public class UserController {
     public String register(@ModelAttribute User user, Model model) {
         try {
             userService.registerUser(user.getFirstName(), user.getLastName(), user.getUsername(),
-                    user.getEmail(), user.getPassword(), Role.USER);
+                    user.getPassword(), user.getEmail(), Role.USER);
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());

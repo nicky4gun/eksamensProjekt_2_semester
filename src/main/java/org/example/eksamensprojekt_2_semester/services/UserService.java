@@ -21,7 +21,7 @@ public class UserService {
         this.collectionRepository = collectionRepository;
     }
 
-    public void registerUser(String firstname, String lastname, String username, String email, String password, Role role) {
+    public void registerUser(String firstname, String lastname, String username, String password, String email, Role role) {
         if (userRepository.findUserByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Brugernavn allerede i brug, Prøv igen!");
         }
@@ -31,7 +31,7 @@ public class UserService {
         }
 
         String hashedPassword = passwordEncoder.encode(password);
-        User user = new User(firstname, lastname, username, email, hashedPassword, role);
+        User user = new User(firstname, lastname, username, hashedPassword, email, role);
         int userId = userRepository.createUser(user);
         collectionRepository.createCollection(userId, Visibility.PRIVATE);
     }

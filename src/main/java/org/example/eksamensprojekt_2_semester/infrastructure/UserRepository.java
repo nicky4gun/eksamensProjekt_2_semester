@@ -45,7 +45,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public int createUser(User user) {
-        String sql = "INSERT INTO users (first_name, last_name, username, password , email, role) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (first_name, last_name, username, password, email, role) VALUES (?, ?, ?, ?, ?, ?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         try {
@@ -54,8 +54,8 @@ public class UserRepository implements IUserRepository {
                 ps.setString(1, user.getFirstName());
                 ps.setString(2, user.getLastName());
                 ps.setString(3, user.getUsername());
-                ps.setString(5, user.getPassword());
-                ps.setString(4, user.getEmail());
+                ps.setString(4, user.getPassword());
+                ps.setString(5, user.getEmail());
                 ps.setString(6, user.getRole().name());
                 return ps;
             }, keyHolder);
