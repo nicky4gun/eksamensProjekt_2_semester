@@ -24,7 +24,7 @@ public class CardController {
         cardService.addCard(userId, card.getName(), card.getCardType(), card.getColor(),
                 card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
 
-        return "redirect:/profile";
+        return "redirect:/users/profile";
     }
 
     @PostMapping("/update")
@@ -34,6 +34,6 @@ public class CardController {
         cardService.updateCard(userId, card.getId(), card.getName(), card.getCardType(),
                 card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
 
-        return "redirect:/cards/"+ card.getId();
+        return "redirect:/users/profile/"+ card.getId();
     }
 }
