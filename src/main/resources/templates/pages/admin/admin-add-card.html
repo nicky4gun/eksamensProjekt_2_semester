@@ -1,10 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Card | Deckforge</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" >
 </head>
 <body>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+    <main>
+        <h1>Add Card To Deckforge Database</h1>
 
+        <form class="update-user-form" th:action="@{/cards/create}" th:object="${card}" method="post">
+            <div class="input-field">
+                <label for="cardName">Kortnavn: </label>
+                <input type="text" id="cardName" th:field="*{name}" placeholder="Indtast kortnavn..." required>
+            </div>
+
+            <label for="cardType">Korttype: </label>
+            <select name="cardType" id="cardType" required>
+                <option value="" disabled selected>Select card type</option>
+                <option th:each="cardType : ${cardTypes}"
+                        th:value="${cardType}"
+                        th:text="${cardType.name}">
+                </option>
+            </select>
+
+            <label for="manaColor">Farve: </label>
+            <select name="color" id="manaColor" required>
+                <option value="" disabled selected>Select color</option>
+                <option th:each="color : ${colors}"
+                        th:value="${color}"
+                        th:text="${color.name}">
+                </option>
+            </select>
+
+            <div class="input-field">
+                <label for="expansion">Sæt: </label>
+                <input type="text" id="expansion" th:field="*{expansions}" placeholder="Indtast sæt..." required>
+            </div>
+
+            <label for="rarity">Sjældenhed: </label>
+            <select name="rarity" id="rarity" required>
+                <option value="" disabled selected>Select sjældenhed</option>
+                <option th:each="rarity : ${rarities}"
+                        th:value="${rarity}"
+                        th:text="${rarity.name}">
+                </option>
+            </select>
+
+            <div class="input-field">
+                <label for="ruleText">Sæt: </label>
+                <textarea id="ruleText" placeholder="Indtast regeltekst..." th:field="*{ruleText}" required></textarea>
+            </div>
+
+            <div class="input-field">
+                <label for="imageUrl">Sæt: </label>
+                <input type="text" id="imageUrl" placeholder="Indtast billede url..." th:field="*{imageUrl}" required>
+            </div>
+
+            <a href="/profile" class="btn">Tilbage</a>
+            <button type="submit" class="btn">Create Card</button>
+        </form>
+    </main>
 </body>
 </html>

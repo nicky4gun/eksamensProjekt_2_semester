@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opdater Kort</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+</head>
+<body>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+    <main>
+        <h1>Opdater Kort</h1>
+        <form th:action="@{/cards/update/{id}(id=${card.id})}"
+              th:object="${card}"
+              method="post">
+
+            <label for="name">Name</label>
+            <input id="name" type="text" th:field="*{name}">
+
+            <label for="cardType">Card Type</label>
+            <select id="cardType" th:field="*{cardType}">
+                <option th:each="t : ${cardTypes}" th:value="${t}" th:text="${t}"></option>
+            </select>
+
+            <label for="color">Color</label>
+            <select id="color" th:field="*{color}">
+                <option th:each="c : ${colors}" th:value="${c}" th:text="${c}"></option>
+            </select>
+
+            <label for="expansions">Expansions</label>
+            <input id="expansions" type="text" th:field="*{expansions}">
+
+            <label for="rarity">Rarity</label>
+            <select id="rarity" th:field="*{rarity}">
+                <option th:each="r : ${rarities}" th:value="${r}" th:text="${r}"></option>
+            </select>
+
+            <label for="ruleText">Rule Text</label>
+            <textarea id="ruleText" th:field="*{ruleText}"></textarea>
+
+            <label for="imageUrl">Image URL</label>
+            <input id="imageUrl" type="text" th:field="*{imageUrl}">
+
+            <button type="submit">Opdater Kort</button>
+        </form>
+    </main>
+</body>
+</html>

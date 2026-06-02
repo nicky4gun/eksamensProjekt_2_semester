@@ -11,18 +11,27 @@
   <main>
     <h1>Tilføj kort til Samling</h1>
 
-    <form th:action="@{/collection/add-cards}" method="post">
-      <div class="add-card-actions">
-        <a th:href="@{/collection}" class="btn">Annuller</a>
-        <button type="submit" class="btn">Tilføj Kort</button>
-      </div>
+    <div class="add-card-actions">
+      <a th:href="@{/collection}" class="btn">Annuller</a>
+      <button type="submit" form="add-cards-form" class="btn">Tilføj Kort</button>
+    </div>
 
+    <form id="add-cards-form" th:action="@{/collection/add-cards}" method="post">
       <section class="card-grid card-grid--select">
         <article th:each="availableCard : ${cardsAvailable}" class="card">
           <label>
             <input type="checkbox" name="cardIds" th:value="${availableCard.id}"/>
             <img th:src="${availableCard.imageUrl}" alt="Card Image">
           </label>
+
+          <div class="card-overlay" th:if="${!user.isNotAdmin()}">
+            <form th:action="@{/cards/delete}" method="post"
+                  onsubmit="return confirm('Er du sikker på du vil slette dette kort?');">
+              <input type="hidden" name="id" th:value="${availableCard.id}">
+              <button type="submit" class="btn btn-danger">Slet Kort</button>
+            </form>
+            <a th:href="@{/cards/update/{cardId}(cardId=${availableCard.id})}" class="btn">Opdater</a>
+          </div>
         </article>
       </section>
     </form>

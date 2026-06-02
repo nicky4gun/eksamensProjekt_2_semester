@@ -87,8 +87,9 @@ header {
 
 /* Profile */
 .profile-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     gap: 30px;
     padding: 30px;
 }
@@ -280,7 +281,11 @@ select { cursor: pointer; }
     opacity: 0;
     transition: opacity 0.2s ease;
     border-radius: inherit;
+    pointer-events: none;
 }
+
+.card-overlay form,
+.card-overlay a { pointer-events: auto; }
 
 .card:hover .card-overlay { opacity: 1; }
 
@@ -409,6 +414,8 @@ select { height: 38px; }
 
 /* Error page */
 #error-btn { margin-top: 20px; }
+
+
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {

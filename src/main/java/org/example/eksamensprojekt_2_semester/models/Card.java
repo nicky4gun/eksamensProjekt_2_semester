@@ -4,6 +4,8 @@ import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
 
+import java.awt.*;
+
 public class Card {
     private int id;
     private String name;
@@ -113,23 +115,47 @@ public class Card {
         return cardType;
     }
 
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
+    }
+
     public ManaColor getColor() {
         return color;
+    }
+
+    public void setColor(ManaColor color) {
+        this.color = color;
     }
 
     public String getExpansions() {
         return expansions;
     }
 
+    public void setExpansions(String expansions) {
+        this.expansions = expansions;
+    }
+
     public Rarity getRarity() {
         return rarity;
+    }
+
+    public void setRarity(Rarity rarity) {
+        this.rarity = rarity;
     }
 
     public String getRuleText() {
         return ruleText;
     }
 
+    public void setRuleText(String ruleText) {
+        this.ruleText = ruleText;
+    }
+
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

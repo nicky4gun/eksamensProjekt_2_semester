@@ -6,6 +6,7 @@ import org.example.eksamensprojekt_2_semester.models.User;
 import org.example.eksamensprojekt_2_semester.models.enums.CardType;
 import org.example.eksamensprojekt_2_semester.models.enums.ManaColor;
 import org.example.eksamensprojekt_2_semester.models.enums.Rarity;
+import org.example.eksamensprojekt_2_semester.models.exceptions.CardNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.exceptions.UserNotFoundException;
 import org.example.eksamensprojekt_2_semester.models.interfaces.ICardRepository;
 import org.example.eksamensprojekt_2_semester.models.interfaces.IUserRepository;
@@ -56,6 +57,20 @@ public class CardService {
 
         Card card = new Card(id, name, cardType, colors, set, rarity, ruleText, imageUrl);
         cardRepository.updateCard(card);
+    }
+
+    public void deleteCard(int userId, int cardId) {
+        User user = userRepository.findUserById(userId).orElseThrow(
+                () -> new UserNotFoundException("Ingen bruger med ID " + userId + " fundet!"));
+
+        validateAdminPermission(user);
+
+        cardRepository.deleteCard(cardId);
+    }
+    public Card findById(int cardId){
+        return cardRepository.findById(cardId).orElseThrow(
+                () -> new CardNotFoundException("Kort med ID" + cardId + " ikke fundet!")
+        );
     }
 
     private void validateAdminPermission(User user) {

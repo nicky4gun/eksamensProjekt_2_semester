@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Profil | Deckforge</title>
@@ -20,8 +20,7 @@
             </div>
             <div class="profile-actions">
                 <a href="/profile/update" class="btn btn-edit">Opdater profil</a>
-                <a href="/admin/addmin-add-card" class="btn btn-edit">tilføjer   kort til databasen</a>
-                <a href="/admin/add-admin" class="btn btn-edit">tilføjer  addmin</a>
+
 
                 <form th:action="@{/profile/delete}" method="post"
                       onsubmit="return confirm('Are you sure you want to delete this user?')">
@@ -49,6 +48,12 @@
                     <img th:src="@{'/images/' +${card.image}}" alt="card image">
                 </div>
             </div>
+        </section>
+        <section class="addmin-content" th:if="${!user.isNotAdmin()}">
+            <h2>Admin controls</h2>
+            <a href="/cards/create" class="btn btn-edit">Opret nyt kort</a>
+            <a href="/collection/add-cards" class="btn btn-edit">Slet Kort</a>
+            <a href="/collection/add-cards" class="btn btn-edit">Opdater kort</a>
         </section>
     </main>
 </body>
