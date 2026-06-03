@@ -408,78 +408,131 @@ select { height: 38px; }
     margin-top: 15px;
     color: red;
 }
-
-/* Home page */
-#home-page .deck-grid { margin-bottom: 20px; }
-
-/* Error page */
-#error-btn { margin-top: 20px; }
-
-
-
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-    .btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
-
-    .deck-grid { grid-template-columns: 1fr; }
-    .card-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-    .toolbar { flex-wrap: wrap;}
-    .filters,
-    .search-bar { flex: 1 1 100%; }
-    .decks-actionbar { margin-top: 10px; }
-
-    .deck-actionbar {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .deck-actionbar div {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        width: 100%;
-    }
-
-    .decks-actionbar button a { margin-top: 8px; }
-    .add-card-actions { flex-direction: column; }
-    #navbar {
-        width: 100%;
-    }
-
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background-color: #1f1f1f;
-        padding: 16px;
-        border-bottom: 1px solid #333;
-        gap: 16px;
-        z-index: 99;
-    }
-
-    .nav-links.open { display: flex; }
-    .nav-links p { display: none; }
-    #company-name { font-size: 1.6rem; }
-
-    #hamburger {
-        display: flex;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 35px;
-        cursor: pointer;
-    }
-
-    #logout-button, #login-button {
-        padding-top: 8px;
-        border-top: 1px solid #333;
-        margin-top: 8px;
-    }
+.update-user-form {
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
+.update-user-form input[type="text"],
+.update-user-form textarea,
+.update-user-form select {
+    width: 280px;
+    max-width: 100%;
+    background: #111;
+    color: #e2e2e2;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+    /* Home page */
+
+    #home-page .deck-grid {
+        margin-bottom: 20px;
+    }
+
+    /* Error page */
+
+    #error-btn {
+        margin-top: 20px;
+    }
+
+
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .deck-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-grid {
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        }
+
+        .toolbar {
+            flex-wrap: wrap;
+        }
+
+        .filters,
+        .search-bar {
+            flex: 1 1 100%;
+        }
+
+        .decks-actionbar {
+            margin-top: 10px;
+        }
+
+        .deck-actionbar {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .deck-actionbar div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .decks-actionbar button a {
+            margin-top: 8px;
+        }
+
+        .add-card-actions {
+            flex-direction: column;
+        }
+
+        #navbar {
+            width: 100%;
+        }
+
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background-color: #1f1f1f;
+            padding: 16px;
+            border-bottom: 1px solid #333;
+            gap: 16px;
+            z-index: 99;
+        }
+
+        .nav-links.open {
+            display: flex;
+        }
+
+        .nav-links p {
+            display: none;
+        }
+
+        #company-name {
+            font-size: 1.6rem;
+        }
+
+        #hamburger {
+            display: flex;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+        }
+
+        #logout-button, #login-button {
+            padding-top: 8px;
+            border-top: 1px solid #333;
+            margin-top: 8px;
+        }
+    }
