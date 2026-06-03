@@ -3,46 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Opdater Kort</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
 </head>
 <body>
     <header th:replace="~{fragments/navbar :: navbar}"></header>
-    <main>
+    <main id="main-update-card-db">
         <h1>Opdater Kort</h1>
-        <form th:action="@{/cards/update/{id}(id=${card.id})}"
-              th:object="${card}"
-              method="post">
+        <form class="update-user-form" id="update-card" th:action="@{/cards/update/{cardId}(cardId=${card.id})}"
+              th:object="${card}" method="post">
 
-            <label for="name">Name</label>
-            <input id="name" type="text" th:field="*{name}">
+            <div class="input-field">
+                <label for="name">Name</label>
+                <input id="name" type="text" th:field="*{name}">
+            </div>
 
             <label for="cardType">Card Type</label>
             <select id="cardType" th:field="*{cardType}">
                 <option th:each="t : ${cardTypes}" th:value="${t}" th:text="${t}"></option>
             </select>
 
-            <label for="color">Color</label>
-            <select id="color" th:field="*{color}">
+            <label for="manaColor">Color</label>
+            <select id="manaColor" th:field="*{color}">
                 <option th:each="c : ${colors}" th:value="${c}" th:text="${c}"></option>
             </select>
 
-            <label for="expansions">Expansions</label>
-            <input id="expansions" type="text" th:field="*{expansions}">
+            <div class="input-field">
+                <label for="expansions">Expansions</label>
+                <input id="expansions" type="text" th:field="*{expansions}">
+            </div>
 
             <label for="rarity">Rarity</label>
             <select id="rarity" th:field="*{rarity}">
                 <option th:each="r : ${rarities}" th:value="${r}" th:text="${r}"></option>
             </select>
 
-            <label for="ruleText">Rule Text</label>
-            <textarea id="ruleText" th:field="*{ruleText}"></textarea>
+            <div class="input-field">
+                <label for="ruleText">Rule Text</label>
+                <textarea id="ruleText" th:field="*{ruleText}"></textarea>
+            </div>
 
-            <label for="imageUrl">Image URL</label>
-            <input id="imageUrl" type="text" th:field="*{imageUrl}">
+            <div class="input-field">
+                <label for="imageUrl">Image URL</label>
+                <input id="imageUrl" type="text" th:field="*{imageUrl}">
+            </div>
 
-            <button type="submit">Opdater Kort</button>
         </form>
+        <button type="submit" form="update-card" class="btn">Opdater Kort</button>
     </main>
 </body>
 </html>

@@ -53,14 +53,14 @@ public class CardController {
         return "pages/admin/admin-update-card";
     }
 
-    @PostMapping("/update")
-    public String updateCard(@ModelAttribute Card card, HttpSession session) {
+    @PostMapping("/update/{cardId}")
+    public String updateCard(@PathVariable int cardId, @ModelAttribute Card card, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
-        cardService.updateCard(userId, card.getId(), card.getName(), card.getCardType(),
+        cardService.updateCard(userId, cardId, card.getName(), card.getCardType(),
                 card.getColor(), card.getExpansions(), card.getRarity(), card.getRuleText(), card.getImageUrl());
 
-        return "redirect:/profile/" + card.getId();
+        return "redirect:/collection/add-cards";
     }
 
     @PostMapping("/delete")

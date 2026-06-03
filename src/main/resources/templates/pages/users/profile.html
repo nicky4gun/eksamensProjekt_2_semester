@@ -21,7 +21,6 @@
             <div class="profile-actions">
                 <a href="/profile/update" class="btn btn-edit">Opdater profil</a>
 
-
                 <form th:action="@{/profile/delete}" method="post"
                       onsubmit="return confirm('Are you sure you want to delete this user?')">
                     <button class="btn btn-delete" type="submit">Slet konto</button>
@@ -29,27 +28,8 @@
             </div>
         </section>
 
-        <section class="profile-content">
-            <h2>Din samling</h2>
-            <div class="card-grid">
-                <div th:each="card : ${collection}" class="card">
-                    <img th:src="@{'/images/' +${card.image}}" alt="card image">
-                </div>
-            </div>
 
-            <div th:if="${deck != null}">
-                <h2 th:text="${deck.deckName}"></h2>
-                <p>Format: <span th:text="${deck.format}"></span></p>
-            </div>
-
-            <h2>Top Decks</h2>
-            <div class="card-grid">
-                <div th:each="card : ${cards}" class="card">
-                    <img th:src="@{'/images/' +${card.image}}" alt="card image">
-                </div>
-            </div>
-        </section>
-        <section class="addmin-content" th:if="${!user.isNotAdmin()}">
+        <section class="admin-content" th:if="${!user.isNotAdmin()}">
             <h2>Admin controls</h2>
             <a href="/cards/create" class="btn btn-edit">Opret nyt kort</a>
             <a href="/collection/add-cards" class="btn btn-edit">Slet Kort</a>

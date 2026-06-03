@@ -71,11 +71,11 @@ public class CardRepository implements ICardRepository {
 
     @Override
     public void updateCard(Card card) {
-        String sql = "UPDATE cards set name = ?, card_type = ?, color = ?, rarity = ?, rule_text = ?, image_url = ? where id = ?";
+        String sql = "UPDATE cards set name = ?, card_type = ?, color = ?, rarity = ?, expansions = ?, rule_text = ?, image_url = ? where id = ?";
 
         try {
             jdbcTemplate.update(sql, card.getName(), card.getCardType().toString(), card.getColor().toString(),
-                    card.getRuleText(), card.getRarity().toString(), card.getExpansions(), card.getImageUrl(), card.getId());
+                    card.getRarity().toString(), card.getExpansions(), card.getRuleText(), card.getImageUrl(), card.getId());
         } catch (DataAccessException e) {
             throw new RuntimeException("Kunne ikke opdatere kort med ID " + card.getId(), e);
         }
