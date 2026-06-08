@@ -85,7 +85,7 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    @PostMapping("/members/delete/{id}")
+    @PostMapping("/profile/delete/{id}")
     public String deleteUser(HttpSession session, @PathVariable int id) {
         Integer userId = (Integer) session.getAttribute("userId");
         userService.removeUser(id);
